@@ -122,7 +122,7 @@ public class MetaWatchService extends Service {
 		public static boolean notifyAlarm = true;
 		public static boolean notifyMusic = true;
 		public static String watchMacAddress = "";
-		public static int packetWait = 0;
+		public static int packetWait = 10;
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
 		public static String weatherCity = "Dallas,US";
