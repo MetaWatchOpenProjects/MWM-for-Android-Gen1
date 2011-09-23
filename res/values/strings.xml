@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MetaWatch</string>
+    
+    <string name="settings_Notifications">Notifications</string>
+	<string name="settings_Call">Call</string>
+	<string name="settings_Call_desc">Incoming call notification</string>
+    <string name="settings_SMS">SMS</string>
+    <string name="settings_SMS_desc">New text message notification</string>
+	<string name="settings_K9">K9 mail</string>
+	<string name="settings_K9_desc">New E-mail notification (K-9 mail)</string>
+	<string name="settings_Alarm">Alarm</string>
+	<string name="settings_Alarm_desc">Alarm clock alert</string>
+	<string name="settings_Music">Music</string>
+	<string name="settings_Music_desc">Music track/artist info</string>
+    
+    <string name="settings_Device">Device</string>
+    <string name="settings_Mac">MAC</string>
+    <string name="settings_Mac_desc">Watch Bluetooth MAC address</string>
+    
+    <string-array name="settings_font_size_name"> 
+   	<item>Small</item>
+   	<item>Medium</item>
+   	<item>Large</item>     
+	</string-array> 
+	<string-array name="settings_font_size_value"> 
+	<item>1</item>
+   	<item>2</item>
+   	<item>3</item>  
+	</string-array>
+    
+    <string name="settings_Other">Other</string>
+    
+</resources>

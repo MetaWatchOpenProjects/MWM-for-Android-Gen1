@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+	<PreferenceCategory
+		android:title="@string/settings_Notifications"
+		>
+		<CheckBoxPreference
+			android:title="@string/settings_Call"
+			android:key="NotifyCall"
+			android:summary="@string/settings_Call_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_SMS"
+			android:key="NotifySMS"
+			android:summary="@string/settings_SMS_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="Gmail"
+			android:key="NotifyGmail"
+			android:summary="New E-mail notification (Gmail)"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_K9"
+			android:key="NotifyK9"
+			android:summary="@string/settings_K9_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Alarm"
+			android:key="NotifyAlarm"
+			android:summary="@string/settings_Alarm_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Music"
+			android:key="NotifyMusic"
+			android:summary="@string/settings_Music_desc"
+			android:defaultValue="true"
+			/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings_Device"
+		>
+	<EditTextPreference
+			android:title="@string/settings_Mac"
+			android:key="MAC"
+			android:summary="Enter watch MAC address manually"
+			android:defaultValue=""
+			/>
+	<Preference
+			android:title="Select Watch"
+			android:key="Discovery"
+			android:summary="Discover and select watch"
+			/>
+	</PreferenceCategory>	
+	
+	
+	<PreferenceCategory
+		android:title="@string/settings_Other"
+		>
+		<CheckBoxPreference
+			android:title="Music Controls (Beta)"
+			android:key="IdleMusicControls"
+			android:summary="Enable music controls on Idle screen"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:title="Last Notification Replay (Beta)"
+			android:key="IdleReplay"
+			android:summary="Enable replay of last notification on Idle screen"
+			android:defaultValue="false"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_font_size_name" 
+			android:entryValues="@array/settings_font_size_value" 
+			android:dialogTitle="Font Size" 
+			android:key="FontSize" 
+			android:title="Font Size" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="2"
+ 			/>
+		<EditTextPreference
+			android:title="Weather Location"
+			android:key="WeatherCity"
+			android:summary="City for weather data"
+			android:defaultValue="Dallas,US"
+			/>
+		<CheckBoxPreference
+			android:title="Weather Celsius"
+			android:key="WeatherCelsius"
+			android:summary="Display temperature in Celsius instead of Fahrenheit"
+			android:defaultValue="false"
+			/>
+		<EditTextPreference
+			android:title="Packet Wait"
+			android:key="PacketWait"
+			android:summary="Time between packet sends (ms)"
+			android:numeric="integer"
+			android:defaultValue="0"
+			/>
+		<CheckBoxPreference
+			android:title="Invert LCD"
+			android:key="InvertLCD"
+			android:summary="Switch black/white bit"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:title="Skip SDP lookup"
+			android:key="SkipSDP"
+			android:summary="Connnect directly to port 1"
+			android:defaultValue="false"
+			/>
+		<EditTextPreference
+			android:title="Test SMS loop interval"
+			android:key="SmsLoopInterval"
+			android:summary="Time between test SMS notifications (in s)"
+			android:numeric="integer"
+			android:defaultValue="15"
+			/>
+			
+	</PreferenceCategory>	
+	
+</PreferenceScreen>
+
+
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/notification" android:title="Notification (LCD/OLED)"></item>
+    <item android:id="@+id/sms_start" android:title="SMS Start (LCD/OLED)"></item>
+    <item android:id="@+id/sms_stop" android:title="SMS Stop (LCD/OLED)"></item>
+    <item android:id="@+id/application_start" android:title="Application Start (LCD)"></item>
+    <item android:id="@+id/application_update" android:title="Application Update (LCD)"></item>
+    <item android:id="@+id/application_stop" android:title="Application Stop (LCD)"></item>
+    <item android:id="@+id/sms" android:title="SMS (LCD/OLED)"></item>
+    <item android:id="@+id/k9" android:title="K9 (LCD/OLED)"></item>
+    <item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
+    <item android:id="@+id/music" android:title="Music (LCD/OLED)"></item>
+    <item android:id="@+id/call_start" android:title="Call Start (LCD/OLED)"></item>
+    <item android:id="@+id/call_stop" android:title="Call Stop (LCD/OLED)"></item>    
+    <item android:id="@+id/vibrate" android:title="Vibrate (LCD/OLED)"></item>
+    <item android:id="@+id/set_rtc" android:title="Set RTC (LCD/OLED)"></item>
+    <item android:id="@+id/load_template" android:title="Load Template (Idle) (LCD)"></item>
+    <item android:id="@+id/write_bufer" android:title="Write Buffer (Idle) (LCD)"></item>
+    <item android:id="@+id/activate_buffer" android:title="Activate Buffer (Idle) (LCD)"></item>
+    <item android:id="@+id/update_display" android:title="Update Display (Idle) (LCD)"></item>    
+    <item android:id="@+id/test" android:title="Test (OLED)"></item>
+</menu>

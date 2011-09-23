@@ -1,0 +1,37 @@
+Handled:
+
+org.metawatch.manager.NOTIFICATION
+  "array" - int[96*96]
+  or
+  "buffer" - byte[96*96/8] // encoded buffer
+  --
+  "vibrate_on" - int // ms
+  "vibrate_off" - int // ms
+  "vibrate_cycles" - int 
+
+org.metawatch.manager.APPLICATION_UPDATE
+  "array" - int[96*96]
+  or
+  "buffer" - byte[96*96/8] // encoded buffer
+
+org.metawatch.manager.APPLICATION_START
+
+org.metawatch.manager.APPLICATION_STOP
+
+
+org.metawatch.manager.IDLE_BUTTONS_OVERRIDE
+  "buttons" - byte[] // buttons to override
+
+
+
+
+
+
+Broadcasted:
+
+org.metawatch.manager.BUTTON_PRESS
+  "button" - byte
+  "mode" - String // ("application", "idle")
+
+
+
