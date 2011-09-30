@@ -149,20 +149,27 @@ public class Monitors {
 			URL url;
 			String queryString = "http://www.google.com/ig/api?weather=" + Preferences.weatherCity;
 			url = new URL(queryString.replace(" ", "%20"));
-
+			
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			XMLReader xr = sp.getXMLReader();
 			
+			/*
+			 * using ISO encoding explicitly is fixing parser exceptions for 'Umlauts' in location data
+			 */
+			InputSource src = new InputSource(url.openStream());
+			src.setEncoding("ISO-8859-1");
+			
 			GoogleWeatherHandler gwh = new GoogleWeatherHandler();
 			xr.setContentHandler(gwh);
-			xr.parse(new InputSource(url.openStream()));
+			xr.parse(src);
 			WeatherSet ws = gwh.getWeatherSet();						
 			WeatherCurrentCondition wcc = ws.getWeatherCurrentCondition();
 			
 			// IndexOutOfBoundsException: Invalid index 0, size is 0
 			WeatherForecastCondition wfc = ws.getWeatherForecastConditions().get(0);
-						
+					
+			
 			String cond = wcc.getCondition();
 			String temp;
 			if (Preferences.weatherCelsius)
@@ -198,6 +205,8 @@ public class Monitors {
 				WeatherData.icon = "weather_cloudy.bmp";
 			
 			WeatherData.received = true;
+			
+		
 			
 			Idle.updateLcdIdle(context);
 			
