@@ -15,7 +15,7 @@ public class GoogleWeatherHandler extends DefaultHandler {
 	// ===========================================================
 	
 	@SuppressWarnings("unused")
-	private String city = "";
+	private String city = "Stuttgart";
 
 	private WeatherSet myWeatherSet = null;
 	@SuppressWarnings("unused")
