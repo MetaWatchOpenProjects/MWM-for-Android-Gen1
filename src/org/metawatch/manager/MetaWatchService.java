@@ -178,7 +178,8 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void createNotification() {
-		notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
+		//notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
+		notification = new android.app.Notification(R.drawable.transparent_square, null, System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
 		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
@@ -195,11 +196,13 @@ public class MetaWatchService extends Service {
 	
 	public void updateNotification(boolean connected) {
 		if (connected) {
-			notification.icon = R.drawable.connected;
+			//notification.icon = R.drawable.connected;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.connected_large);
+			remoteViews.setTextViewText(R.id.text, "MetaWatch is connected");
 		} else {
-			notification.icon = R.drawable.disconnected;
+			//notification.icon = R.drawable.disconnected;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected_large);
+			remoteViews.setTextViewText(R.id.text, "MetaWatch is not connected");
 		}
 		startForeground(1, notification);
 	}

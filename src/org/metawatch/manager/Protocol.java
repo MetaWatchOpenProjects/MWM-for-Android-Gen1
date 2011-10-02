@@ -41,10 +41,8 @@ import java.util.Date;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.NotificationBuilder.FontSize;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -724,7 +722,7 @@ public class Protocol {
 					display[i] += Math.pow(2, j);  
 			}
 		}		
-		int len = (int) paint.measureText(line);
+		//int len = (int) paint.measureText(line);
 		
 		return (int) paint.measureText(line) - 79;
 	}

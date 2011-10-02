@@ -32,12 +32,9 @@
 
 package org.metawatch.manager;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Hashtable;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -48,9 +45,7 @@ import org.anddev.android.weatherforecast.weather.WeatherSet;
 import org.anddev.android.weatherforecast.weather.WeatherUtils;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

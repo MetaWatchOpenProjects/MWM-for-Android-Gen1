@@ -53,6 +53,10 @@ public class Test extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+	    case R.id.poem:
+	    	if (MetaWatchService.watchType == WatchType.ANALOG)
+    		    Notification.addOledNotification(this, Protocol.createOled2lines(this, "Craig's MetaWatch", "has awesomesauce "), Protocol.createOled2lines(this, "'cause Android is", "the ultimate boss"), null, 0, null);
+	        return true;
 	    case R.id.notification:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Notification.addTextNotification(this, "Notification", new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
