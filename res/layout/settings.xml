@@ -111,6 +111,12 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
+			android:title="Hide Notification Icon"
+			android:key="HideNotificationIcon"
+			android:summary="Hide the ongoing notification icon in the status bar"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
 			android:title="Skip SDP lookup"
 			android:key="SkipSDP"
 			android:summary="Connnect directly to port 1"

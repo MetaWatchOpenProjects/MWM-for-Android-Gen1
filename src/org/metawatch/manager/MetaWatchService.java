@@ -125,6 +125,7 @@ public class MetaWatchService extends Service {
 		public static int packetWait = 10;
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
+		public static boolean hideNotificationIcon = false;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
 		public static int fontSize = 2;
@@ -155,6 +156,7 @@ public class MetaWatchService extends Service {
 		Preferences.watchMacAddress = sharedPreferences.getString("MAC", Preferences.watchMacAddress);		
 		Preferences.skipSDP = sharedPreferences.getBoolean("SkipSDP", Preferences.skipSDP);
 		Preferences.invertLCD = sharedPreferences.getBoolean("InvertLCD", Preferences.invertLCD);
+		Preferences.hideNotificationIcon = sharedPreferences.getBoolean("HideNotificationIcon", Preferences.hideNotificationIcon);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity", Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean("WeatherCelsius", Preferences.weatherCelsius);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
@@ -178,8 +180,9 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void createNotification() {
+		int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
 		//notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
-		notification = new android.app.Notification(R.drawable.transparent_square, null, System.currentTimeMillis());
+		notification = new android.app.Notification(notificationIcon, null, System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
 		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
@@ -196,11 +199,15 @@ public class MetaWatchService extends Service {
 	
 	public void updateNotification(boolean connected) {
 		if (connected) {
+			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.connected);
 			//notification.icon = R.drawable.connected;
+			notification.icon = notificationIcon;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.connected_large);
 			remoteViews.setTextViewText(R.id.text, "MetaWatch is connected");
 		} else {
+			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
 			//notification.icon = R.drawable.disconnected;
+			notification.icon = notificationIcon;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected_large);
 			remoteViews.setTextViewText(R.id.text, "MetaWatch is not connected");
 		}
