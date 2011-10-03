@@ -113,7 +113,7 @@
 		<CheckBoxPreference
 			android:title="Hide Notification Icon"
 			android:key="HideNotificationIcon"
-			android:summary="Hide the ongoing notification icon in the status bar"
+			android:summary="Hide the ongoing notification icon in the status bar (requires restart)"
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
