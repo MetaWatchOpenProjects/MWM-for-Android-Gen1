@@ -84,6 +84,10 @@
 					android:pathPattern="/unread/.*"
 					/>
 			</intent-filter>
+			<intent-filter>
+                <action
+                    android:name="com.nullsoft.winamp.metachanged" />
+            </intent-filter>
         </receiver> 
         <receiver android:name=".ApiIntentReceiver"> 
             <intent-filter>

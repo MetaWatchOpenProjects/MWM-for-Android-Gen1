@@ -40,7 +40,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 public class IntentReceiver extends BroadcastReceiver {
-
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
@@ -71,7 +71,7 @@ public class IntentReceiver extends BroadcastReceiver {
 				Monitors.updateGmailUnreadCount(recipient, count);
 				
 				if (count > 0)
-					NotificationBuilder.createGmailBlank(context, recipient);
+					NotificationBuilder.createGmailBlank(context, recipient, count);
 				else
 					Idle.updateLcdIdle(context);
 				return;
@@ -119,7 +119,8 @@ public class IntentReceiver extends BroadcastReceiver {
 			return;
 		}
 		
-		if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
+		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
+		if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.nullsoft.winamp.metachanged"))
 		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
 		{	
 			if (!MetaWatchService.Preferences.notifyMusic)

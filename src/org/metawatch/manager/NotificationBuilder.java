@@ -83,12 +83,13 @@ public class NotificationBuilder {
 		}
 	}
 	
-	public static void createGmailBlank(Context context, String recipient) {
+	public static void createGmailBlank(Context context, String recipient, int count) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail for", recipient});		
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", "SMS for"), Protocol.createOled1line(context, null, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
+			//Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", "SMS for"), Protocol.createOled1line(context, null, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", " GMail"), Protocol.createOled2lines(context, "Unread: " + count, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
 	
@@ -106,7 +107,7 @@ public class NotificationBuilder {
 			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, artist});
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 100, 500, 1));
 		}
 	}
 	
