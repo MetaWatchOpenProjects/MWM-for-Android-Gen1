@@ -630,6 +630,10 @@ public class Protocol {
 			offset += 17;
 		*/
 		
+		/* Convert newlines to spaces */
+		line1 = line1.replace('\n', ' ');
+		line2 = line2.replace('\n', ' ');
+		
 		Bitmap image = Bitmap.createBitmap(80, 16, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
@@ -685,6 +689,9 @@ public class Protocol {
 		if (logo)
 			offset += 17;
 		*/
+		
+		/* Replace newlines with spaces */
+		line = line.replace('\n', ' ');
 		
 		final int width = 800;
 		
