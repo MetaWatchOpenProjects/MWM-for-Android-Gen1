@@ -105,9 +105,9 @@ public class NotificationBuilder {
 	public static void createMusic(Context context, String artist, String track) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, artist});
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 0, 1), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 100, 500, 1));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 0, 1));
 		}
 	}
 	

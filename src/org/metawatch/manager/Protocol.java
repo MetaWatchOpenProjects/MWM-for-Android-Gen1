@@ -34,9 +34,10 @@ package org.metawatch.manager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.NotificationBuilder.FontSize;
@@ -56,8 +57,8 @@ public class Protocol {
 	
 	public static final byte REPLAY = 30;
 	
-	public static ArrayList<byte[]> sendQueue = new ArrayList<byte[]>();
-	public static boolean isSending = false;
+	public static volatile BlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
+	public static volatile boolean isSending = false;
 	
 	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {		
 		int pixelArray[] = new int[96 * 96];
@@ -130,9 +131,8 @@ public class Protocol {
 				Log.d(MetaWatch.TAG, "entering send queue");
 				while (sendQueue.size() > 0) {
 					try {
-						send(sendQueue.get(0));
+						send(sendQueue.take());
 						//Log.d(MetaWatch.TAG, "  part sent");
-						sendQueue.remove(0);
 						Thread.sleep(Preferences.packetWait);
 					} catch (IOException e) {
 						sendQueue.clear();

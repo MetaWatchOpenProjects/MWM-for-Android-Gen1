@@ -2,9 +2,7 @@ This is Craig's custom MetaWatch Manager.
 
 It's based on the official MetaWatch manager (see README.orig)
 
-New in this version:
-- Extended support to Android 2.2 (FroYo)
-- Changed music update to single 500ms buzz
+See CHANGELOG for changes in this version.
 
 Questions, comments, bug reports, and suggestions are welcome.  
 I'm PurpleGuitar on the MetaWatch forums.

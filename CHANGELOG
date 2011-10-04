@@ -1,6 +1,10 @@
 CHANGELOG
 
-
+v0.2:
+- Extended support to Android 2.2 (FroYo)
+- Changed music update to single 500ms buzz
+- Marked shared variables as volatile to improve thread safety
+- Changed send buffer to a BlockingQueue to improve thread safety
 
 Initial version
 - Support for Android 2.3 (API level 10)
