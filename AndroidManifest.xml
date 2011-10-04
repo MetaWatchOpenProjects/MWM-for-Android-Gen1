@@ -3,8 +3,8 @@
       package="org.metawatch.manager"
       android:versionCode="1"
       android:installLocation="internalOnly" android:versionName="0.2.4">
-    <uses-sdk android:minSdkVersion="10" />
-    <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
+    <uses-sdk android:minSdkVersion="8" />
+    <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
     
     <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>

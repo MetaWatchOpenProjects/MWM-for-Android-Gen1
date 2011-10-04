@@ -1,15 +1,9 @@
 This is Craig's custom MetaWatch Manager.
 
-It's based on the official MetaWatch manager (details below).
+It's based on the official MetaWatch manager (see README.orig)
 
 New in this version:
-- Support for Android 2.3 (API level 10)
-- Optionally hide notification icon in status bar
-- Fix bug where newlines were displayed as boxes in analog watch
-- Fix bug where GMail was displayed as SMS on analog watch
-- Display Gmail unread count on analog watch
-- Added music support for Winamp
-- Changed vibrate on music update to a single 100ms "tap"
+- Extended support to Android 2.2 (FroYo)
 
 Questions, comments, bug reports, and suggestions are welcome.  
 I'm PurpleGuitar on the MetaWatch forums.
@@ -18,23 +12,7 @@ APK download: http://dl.dropbox.com/u/7375584/MetaWatch/MetaWatch.apk
 
 Source code: https://github.com/PurpleGuitar/MWM-for-Android
 
-
-Below is the offical README for MetaWatch.
---------------------------------------------------------------------------------
-
-Welcome. This is the Meta Watch Manager (MWM) for Android project.
-
-Read the LICENSE and the NOTICE files in the root.
-
-Visit us at http://www.metawatch.org
-
-Report bugs and request enhancements at: http://bugs.metawatch.org
-
-Meta Watch will be keeping this project up to date and periodically releasing new
-stable versions on the Metawatch.org website and on the Android Market.
-
-Contributing your code to this project is encouraged.
-To contribute your code, you must please fill out and submit a contributor agreement.
-You can find this in the developer section of the metawatch.org website.
-
-Have fun!
+Disclaimer: This is development code; it may contain bugs, cause your
+phone / watch to reset, or any other of a host of unpleasant things.
+You use it AT YOUR OWN RISK, and I offer NO WARRANTY for anything it
+may do to you, your phone, your watch, or anything else.
