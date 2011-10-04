@@ -1,0 +1,12 @@
+CHANGELOG
+
+
+
+Initial version
+- Support for Android 2.3 (API level 10)
+- Optionally hide notification icon in status bar
+- Fix bug where newlines were displayed as boxes in analog watch
+- Fix bug where GMail was displayed as SMS on analog watch
+- Display Gmail unread count on analog watch
+- Added music support for Winamp
+- Changed vibrate on music update to a single 100ms "tap"
