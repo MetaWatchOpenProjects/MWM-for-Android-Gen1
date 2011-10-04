@@ -1,6 +1,6 @@
 package org.metawatch.manager;
 
-public enum Message
+public enum eMessageType
 {
   InvalidMessage(0x00),
   
@@ -121,13 +121,13 @@ public enum Message
     
   AccelerometerSteps(0xea),
   AccelerometerRawData(0xeb);
-  public byte msg;
+  public final byte msg;
   static public final byte start = 0x01; 
   //byte ID()
   //{
 	  //return msg;
   //}
-  Message(int msg)
+  eMessageType(int msg)
   {
 	  this.msg = (byte)msg;
   }

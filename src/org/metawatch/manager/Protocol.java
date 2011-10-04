@@ -104,7 +104,7 @@ public class Protocol {
 
 			bytes[0] = 0x01;
 			bytes[1] = (byte) (bytes.length+2); // packet length
-			bytes[2] = Message.WriteBuffer.msg; 
+			bytes[2] = eMessageType.WriteBuffer.msg; 
 			bytes[3] = (byte) bufferType; 
 
 			bytes[4] = (byte) i; // row A
@@ -183,9 +183,9 @@ public class Protocol {
 
 			byte[] bytes = new byte[7];
 
-			bytes[0] = Message.start;
+			bytes[0] = eMessageType.start;
 			bytes[1] = 9; // length
-			bytes[2] = Message.AdvanceWatchHandsMsg.msg; // advance watch hands
+			bytes[2] = eMessageType.AdvanceWatchHandsMsg.msg; // advance watch hands
 			bytes[3] = 0x04; // complete
 
 			bytes[4] = (byte) hour;
@@ -220,9 +220,9 @@ public class Protocol {
 
 			byte[] bytes = new byte[14];
 
-			bytes[0] = Message.start;
+			bytes[0] = eMessageType.start;
 			bytes[1] = (byte) (bytes.length+2); // length
-			bytes[2] = Message.SetRealTimeClock.msg; // set rtc
+			bytes[2] = eMessageType.SetRealTimeClock.msg; // set rtc
 			bytes[3] = 0x00; // not used
 
 			bytes[4] = (byte) (year/256);
@@ -319,7 +319,7 @@ public class Protocol {
 
 		bytes[0] = 0x01;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.LoadTemplate.msg; // load template
+		bytes[2] = eMessageType.LoadTemplate.msg; // load template
 		bytes[3] = (byte) mode;
 
 		bytes[4] = (byte) 0; // write all "0"
@@ -332,9 +332,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[4];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.ConfigureIdleBufferSize.msg; // activate buffer
+		bytes[2] = eMessageType.ConfigureIdleBufferSize.msg; // activate buffer
 		bytes[3] = (byte) mode;
 
 		sendQueue.add(bytes);
@@ -345,9 +345,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[4];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.UpdateDisplay.msg; // update display
+		bytes[2] = eMessageType.UpdateDisplay.msg; // update display
 		bytes[3] = (byte) (bufferType + 16);
 
 		sendQueue.add(bytes);
@@ -358,9 +358,9 @@ public class Protocol {
 		
 		byte[] bytes = new byte[10];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = 12; // delka
-		bytes[2] = Message.SetVibrateMode.msg; // set vibrate
+		bytes[2] = eMessageType.SetVibrateMode.msg; // set vibrate
 		bytes[3] = 0x00; // unused
 
 		bytes[4] = 0x01; // enabled
@@ -379,9 +379,9 @@ public class Protocol {
 		//for (int j = 0; j < 96; j = j+2) {		
 			byte[] bytes = new byte[17];
 			
-			bytes[0] = Message.start;
+			bytes[0] = eMessageType.start;
 			bytes[1] = (byte) (bytes.length+2); // length
-			bytes[2] = Message.WriteBuffer.msg; // write lcd buffer
+			bytes[2] = eMessageType.WriteBuffer.msg; // write lcd buffer
 			//bytes[3] = 0x02; // notif, two lines
 			//bytes[3] = 18;
 			bytes[3] = 0;
@@ -410,9 +410,9 @@ public class Protocol {
 	public static void enableButton(int button, int type, int code) {
 		byte[] bytes = new byte[9];
 		
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.EnableButtonMsg.msg; // enable button
+		bytes[2] = eMessageType.EnableButtonMsg.msg; // enable button
 		bytes[3] = 0; // not used
 		
 		bytes[4] = 0; // idle
@@ -428,9 +428,9 @@ public class Protocol {
 	public static void disableButton(int button, int type) {
 		byte[] bytes = new byte[7];
 		
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.DisableButtonMsg.msg; // disable button
+		bytes[2] = eMessageType.DisableButtonMsg.msg; // disable button
 		bytes[3] = 0; // not used
 		
 		bytes[4] = 0; // idle
@@ -481,9 +481,9 @@ public class Protocol {
 	public static void readButtonConfiguration() {
 		byte[] bytes = new byte[9];
 		
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.ReadButtonConfigMsg.msg; // 
+		bytes[2] = eMessageType.ReadButtonConfigMsg.msg; // 
 		bytes[3] = 0; // not used
 		
 		bytes[4] = 0; 
@@ -500,9 +500,9 @@ public class Protocol {
 		
 		byte[] bytes = new byte[6];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.ConfigureMode.msg; // 
+		bytes[2] = eMessageType.ConfigureMode.msg; // 
 		bytes[3] = 0;
 		
 		bytes[4] = 10; 
@@ -516,9 +516,9 @@ public class Protocol {
 		
 		byte[] bytes = new byte[4];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.GetDeviceType.msg;
+		bytes[2] = eMessageType.GetDeviceType.msg;
 		bytes[3] = 0;
 		
 		sendQueue.add(bytes);
@@ -529,9 +529,9 @@ public class Protocol {
 		
 		byte[] bytes = new byte[7];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.NvalOperationMsg.msg; // nval operations
+		bytes[2] = eMessageType.NvalOperationMsg.msg; // nval operations
 		bytes[3] = 0x01; // read
 		
 		bytes[4] = 0x09; 
@@ -546,9 +546,9 @@ public class Protocol {
 		
 		byte[] bytes = new byte[8];
 
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.NvalOperationMsg.msg; // nval operations
+		bytes[2] = eMessageType.NvalOperationMsg.msg; // nval operations
 		bytes[3] = 0x02; // write
 		
 		bytes[4] = 0x09; 
@@ -736,9 +736,9 @@ public class Protocol {
 			
 			for (int a = 0; a < 160; a += 20) {
 				bytes = new byte[27];
-				bytes[0] = Message.start;
+				bytes[0] = eMessageType.start;
 				bytes[1] = (byte) (bytes.length+2); // length
-				bytes[2] = Message.OledWriteBufferMsg.msg; // oled write
+				bytes[2] = eMessageType.OledWriteBufferMsg.msg; // oled write
 				if (scroll)				
 					bytes[3] = (byte) 0x82; // notification + scroll
 				else 
@@ -765,9 +765,9 @@ public class Protocol {
 	
 	public static void updateOledNotification(boolean top, boolean scroll) {
 		byte[] bytes = new byte[7];
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.OledWriteBufferMsg.msg; // oled write
+		bytes[2] = eMessageType.OledWriteBufferMsg.msg; // oled write
 		if (scroll)
 			bytes[3] = (byte) 0xC2; // notification, activate, scroll
 		else
@@ -791,9 +791,9 @@ public class Protocol {
 	
 	public static void sendOledBuffer(boolean startScroll) {
 		byte[] bytes = new byte[25];
-		bytes[0] = Message.start;
+		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = Message.OledWriteScrollBufferMsg.msg; // write oled buffer		
+		bytes[2] = eMessageType.OledWriteScrollBufferMsg.msg; // write oled buffer		
 		if (startScroll)
 			bytes[3] = 0x02; // not last, start
 		else
@@ -813,9 +813,9 @@ public class Protocol {
 		
 		for (int j = start; j < start+length; j += 20) {		
 			byte[] bytes = new byte[25];
-			bytes[0] = Message.start;
+			bytes[0] = eMessageType.start;
 			bytes[1] = (byte) (bytes.length+2); // length
-			bytes[2] = Message.OledWriteScrollBufferMsg.msg; // write oled buffer		
+			bytes[2] = eMessageType.OledWriteScrollBufferMsg.msg; // write oled buffer		
 			bytes[3] = 0x00; // not last
 			
 			if (j+20 >= start+length) { // is last packet
