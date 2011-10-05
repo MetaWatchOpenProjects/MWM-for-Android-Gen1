@@ -77,8 +77,7 @@ public class IntentReceiver extends BroadcastReceiver {
 				return;
 			}
 		}
-		
-		if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
+		else if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
 			
 			if (!MetaWatchService.Preferences.notifySMS)
 				return;
@@ -97,8 +96,7 @@ public class IntentReceiver extends BroadcastReceiver {
 			}
 			return;
 		}
-		
-		if (action.equals("com.fsck.k9.intent.action.EMAIL_RECEIVED")) {
+		else if (action.equals("com.fsck.k9.intent.action.EMAIL_RECEIVED")) {
 			
 			if (!MetaWatchService.Preferences.notifyK9)
 				return;
@@ -108,9 +106,8 @@ public class IntentReceiver extends BroadcastReceiver {
 			String sender = bundle.getString("com.fsck.k9.intent.extra.FROM");
 			NotificationBuilder.createK9(context, sender, subject);
 			return;
-		}
-				
-		if (action.equals("com.android.alarmclock.ALARM_ALERT") || action.equals("com.htc.android.worldclock.ALARM_ALERT") || action.equals("com.android.deskclock.ALARM_ALERT") || action.equals("com.sonyericsson.alarm.ALARM_ALERT") ) {
+		}	
+		else if (action.equals("com.android.alarmclock.ALARM_ALERT") || action.equals("com.htc.android.worldclock.ALARM_ALERT") || action.equals("com.android.deskclock.ALARM_ALERT") || action.equals("com.sonyericsson.alarm.ALARM_ALERT") ) {
 			
 			if (!MetaWatchService.Preferences.notifyAlarm)
 				return;
@@ -118,8 +115,7 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createAlarm(context);
 			return;
 		}
-		
-		if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
+		else if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
 		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
 		{	
 			if (!MetaWatchService.Preferences.notifyMusic)

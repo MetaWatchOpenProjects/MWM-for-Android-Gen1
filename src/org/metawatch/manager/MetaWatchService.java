@@ -178,30 +178,44 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void createNotification() {
-		notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
+		notification = new android.app.Notification(R.drawable.disconnected, null, System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
 		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
-		remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected);
-		remoteViews.setTextViewText(R.id.text, "MetaWatch service is running");
+		remoteViews.setTextViewText(R.id.notification_title, getString(R.string.app_name));
+		remoteViews.setImageViewResource(R.id.notification_button, R.drawable.connected_large);
+ 		
 		notification.contentView = remoteViews;
-
-		Intent notificationIntent = new Intent(this, MetaWatch.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.contentIntent = contentIntent;
+		notification.contentIntent = createNotificationPendingIntent();
 
 		startForeground(1, notification);
 	}
 	
-	public void updateNotification(boolean connected) {
-		if (connected) {
-			notification.icon = R.drawable.connected;
-			remoteViews.setImageViewResource(R.id.image, R.drawable.connected_large);
-		} else {
-			notification.icon = R.drawable.disconnected;
-			remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected_large);
-		}
-		startForeground(1, notification);
+	private PendingIntent createNotificationPendingIntent() {
+		return PendingIntent.getActivity(
+			this,
+			0,
+			new Intent(this, MetaWatch.class),
+			0);
+	}
+	
+	public void updateNotification() {
+		switch (connectionState) {
+			case ConnectionState.CONNECTING:
+				notification.icon = R.drawable.connected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Connecting");
+				break;
+			case ConnectionState.CONNECTED:
+				notification.icon = R.drawable.connected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Connected");
+				break;
+			default:
+				notification.icon = R.drawable.disconnected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Disconnected");
+				break;
+ 		}
+
+		startForeground(1, notification);		
 	}
 	
 	public void removeNotification() {
@@ -250,7 +264,11 @@ public class MetaWatchService extends Service {
 			if (Preferences.watchMacAddress.equals(""))
 				loadPreferences(context);
 			BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(Preferences.watchMacAddress);
-			
+
+			if (!bluetoothAdapter.isEnabled()) {
+				return;
+			}
+
 			/*
 			Log.d(MetaWatch.TAG, "remote device name: " + bluetoothDevice.getName());
 			int bondState = bluetoothDevice.getBondState();
@@ -286,7 +304,7 @@ public class MetaWatchService extends Service {
 			outputStream = bluetoothSocket.getOutputStream();
 			
 			connectionState = ConnectionState.CONNECTED;		
-			updateNotification(true);
+			updateNotification();
 			
 			Protocol.sendRtcNow(context);			
 			Protocol.getDeviceType();			
@@ -374,7 +392,7 @@ public class MetaWatchService extends Service {
 					case ConnectionState.CONNECTING:
 						Log.d(MetaWatch.TAG, "state: connecting");
 						// create initial connection or reconnect
-						updateNotification(false);
+						updateNotification();
 						connect(context);
 						nap(2000);
 						break;
