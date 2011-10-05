@@ -1,5 +1,10 @@
 CHANGELOG
 
+v0.3:
+- Added experimental support for Calendar events.
+  (note that this requires Accessibility in Android Settings.)
+  (works on analog watch, untested on digital)
+
 v0.2:
 - Extended support to Android 2.2 (FroYo)
 - Changed music update to single 500ms buzz

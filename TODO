@@ -1,0 +1,58 @@
+TO DO
+=======================================================================
+
+
+
+
+WISH LIST
+=======================================================================
+
+- Change notification timing for analog watch -- usually by the time
+  the user turns to look at the watch the beginning of the message
+  has scrolled by.  Maybe have the display pause for a second or two
+  before scrolling starts?
+  
+- Change duration of notification on analog watch -- it disappears
+  too quickly.  Make it user configurable in Settings.
+
+- Fix generic GMail notification -- sometimes we get double
+  notifications, other times we get notified when the unread count
+  changes because the user read an email!  Probably the easiest way to
+  fix this is to remember the count of the last notification, and only
+  notify the user when the count has gone *up*.
+  
+- Maybe try using accessibility interface to get better GMail
+  notifications?  Sometimes GMail notifications include the sender
+  and text of the email.
+
+- Display anDGS notifications: "It's your turn to play!"
+
+- Display Remember the Milk notifications: "A task is due!"
+
+- Pandora track changes?
+
+- Facebook notifications?
+
+- Twitter notifications?
+
+- Google+ notifications?
+
+- Parcel notifications?  "Your package has arrived!" :)
+
+- Notify on new voicemail?
+
+- Turn-by-turn navigation?
+
+- Low phone battery?
+
+- Weather channel severe weather?
+
+- Synchronize notifications being pushed to the watch at the event 
+  level instead of the byte array level.  This would prevent the bug
+  where simultaneous events interleave their data to the watch,
+  causing confusing displays. 
+  
+- When the notification icon is hidden, it can sometimes be seen as
+  an empty block next to other icons.  Other apps push their icon to
+  the right, like Llama and Juice Defender.  How do they do that?
+  Something to do with the event timestamp, maybe?

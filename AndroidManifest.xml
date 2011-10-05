@@ -100,6 +100,11 @@
         </receiver> 
         <receiver android:name="org.metawatch.manager.AlarmReceiver"></receiver>
         <service android:name="org.metawatch.manager.MetaWatchService"></service>
+	    <service android:name=".MetaWatchAccessibilityService">
+			<intent-filter>
+				<action android:name="android.accessibilityservice.AccessibilityService" />
+			</intent-filter>
+		</service>        
         <activity android:name="Settings" 
         		  android:launchMode="singleTask">
         </activity>
@@ -108,4 +113,5 @@
         </activity>
 
     </application>
+
 </manifest>

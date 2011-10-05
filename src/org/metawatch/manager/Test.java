@@ -53,6 +53,9 @@ public class Test extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+	    case R.id.calendar:	   
+	    	NotificationBuilder.createCalendar(this, "Tea with the Hatter - Windmill");
+	        return true;
 	    case R.id.notification:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Notification.addTextNotification(this, "Notification", new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);

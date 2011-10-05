@@ -41,6 +41,12 @@
 			android:summary="@string/settings_Music_desc"
 			android:defaultValue="true"
 			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Calendar"
+			android:key="NotifyCalendar"
+			android:summary="@string/settings_Calendar_desc"
+			android:defaultValue="true"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory
