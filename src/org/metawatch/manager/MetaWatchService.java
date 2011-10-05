@@ -361,6 +361,7 @@ public class MetaWatchService extends Service {
 	
 	void start() {
 		Thread thread = new Thread() {
+			@Override
 			public void run() {
 				boolean run = true;
 				Looper.prepare();				

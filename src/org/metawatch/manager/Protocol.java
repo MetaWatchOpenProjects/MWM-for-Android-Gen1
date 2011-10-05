@@ -44,7 +44,6 @@ import org.metawatch.manager.NotificationBuilder.FontSize;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -128,6 +127,7 @@ public class Protocol {
 			isSending = true;
 		
 		Thread thread = new Thread() {
+			@Override
 			public void run() {
 				Log.d(MetaWatch.TAG, "entering send queue");
 				while (sendQueue.size() > 0) {
