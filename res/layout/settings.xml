@@ -137,6 +137,18 @@
 			/>
 			
 	</PreferenceCategory>	
+	<PreferenceCategory
+		android:title="@string/settings_Debug"
+		>
+		<CheckBoxPreference
+			android:title="Pad short messages"
+			android:key="debugPadShortMessages"
+			android:summary="Pad short messages so that they take up the full OLED screen"
+			android:defaultValue="false"
+			/>
+		
+	</PreferenceCategory>	
+	
 	
 </PreferenceScreen>
 

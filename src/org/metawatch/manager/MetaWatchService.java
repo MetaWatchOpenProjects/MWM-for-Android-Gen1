@@ -133,6 +133,7 @@ public class MetaWatchService extends Service {
 		public static int smsLoopInterval = 15;
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
+		public static boolean debugPadShortMessages = false;
 	}
 	
 	final class WatchType {		
@@ -163,6 +164,7 @@ public class MetaWatchService extends Service {
 		Preferences.weatherCelsius = sharedPreferences.getBoolean("WeatherCelsius", Preferences.weatherCelsius);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay", Preferences.idleReplay);
+		Preferences.debugPadShortMessages = sharedPreferences.getBoolean("debugPadShortMessages", Preferences.debugPadShortMessages);
 		
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString("FontSize", Integer.toString(Preferences.fontSize)));

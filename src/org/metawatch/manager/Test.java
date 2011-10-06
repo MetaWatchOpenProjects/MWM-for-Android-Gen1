@@ -82,7 +82,9 @@ public class Test extends Activity {
 	        return true;
 	    case R.id.sms:	   
 	    	NotificationBuilder.createSMS(this, "555-123-456", "Rights groups report systematic state violence is being unleashed on Bahrain's opposition movement.");
-	    	//NotificationBuilder.createSMS(this, "123-456-789", "Test SMS #" + "x");
+	        return true;
+	    case R.id.testShortMessage:	   
+	    	NotificationBuilder.createSMS(this, "555-123-456", "Hi.");
 	        return true;
 	    case R.id.k9:	   
 	    	NotificationBuilder.createK9(this, "doctor@gallifrey.net", "Would you like a jelly baby?");

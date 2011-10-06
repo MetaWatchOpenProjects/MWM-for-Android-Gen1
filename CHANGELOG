@@ -6,7 +6,8 @@ v0.4:
   Note that this doesn't affect phones that can't see the content
   of GMail messages (Android 2.3 and above, I think).
 - Hopefully change calendar notification to show text on digital watch [dtiens]
-  
+- Added debug option to pad short messages with spaces,
+  to help debug possible short notification issue [Arlanthir]
 
 v0.3:
 - Added experimental support for Calendar events.
