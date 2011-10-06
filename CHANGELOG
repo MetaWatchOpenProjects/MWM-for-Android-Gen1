@@ -1,5 +1,8 @@
 CHANGELOG
 
+v0.4:
+- Scroll subject line of K9 notifications. [DHG703B]
+
 v0.3:
 - Added experimental support for Calendar events.
   (note that this requires Accessibility in Android Settings.)

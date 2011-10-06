@@ -69,7 +69,9 @@ public class NotificationBuilder {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"K9 mail from", sender, subject});		
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", "K9 mail from"), Protocol.createOled2lines(context, sender, subject), null, 0, new VibratePattern(true, 500, 500, 3));
+			byte[] scroll = new byte[800];
+			int len = Protocol.createOled2linesLong(context, subject, scroll);
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", "K9 mail from"), Protocol.createOled2lines(context, sender, subject), scroll, len, new VibratePattern(true, 500, 500, 3));
 		}
 	}
 	

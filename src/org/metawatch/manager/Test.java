@@ -85,7 +85,7 @@ public class Test extends Activity {
 	    	//NotificationBuilder.createSMS(this, "123-456-789", "Test SMS #" + "x");
 	        return true;
 	    case R.id.k9:	   
-	    	NotificationBuilder.createK9(this, "e@mail.com", "Subject line");
+	    	NotificationBuilder.createK9(this, "doctor@gallifrey.net", "Would you like a jelly baby?");
 	        return true;
 	    case R.id.alarm:	   
 	    	NotificationBuilder.createAlarm(this);
