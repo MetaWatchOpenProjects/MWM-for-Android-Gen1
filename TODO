@@ -1,17 +1,40 @@
 TO DO
 =======================================================================
 
+- Arlanthir: Pad short messages with spaces to help debug possible 
+  short notification issue?
+
+- DHG703B: Have Gmail and K9 scroll subject rather than truncate it?
+
+- dtiens: Calendar notifications have no data on digital watch
 
 
 
 WISH LIST
 =======================================================================
 
+- Optionally left-pad scrolling messages -- often the beginning of
+  the message has already disappeared by the time the user looks
+  at the watch
+
 - Fix generic GMail notification -- sometimes we get double
   notifications, other times we get notified when the unread count
   changes because the user read an email!  Probably the easiest way to
   fix this is to remember the count of the last notification, and only
-  notify the user when the count has gone *up*.
+  notify the user when the count has gone *up*.  
+
+- Optionally suppress toasts when Bluetooth throws IOExceptions 
+
+- Create buzzing scheme:
+  - 1 buzz: minor events (music track change)
+  - 2 buzz: normal events (notifications, email)
+  - 3 buzz: urgent events (SMS, calendar)
+
+- db1nto: Forward all notifications, with a blacklist?
+
+- Scroll big text on oled?
+
+- Scroll album and track on music updates?
   
 - Display anDGS notifications: "It's your turn to play!"
 
@@ -34,6 +57,9 @@ WISH LIST
 - Low phone battery?
 
 - Weather channel severe weather?
+
+- Control Winamp from watch?  Can this be done?  Does the analog
+  watch have an application mode?
 
 - Maybe try using accessibility interface to get better GMail
   notifications?  Sometimes GMail notifications include the sender

@@ -6,10 +6,10 @@ v0.3:
   (works on analog watch, untested on digital)
 
 v0.2:
-- Extended support to Android 2.2 (FroYo)
+- Extended support to Android 2.2 (FroYo) [db1nto]
 - Changed music update to single 500ms buzz
 - Marked shared variables as volatile to improve thread safety
-- Changed send buffer to a BlockingQueue to improve thread safety
+- Changed send buffer to a BlockingQueue to improve thread safety [spacejunky]
 
 Initial version
 - Support for Android 2.3 (API level 10)
