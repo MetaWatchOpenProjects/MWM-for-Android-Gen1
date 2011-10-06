@@ -93,7 +93,8 @@ public class NotificationBuilder {
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
 		} else {
 			//Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", "SMS for"), Protocol.createOled1line(context, null, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", " GMail"), Protocol.createOled2lines(context, "Unread: " + count, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
+			String messages = (count == 1 ? "message" : "messages");
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", " GMail"), Protocol.createOled2lines(context, count + " new " + messages, recipient), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
 	

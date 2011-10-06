@@ -56,27 +56,54 @@ public class IntentReceiver extends BroadcastReceiver {
 		*/
 		
 		if (action.equals("android.intent.action.PROVIDER_CHANGED")) {
-			
+
 			if (!MetaWatchService.Preferences.notifyGmail)
 				return;
-			
+
 			if (!Utils.isGmailAccessSupported(context)) {
-				String recipient = "You";
 				Bundle bundle = intent.getExtras();
-				
+
+				/* Get recipient and count */
+				String recipient = "You";
 				if (bundle.containsKey("account"))
 					recipient = bundle.getString("account");
-				Log.d(MetaWatch.TAG, "count for " + recipient + ": " + bundle.getInt("count"));
-				int count = bundle.getInt("count");				
-				Monitors.updateGmailUnreadCount(recipient, count);
-				
-				if (count > 0)
-					NotificationBuilder.createGmailBlank(context, recipient, count);
-				else
+				int count = bundle.getInt("count");
+
+				/* What kind of update is this? */
+				String tagLabel = bundle.getString("tagLabel");
+				if (tagLabel.equals("^^unseen-^i")) {
+
+					/* This is a new message notification. */
+					if (count > 0) {
+						NotificationBuilder.createGmailBlank(context,
+								recipient, count);
+						Log.d(MetaWatch.TAG,
+								"Received Gmail new message notification; "
+										+ count + " new message(s).");
+					} else {
+						Log.d(MetaWatch.TAG,
+								"Ignored Gmail new message notification; no new messages.");
+					}
+
+				} else if (tagLabel.equals("^^unseen-^iim")) {
+
+					/* This is a total unread count notification. */
+					Log.d(MetaWatch.TAG,
+							"Received Gmail notification: total unread count for '"
+									+ recipient + "' is " + count + ".");
+					Monitors.updateGmailUnreadCount(recipient, count);
 					Idle.updateLcdIdle(context);
+
+				} else {
+					/* I have no idea what this is. */
+					Log.d(MetaWatch.TAG,
+							"Unknown Gmail notification: tagLabel is '"+tagLabel+"'");
+				}
+
 				return;
 			}
 		}
+
 		
 		if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
 			

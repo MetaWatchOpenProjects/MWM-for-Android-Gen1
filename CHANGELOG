@@ -1,30 +1,59 @@
 CHANGELOG
 
 v0.4:
+=======================================================================
+
+- GMail notifications are now sent only on receipt of new messages.
+  This change fixes a nasty bug where the MWM wasn't distinguishing
+  between new message notifications and unread count notifications, 
+  causing double notifications with seemingly random numbers on the 
+  watch.  Digital watch is probably fixed too, but is untested.  
+
 - Scroll subject line of K9 notifications. [DHG703B]
+
 - Scroll snippet line of GMail full notifications. [DHG703B]
   Note that this doesn't affect phones that can't see the content
   of GMail messages (Android 2.3 and above, I think).
-- Hopefully change calendar notification to show text on digital watch [dtiens]
+
+- Hopefully fix calendar notification to show text on digital watch [dtiens]
+
 - Added debug option to pad short messages with spaces,
   to help debug possible short notification issue [Arlanthir]
 
+
 v0.3:
+=======================================================================
+
 - Added experimental support for Calendar events.
   (note that this requires Accessibility in Android Settings.)
   (works on analog watch, untested on digital)
 
+
 v0.2:
+=======================================================================
+
 - Extended support to Android 2.2 (FroYo) [db1nto]
+
 - Changed music update to single 500ms buzz
+
 - Marked shared variables as volatile to improve thread safety
+
 - Changed send buffer to a BlockingQueue to improve thread safety [spacejunky]
 
+
 Initial version
+=======================================================================
+
 - Support for Android 2.3 (API level 10)
+
 - Optionally hide notification icon in status bar
+
 - Fix bug where newlines were displayed as boxes in analog watch
+
 - Fix bug where GMail was displayed as SMS on analog watch
+
 - Display Gmail unread count on analog watch
+
 - Added music support for Winamp
+
 - Changed vibrate on music update to a single 100ms "tap"
