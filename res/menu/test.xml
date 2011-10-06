@@ -10,6 +10,8 @@
     <item android:id="@+id/application_stop" android:title="Application Stop (LCD)"></item>
     <item android:id="@+id/sms" android:title="SMS (LCD/OLED)"></item>
     <item android:id="@+id/k9" android:title="K9 (LCD/OLED)"></item>
+    <item android:id="@+id/gmail_short" android:title="GMail short(LCD/OLED)"></item>
+    <item android:id="@+id/gmail_full" android:title="GMail full(LCD/OLED)"></item>
     <item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
     <item android:id="@+id/music" android:title="Music (LCD/OLED)"></item>
     <item android:id="@+id/call_start" android:title="Call Start (LCD/OLED)"></item>

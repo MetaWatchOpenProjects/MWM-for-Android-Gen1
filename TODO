@@ -4,8 +4,6 @@ TO DO
 - Arlanthir: Pad short messages with spaces to help debug possible 
   short notification issue?
 
-- DHG703B: Have Gmail and K9 scroll subject rather than truncate it?
-
 - dtiens: Calendar notifications have no data on digital watch
 
 
@@ -24,6 +22,9 @@ WISH LIST
   notify the user when the count has gone *up*.  
 
 - Optionally suppress toasts when Bluetooth throws IOExceptions 
+
+- Why does clicking "Start" take so long?  Maybe we should push the
+  startup to a working thread?
 
 - Create buzzing scheme:
   - 1 buzz: minor events (music track change)

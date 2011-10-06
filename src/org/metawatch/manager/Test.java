@@ -87,6 +87,12 @@ public class Test extends Activity {
 	    case R.id.k9:	   
 	    	NotificationBuilder.createK9(this, "doctor@gallifrey.net", "Would you like a jelly baby?");
 	        return true;
+	    case R.id.gmail_short:	   
+	    	NotificationBuilder.createGmailBlank(this, "me@gmail.com", 513);
+	        return true;
+	    case R.id.gmail_full:	   
+	    	NotificationBuilder.createGmail(this, "bruce@wayneenterprises.com", "me@gmail.com", "Need a ride", "Alfred, would you bring the car around to the docks?");
+	        return true;
 	    case R.id.alarm:	   
 	    	NotificationBuilder.createAlarm(this);
 	        return true;

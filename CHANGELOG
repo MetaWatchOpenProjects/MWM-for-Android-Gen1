@@ -2,6 +2,9 @@ CHANGELOG
 
 v0.4:
 - Scroll subject line of K9 notifications. [DHG703B]
+- Scroll snippet line of GMail full notifications. [DHG703B]
+  Note that this doesn't affect phones that can't see the content
+  of GMail messages (Android 2.3 and above, I think).
 
 v0.3:
 - Added experimental support for Calendar events.
