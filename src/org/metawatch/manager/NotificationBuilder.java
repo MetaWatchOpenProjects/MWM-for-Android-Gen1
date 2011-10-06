@@ -99,7 +99,7 @@ public class NotificationBuilder {
 	
 	public static void createCalendar(Context context, String text) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event"});		
+			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event", text});		
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);	
 			Notification.addTextNotification(context, text, new VibratePattern(false, 0, 0, 0), Notification.notificationTimeout);
 		} else {
