@@ -13,7 +13,8 @@
 	<string name="settings_Alarm_desc">Alarm clock alert</string>
 	<string name="settings_Music">Music</string>
 	<string name="settings_Music_desc">Music track/artist info</string>
-    
+    <string name="settings_Winamp">Winamp</string>
+    <string name="settings_Winamp_desc">Winamp music track/artist info</string>
     <string name="settings_Device">Device</string>
     <string name="settings_Mac">MAC</string>
     <string name="settings_Mac_desc">Watch Bluetooth MAC address</string>
@@ -30,5 +31,6 @@
 	</string-array>
     
     <string name="settings_Other">Other</string>
+    
     
 </resources>
