@@ -302,12 +302,13 @@ public class MetaWatchService extends Service {
 			connectionState = ConnectionState.CONNECTED;		
 			updateNotification(true);
 			
+			Protocol.startProtocolSender();
 			Protocol.sendRtcNow(context);			
 			Protocol.getDeviceType();			
 			
 		} catch (IOException ioexception) {
 			Log.d(MetaWatch.TAG, ioexception.toString());
-			sendToast(ioexception.toString());
+			//sendToast(ioexception.toString());
 		} catch (SecurityException e) {
 			Log.d(MetaWatch.TAG, e.toString());
 		} catch (NoSuchMethodException e) {
@@ -344,6 +345,7 @@ public class MetaWatchService extends Service {
 	};
 	
 	void disconnect() {
+		Protocol.stopProtocolSender();
 		try {
 			if (outputStream != null)
 				outputStream.close();
