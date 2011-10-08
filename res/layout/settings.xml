@@ -47,6 +47,12 @@
 			android:summary="@string/settings_Winamp_desc"
 			android:defaultValue="true"
 			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Batterylow"
+			android:key="NotifyBatterylow"
+			android:summary="@string/settings_Batterylow_desc"
+			android:defaultValue="true"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory

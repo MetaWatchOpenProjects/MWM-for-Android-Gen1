@@ -15,6 +15,8 @@
 	<string name="settings_Music_desc">Music track/artist info</string>
     <string name="settings_Winamp">Winamp</string>
     <string name="settings_Winamp_desc">Winamp music track/artist info</string>
+    <string name="settings_Batterylow">Low battery</string>
+    <string name="settings_Batterylow_desc">Displays a warning when the battery of this device is low.</string>
     <string name="settings_Device">Device</string>
     <string name="settings_Mac">MAC</string>
     <string name="settings_Mac_desc">Watch Bluetooth MAC address</string>
