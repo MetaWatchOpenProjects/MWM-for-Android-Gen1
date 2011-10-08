@@ -101,7 +101,7 @@ public class NotificationBuilder {
 			Bitmap bitmap = smartLines(context, "timer.bmp", new String[] {"Alarm Clock"});		
 			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm clock"), Protocol.createOled1line(context, null, "Alarm"), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm!"), Protocol.createOled1line(context, null, "Alarm"), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
 	
