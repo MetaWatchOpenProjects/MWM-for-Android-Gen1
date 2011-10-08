@@ -196,6 +196,7 @@ public class Protocol {
 	}
 	
 	public static void sendRtcNow(Context context) {
+		Log.d(MetaWatch.TAG, "Setting time of watch");
 		try {
 			boolean isMMDD = true;
 			char[] ch = DateFormat.getDateFormatOrder(context);
@@ -511,7 +512,7 @@ public class Protocol {
 	}
 	
 	public static void getDeviceType() {
-		
+		Log.d(MetaWatch.TAG,"Asking watch what kind it is.");
 		byte[] bytes = new byte[4];
 
 		bytes[0] = 0x01;
