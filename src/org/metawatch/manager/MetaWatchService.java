@@ -108,10 +108,10 @@ public class MetaWatchService extends Service {
 	}
 	
 	static class WatchModes {
-		public static boolean IDLE = false;
-		public static boolean APPLICATION = false;
-		public static boolean NOTIFICATION = false;
-		public static boolean CALL = false;
+		public static volatile boolean IDLE = false;
+		public static volatile boolean APPLICATION = false;
+		public static volatile boolean NOTIFICATION = false;
+		public static volatile boolean CALL = false;
 	}
 	
 	static class Preferences {
@@ -304,7 +304,9 @@ public class MetaWatchService extends Service {
 			
 			Protocol.startProtocolSender();
 			Protocol.sendRtcNow(context);			
-			Protocol.getDeviceType();			
+			Protocol.getDeviceType();		
+			
+			Notification.startNotificationSender(this);
 			
 		} catch (IOException ioexception) {
 			Log.d(MetaWatch.TAG, ioexception.toString());
@@ -346,6 +348,7 @@ public class MetaWatchService extends Service {
 	
 	void disconnect() {
 		Protocol.stopProtocolSender();
+		Notification.stopNotificationSender();
 		try {
 			if (outputStream != null)
 				outputStream.close();
@@ -368,15 +371,8 @@ public class MetaWatchService extends Service {
 		disconnect();		
 	}
 	
-	public static void nap(long time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-		}
-	}
-	
 	void start() {
-		Thread thread = new Thread() {
+		Thread thread = new Thread("MetaWatch Service Thread") {
 			public void run() {
 				boolean run = true;
 				Looper.prepare();				
@@ -391,7 +387,12 @@ public class MetaWatchService extends Service {
 						// create initial connection or reconnect
 						updateNotification(false);
 						connect(context);
-						nap(2000);
+						try {
+						Thread.sleep(2000);
+						} catch (InterruptedException ie) {
+							/* If we've been interrupted, exit gracefully. */
+							run = false;
+						}
 						break;
 					case ConnectionState.CONNECTED:
 						Log.d(MetaWatch.TAG, "state: connected");

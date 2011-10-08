@@ -56,7 +56,6 @@ public class Protocol {
 
 	private static volatile BlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
 	private static volatile boolean protocolSenderRunning = false;
-
 	private static Runnable protocolSender = new Runnable() {
 		public void run() {
 			while (protocolSenderRunning) {

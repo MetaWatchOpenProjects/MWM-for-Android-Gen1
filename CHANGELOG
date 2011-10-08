@@ -3,7 +3,30 @@ CHANGELOG
 v0.5:
 =======================================================================
 
+- Implemented a host of changes to try to fix the unresponsive analog
+  watch problem:
+
+  - Low-level protocol messages are now managed by a dedicated thread
+    and synchronized queue, to protect against the possibility of 
+    bytes from different arrays getting mangled.
+    
+  - High-level notification messages are now managed by a (different)
+    dedicated thread and synchronized queue, to protect against the
+    possibility of arrays from different notifications getting
+    mangled.
+    
+  - The notification processing thread no longer aborts when a 
+    scrolling message shorter than the OLED screen size is sent.
+    (This was the "short message" bug -- major thanks to Arlanthir,
+    thescreensavers, and spacejunky for helping me track this one down!)
+    
+  - Numerous minor fixes to improve thread safety; making variables
+    volatile, properly handling InterruptedExceptions, etc.
+  
 - Don't send calender events if the event text is blank.
+
+- Suppress toasts when Bluetooth throws IOExceptions; just log them. 
+
 
 v0.4:
 =======================================================================

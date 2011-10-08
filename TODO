@@ -3,19 +3,16 @@ TO DO
 
 
 
-
 WISH LIST
 =======================================================================
 
 - Scroll account name on GMail blank notifications.
 
-- Try changing right-padding to something other than spaces. 
+- If the threading fix works, remove the right-padding option. 
 
 - Optionally left-pad scrolling messages?  Often the beginning of
   the message has already disappeared by the time the user looks
   at the watch
-
-- Optionally suppress toasts when Bluetooth throws IOExceptions 
 
 - Why does clicking "Start" take so long?  Maybe we should push the
   startup to a working thread?
@@ -53,12 +50,6 @@ WISH LIST
   too quickly.  Make it user configurable in Settings.
   NOTE: Notification duration might be controlled in the firmware, not 
         the MWM; look at Protocol.sendOledDisplay().  
-
-- Synchronize notifications being pushed to the watch at the event 
-  level instead of the byte array level.  This would prevent the bug
-  where simultaneous events interleave their data to the watch,
-  causing confusing displays.
-  NOTE: Maybe this already exists?  See Notification.NotificationQueue?
   
 - When the notification icon is hidden, it can sometimes be seen as
   an empty block next to other icons.  Other apps push their icon to

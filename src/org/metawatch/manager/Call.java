@@ -81,7 +81,7 @@ public class Call {
 		MetaWatchService.WatchModes.CALL = false;
 				
 		if (MetaWatchService.WatchModes.NOTIFICATION == true)
-			Notification.toNotification(context);
+			Notification.replay(context);
 		else if (MetaWatchService.WatchModes.APPLICATION == true)
 			Application.toApp();
 		else if (MetaWatchService.WatchModes.IDLE == true)
