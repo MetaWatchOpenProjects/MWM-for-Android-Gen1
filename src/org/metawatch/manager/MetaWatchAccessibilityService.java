@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 public class MetaWatchAccessibilityService extends AccessibilityService {
@@ -17,8 +18,6 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 		asi.flags = AccessibilityServiceInfo.DEFAULT;
 		asi.notificationTimeout = 100;
 		setServiceInfo(asi);
-		// Log.d(MetaWatch.TAG,
-		// "MetaWatchAccessibilityService.onServiceConnected()");
 	}
 
 	@Override
@@ -38,16 +37,23 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 		}
 		String calendarText = sb.toString();
 
-		// CharSequence className = event.getClassName();
-		// Log.d(MetaWatch.TAG,
-		// "onAccessibilityEvent(): Received event, className='"
-		// + className + "' packagename='" + packageName
-		// + "' text='" + sb.toString() + "'");
+		CharSequence className = event.getClassName();
+		Log.d(MetaWatch.TAG,
+				"onAccessibilityEvent(): Received event, className='"
+						+ className + "' packagename='" + packageName
+						+ "' text='" + sb.toString() + "'");
 
 		/* Forward calendar event */
 		if (MetaWatchService.Preferences.notifyCalendar) {
 			if (packageName.equals("com.android.calendar")) {
-				NotificationBuilder.createCalendar(this, calendarText);
+				if (calendarText.trim().length() == 0) {
+					Log.d(MetaWatch.TAG,
+							"onAccessibilityEvent(): Ignoring calendar event with empty string.");
+				} else {
+					Log.d(MetaWatch.TAG,
+							"onAccessibilityEvent(): Sending calendar event: '"+calendarText+"'.");
+					NotificationBuilder.createCalendar(this, calendarText);
+				}
 			}
 		}
 
