@@ -117,6 +117,14 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
+	public static void createBatterylow(Context context) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "batterylow.bmp", new String[] {"Battery Low"});		
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "batterylow.bmp", "Warning!"), Protocol.createOled1line(context, null, "Battery low!"), null, 0, new VibratePattern(true, 500, 500, 3));
+		}
+	}
 	
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {

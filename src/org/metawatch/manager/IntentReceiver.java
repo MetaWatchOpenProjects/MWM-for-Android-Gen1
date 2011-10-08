@@ -111,6 +111,14 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createAlarm(context);
 			return;
 		}
+		else if (action.equals("android.intent.action.BATTERY_LOW") ) {
+			
+			if (!MetaWatchService.Preferences.notifyBatterylow)
+				return;
+			
+			NotificationBuilder.createBatterylow(context);
+			return;
+		}
 		else if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
 		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
 		{	

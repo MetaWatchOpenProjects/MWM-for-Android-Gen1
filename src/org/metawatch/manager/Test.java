@@ -120,6 +120,9 @@ public class Test extends Activity {
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Protocol.writeBuffer();
 	        return true;
+	    case R.id.Batterylow:	   
+	    	NotificationBuilder.createBatterylow(this);
+	        return true;
 	    case R.id.test: {
 	    	//Protocol.test(this);
 	    	//NotificationBuilder.createSMS(this, "555-123-4567", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20.");
