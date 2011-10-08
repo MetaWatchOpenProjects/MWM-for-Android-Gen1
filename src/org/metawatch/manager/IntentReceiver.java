@@ -132,6 +132,23 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createMusic(context, artist, track);
 			return;
 		}
+		else if (intent.getAction().equals("com.nullsoft.winamp.metachanged"))
+		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
+		{	
+			if (!MetaWatchService.Preferences.notifyWinamp)
+				return;
+			
+			String artist = "";
+			String track = "";
+			
+			if (intent.hasExtra("artist"))
+				artist = intent.getStringExtra("artist");
+			if (intent.hasExtra("track"))
+				track = intent.getStringExtra("track");
+			
+			NotificationBuilder.createWinamp(context, artist, track);
+			return;
+		}
 		
 	}
 

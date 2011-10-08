@@ -109,6 +109,14 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
+	public static void createWinamp(Context context, String artist, String track) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, artist});
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.notificationTimeout);
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
+		}
+	}
 	
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {

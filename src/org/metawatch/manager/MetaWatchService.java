@@ -121,6 +121,7 @@ public class MetaWatchService extends Service {
 		public static boolean notifyK9 = true;
 		public static boolean notifyAlarm = true;
 		public static boolean notifyMusic = true;
+		public static boolean notifyWinamp = true;
 		public static String watchMacAddress = "";
 		public static int packetWait = 10;
 		public static boolean skipSDP = false;
