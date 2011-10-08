@@ -100,6 +100,14 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm!"), Protocol.createOled1line(context, null, "Alarm"), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
+	public static void createTimezonechange(Context context) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "timezone.bmp", new String[] {"Timezone Changed"});		
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "timezone.bmp", "Timezone"), Protocol.createOled1line(context, null, "Changed"), null, 0, new VibratePattern(true, 500, 500, 3));
+		}
+	}
 	
 	public static void createMusic(Context context, String artist, String track) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {

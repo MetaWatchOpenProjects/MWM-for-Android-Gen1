@@ -86,6 +86,9 @@ public class Test extends Activity {
 	    case R.id.alarm:	   
 	    	NotificationBuilder.createAlarm(this);
 	        return true;
+	    case R.id.timezone:	   
+	    	NotificationBuilder.createTimezonechange(this);
+	        return true;
 	    case R.id.music:	   
 	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra");
 	        return true;

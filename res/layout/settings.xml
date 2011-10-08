@@ -53,6 +53,12 @@
 			android:summary="@string/settings_Batterylow_desc"
 			android:defaultValue="true"
 			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Timezonechange"
+			android:key="NotifyTimezonechange"
+			android:summary="@string/settings_Timezonechange_desc"
+			android:defaultValue="true"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory

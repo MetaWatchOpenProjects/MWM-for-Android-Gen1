@@ -9,10 +9,12 @@
     <item android:id="@+id/application_stop" android:title="Application Stop (LCD)"></item>
     <item android:id="@+id/sms" android:title="SMS (LCD/OLED)"></item>
     <item android:id="@+id/k9" android:title="K9 (LCD/OLED)"></item>
-    <item android:title="Gmail (OLED)" android:id="@+id/gmail"></item><item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
+    <item android:title="Gmail (OLED)" android:id="@+id/gmail"></item>
+    <item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
     <item android:id="@+id/music" android:title="Music (LCD/OLED)"></item>
     <item android:id="@+id/winamp" android:title="Winamp (LCD/OLED)"></item>
     <item android:id="@+id/Batterylow" android:title="Battery Low (LCD/OLED)"></item>
+    <item android:id="@+id/timezone" android:title="Timezone Change (LCD/OLED)"></item>
     <item android:id="@+id/call_start" android:title="Call Start (LCD/OLED)"></item>
     <item android:id="@+id/call_stop" android:title="Call Stop (LCD/OLED)"></item>    
     <item android:id="@+id/vibrate" android:title="Vibrate (LCD/OLED)"></item>
