@@ -54,7 +54,7 @@
 			android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask">
 		</activity>
-        <receiver android:name=".IntentReceiver"> 
+        <receiver android:name=".IntentReceiver" android:exported="true"> 
             <intent-filter>
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
             	<action android:name="android.intent.action.BOOT_COMPLETED"/>
