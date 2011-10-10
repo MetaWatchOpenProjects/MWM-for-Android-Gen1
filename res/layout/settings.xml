@@ -67,6 +67,18 @@
 	
 	
 	<PreferenceCategory
+		android:title="@string/settings_Analog"
+		>
+		<CheckBoxPreference
+			android:title="Pause Before Scrolling"
+			android:key="pauseBeforeScrolling"
+			android:summary="Pause a few seconds before scrolling long messages on the analog watch"
+			android:defaultValue="false"
+			/>
+	</PreferenceCategory>	
+	
+	
+	<PreferenceCategory
 		android:title="@string/settings_Other"
 		>
 		<CheckBoxPreference
@@ -114,12 +126,6 @@
 			android:title="Invert LCD"
 			android:key="InvertLCD"
 			android:summary="Switch black/white bit"
-			android:defaultValue="false"
-			/>
-		<CheckBoxPreference
-			android:title="Pause Before Scrolling"
-			android:key="pauseBeforeScrolling"
-			android:summary="Pause a few seconds before scrolling long messages on the analog watch"
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference

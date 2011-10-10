@@ -25,6 +25,9 @@ WISH LIST
 
 - Notify on new voicemail?
 
+- Optionally left-pad scrolling text on analog, to maximize the time 
+  before the beginning of the message scrolls off.
+
 - Low phone battery?  (Already implemented by AkiraYasha -- maybe
   request permission to import their changes?)
 
