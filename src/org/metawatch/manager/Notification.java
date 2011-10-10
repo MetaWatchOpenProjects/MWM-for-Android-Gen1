@@ -44,6 +44,12 @@ public class Notification {
 	private static BlockingQueue<NotificationType> notificationQueue = new LinkedBlockingQueue<NotificationType>();
 	private static volatile boolean notificationSenderRunning = false;
 
+	private static void addToNotificationQueue(NotificationType notification) {
+		if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
+			notificationQueue.add(notification);
+		}
+	}
+	
 	private static class NotificationSender implements Runnable {
 		private Context context;
 
@@ -221,7 +227,7 @@ public class Notification {
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
 		else
 			notification.vibratePattern = vibratePattern;
-		notificationQueue.add(notification);
+		addToNotificationQueue(notification);
 	}
 
 	public static void addBitmapNotification(Context context, Bitmap bitmap,
@@ -233,7 +239,7 @@ public class Notification {
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
 		else
 			notification.vibratePattern = vibratePattern;
-		notificationQueue.add(notification);
+		addToNotificationQueue(notification);
 	}
 
 	public static void addArrayNotification(Context context, int[] array,
@@ -245,7 +251,8 @@ public class Notification {
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
 		else
 			notification.vibratePattern = vibratePattern;
-		notificationQueue.add(notification);
+		addToNotificationQueue(notification);
+
 	}
 
 	public static void addBufferNotification(Context context, byte[] buffer,
@@ -257,7 +264,8 @@ public class Notification {
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
 		else
 			notification.vibratePattern = vibratePattern;
-		notificationQueue.add(notification);
+		addToNotificationQueue(notification);
+
 	}
 
 	public static void addOledNotification(Context context, byte[] top,
@@ -273,7 +281,8 @@ public class Notification {
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
 		else
 			notification.vibratePattern = vibratePattern;
-		notificationQueue.add(notification);
+		addToNotificationQueue(notification);
+
 	}
 
 	private static void exitNotification(Context context) {
@@ -291,7 +300,8 @@ public class Notification {
 	public static void replay(Context context) {
 		if (lastNotification != null) {
 			lastNotification.vibratePattern.vibrate = false;
-			notificationQueue.add(lastNotification);
+			addToNotificationQueue(lastNotification);
+
 		}
 	}
 

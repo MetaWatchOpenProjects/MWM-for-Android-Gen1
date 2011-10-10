@@ -6,6 +6,9 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Remove pause in processNotification scrolling, replace with
+  wait for watch to return "scrolling done" message?
+
 - Scroll account name on GMail blank notifications.
 
 - If the threading fix works, remove the right-padding option. 
