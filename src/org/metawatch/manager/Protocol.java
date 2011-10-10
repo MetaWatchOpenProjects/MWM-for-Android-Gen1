@@ -698,15 +698,6 @@ public class Protocol {
 		/* Replace newlines with spaces */
 		line = line.replace('\n', ' ');
 
-		/* Debug: pad short messages with spaces if requested */
-		if (Preferences.debugPadShortMessages) {
-			if (line.length() < 20) {
-				while (line.length() < 20) {
-					line = line + " ";
-				}
-			}
-		}
-
 		final int width = 800;
 
 		Bitmap image = Bitmap.createBitmap(width, 8, Bitmap.Config.RGB_565);

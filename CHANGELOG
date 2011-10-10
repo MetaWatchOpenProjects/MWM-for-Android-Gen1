@@ -7,6 +7,11 @@ v0.6:
 
 - Add album info to music notification for analog watch.
 
+- Removed debug option to right-pad short messages, since the 
+  short messages bug is fixed now.
+
+- Added option to pause a few seconds before scrolling OLED text.
+
 v0.5:
 =======================================================================
 

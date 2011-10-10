@@ -32,6 +32,5 @@
 	</string-array>
     
     <string name="settings_Other">Other</string>
-    <string name="settings_Debug">Debug options (beware)</string>
     
 </resources>

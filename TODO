@@ -2,20 +2,10 @@ TO DO
 =======================================================================
 
 
-
 WISH LIST
 =======================================================================
 
-- Remove pause in processNotification scrolling, replace with
-  wait for watch to return "scrolling done" message?
-
 - Scroll account name on GMail blank notifications.
-
-- If the threading fix works, remove the right-padding option. 
-
-- Optionally left-pad scrolling messages?  Often the beginning of
-  the message has already disappeared by the time the user looks
-  at the watch
 
 - Why does clicking "Start" take so long?  Maybe we should push the
   startup to a working thread?
@@ -47,11 +37,6 @@ WISH LIST
 - Control Winamp from watch?  Can this be done?  Does the analog
   watch have an application mode?
 
-- Change duration of notification on analog watch -- it disappears
-  too quickly.  Make it user configurable in Settings.
-  NOTE: Notification duration might be controlled in the firmware, not 
-        the MWM; look at Protocol.sendOledDisplay().  
-  
 - When the notification icon is hidden, it can sometimes be seen as
   an empty block next to other icons.  Other apps push their icon to
   the right, like Llama and Juice Defender.  How do they do that?
