@@ -3,16 +3,17 @@ CHANGELOG
 v0.6:
 =======================================================================
 
-- Only add notifications to the queue if the watch is connected.
-
 - Add album info to music notification for analog watch.
-
-- Removed debug option to right-pad short messages, since the 
-  short messages bug is fixed now.
 
 - Added option to pause a few seconds before scrolling OLED text.
 
 - Scroll recipient name on analog watch for GMail messages (Android 2.3+)
+
+- Removed debug option to right-pad short messages, since the 
+  short messages bug is fixed now.
+
+- Only add notifications to the queue if the watch is connected. [Arlanthir]
+
 
 v0.5:
 =======================================================================
