@@ -5,6 +5,8 @@ v0.6:
 
 - Only add notifications to the queue if the watch is connected.
 
+- Add album info to music notification for analog watch.
+
 v0.5:
 =======================================================================
 
