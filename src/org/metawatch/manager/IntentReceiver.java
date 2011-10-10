@@ -47,13 +47,12 @@ public class IntentReceiver extends BroadcastReceiver {
 		String action = intent.getAction();		
 		//Log.d(MetaWatch.TAG, action);
 		
-		/*
-		Bundle b = intent.getExtras();
-		for (String key : b.keySet()) {
-			Log.d(MetaWatch.TAG, "extra: " + key);
-        }		
-		Log.d(MetaWatch.TAG, intent.getDataString());
-		*/
+//		Bundle b = intent.getExtras();
+//		for (String key : b.keySet()) {
+//			Log.d(MetaWatch.TAG, "extra: " + key + " = '"+b.getString(key)+"'");
+//        }		
+//		String dataString = intent.getDataString();
+//		Log.d(MetaWatch.TAG, "dataString: " + (dataString == null ? "null" : "'" + dataString + "'"));
 		
 		if (action.equals("android.intent.action.PROVIDER_CHANGED")) {
 
@@ -155,13 +154,16 @@ public class IntentReceiver extends BroadcastReceiver {
 			
 			String artist = "";
 			String track = "";
+			String album = "";
 			
 			if (intent.hasExtra("artist"))
 				artist = intent.getStringExtra("artist");
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
+			if (intent.hasExtra("album"))
+				album = intent.getStringExtra("album");
 			
-			NotificationBuilder.createMusic(context, artist, track);
+			NotificationBuilder.createMusic(context, artist, track, album);
 			return;
 		}
 		

@@ -99,7 +99,7 @@ public class Test extends Activity {
 	    	NotificationBuilder.createAlarm(this);
 	        return true;
 	    case R.id.music:	   
-	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra");
+	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra", "Building a Better");
 	        return true;
 	    case R.id.call_start:	   
 	    	Call.startCall(this, "555-123-4567");
