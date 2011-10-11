@@ -116,14 +116,15 @@ public class NotificationBuilder {
 	}
 	
 	public static void createCalendar(Context context, String text) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsCalendarNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event", text});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);	
-			Notification.addTextNotification(context, text, new VibratePattern(false, 0, 0, 0), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.notificationTimeout);	
+			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.notificationTimeout);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "calendar.bmp", "  Calendar"), Protocol.createOled2lines(context, "Event Reminder:", text), scroll, len, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "calendar.bmp", "  Calendar"), Protocol.createOled2lines(context, "Event Reminder:", text), scroll, len, vibratePattern);
 		}
 	}
 	

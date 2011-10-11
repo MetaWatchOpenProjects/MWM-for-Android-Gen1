@@ -97,6 +97,16 @@
 			android:summary="@string/settings_Calendar_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsCalendarNumberBuzzes" 
+			android:title="Calendar Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
 	</PreferenceCategory>
 
 	<PreferenceCategory
