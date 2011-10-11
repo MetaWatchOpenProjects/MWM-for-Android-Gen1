@@ -25,10 +25,29 @@
    	<item>Medium</item>
    	<item>Large</item>     
 	</string-array> 
+
 	<string-array name="settings_font_size_value"> 
 	<item>1</item>
    	<item>2</item>
    	<item>3</item>  
+	</string-array>
+    
+	<string-array name="settings_number_buzzes_names">
+	<item>No Vibrate</item> 
+	<item>One Buzz</item>
+   	<item>Two Buzzes</item>
+   	<item>Three Buzzes</item>  
+   	<item>Four Buzzes</item>  
+   	<item>Five Buzzes</item>  
+	</string-array>
+
+	<string-array name="settings_number_buzzes_values"> 
+	<item>0</item>
+	<item>1</item>
+   	<item>2</item>
+   	<item>3</item>  
+   	<item>4</item>  
+   	<item>5</item>  
 	</string-array>
     
     <string name="settings_Analog">Analog Watch</string>

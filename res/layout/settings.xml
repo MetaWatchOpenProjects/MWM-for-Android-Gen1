@@ -17,6 +17,16 @@
 			android:summary="@string/settings_SMS_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsSMSNumberBuzzes" 
+			android:title="SMS Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>
 		<CheckBoxPreference
 			android:title="Gmail"
 			android:key="NotifyGmail"

@@ -37,11 +37,13 @@ import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 
 public class NotificationBuilder {
 	
@@ -50,17 +52,28 @@ public class NotificationBuilder {
 		public static final int MEDIUM = 2;
 		public static final int LARGE = 3;
 	}
+	
+	public static final String DEFAULT_NUMBER_OF_BUZZES = "3";
+	public static final VibratePattern NO_VIBRATE = new VibratePattern(false,0,0,0);
+	
+	private static VibratePattern createVibratePatternFromPreference(Context context, String preferenceName) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		String buzzPref = sharedPreferences.getString(preferenceName, DEFAULT_NUMBER_OF_BUZZES); 
+		int numberOfBuzzes = Integer.parseInt(buzzPref);
+		return new VibratePattern((numberOfBuzzes > 0),500,500,numberOfBuzzes);
+	}
 
 	public static void createSMS(Context context, String number, String text) {
 		String name = Utils.getContactNameFromNumber(context, number);
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsSMSNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), 4000);
-			Notification.addTextNotification(context, text, new VibratePattern(false, 0, 0, 0), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
+			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.notificationTimeout);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "message.bmp", "SMS from"), Protocol.createOled2lines(context, name, text), scroll, len, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "message.bmp", "SMS from"), Protocol.createOled2lines(context, name, text), scroll, len, vibratePattern);
 		}
 	}
 	
