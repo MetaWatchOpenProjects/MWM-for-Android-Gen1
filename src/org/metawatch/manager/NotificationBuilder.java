@@ -138,13 +138,14 @@ public class NotificationBuilder {
 	}
 	
 	public static void createMusic(Context context, String artist, String track, String album) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, artist});
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.notificationTimeout);
+			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, album, artist});
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.notificationTimeout);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, track, scroll);
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled2lines(context, album, track), scroll, len, new VibratePattern(true, 500, 0, 1));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled2lines(context, album, track), scroll, len, vibratePattern);
 		}
 	}
 	

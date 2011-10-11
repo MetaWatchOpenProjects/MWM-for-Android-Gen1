@@ -81,6 +81,16 @@
 			android:summary="@string/settings_Music_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsMusicNumberBuzzes" 
+			android:title="Music Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="1"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Calendar"
 			android:key="NotifyCalendar"

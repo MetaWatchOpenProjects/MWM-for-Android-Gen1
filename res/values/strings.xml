@@ -12,7 +12,7 @@
 	<string name="settings_Alarm">Alarm</string>
 	<string name="settings_Alarm_desc">Alarm clock alert</string>
 	<string name="settings_Music">Music</string>
-	<string name="settings_Music_desc">Music track/artist info</string>
+	<string name="settings_Music_desc">Music artist/album/track info</string>
 	<string name="settings_Calendar">Calendar</string>
 	<string name="settings_Calendar_desc">Calendar notifications (requires Accessibility in Android settings)</string>
     
