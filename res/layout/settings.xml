@@ -49,6 +49,16 @@
 			android:summary="@string/settings_K9_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsK9NumberBuzzes" 
+			android:title="K9 Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Alarm"
 			android:key="NotifyAlarm"
