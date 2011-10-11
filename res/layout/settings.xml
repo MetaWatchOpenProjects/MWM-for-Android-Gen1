@@ -33,6 +33,16 @@
 			android:summary="New E-mail notification (Gmail)"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsGmailNumberBuzzes" 
+			android:title="Gmail Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_K9"
 			android:key="NotifyK9"

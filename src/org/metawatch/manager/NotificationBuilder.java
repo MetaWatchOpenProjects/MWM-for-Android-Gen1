@@ -89,26 +89,28 @@ public class NotificationBuilder {
 	}
 	
 	public static void createGmail(Context context, String sender, String email, String subject, String snippet) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail from", sender, email, subject});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);	
-			Notification.addTextNotification(context, snippet, new VibratePattern(false, 0, 0, 0), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.notificationTimeout);	
+			Notification.addTextNotification(context, snippet, NO_VIBRATE, Notification.notificationTimeout);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, snippet, scroll);
-			Notification.addOledNotification(context, Protocol.createOled2lines(context, "Gmail from " + sender, email), Protocol.createOled2lines(context, subject, snippet), scroll, len, new VibratePattern(true, 500, 500, 3));			
+			Notification.addOledNotification(context, Protocol.createOled2lines(context, "Gmail from " + sender, email), Protocol.createOled2lines(context, subject, snippet), scroll, len, vibratePattern);			
 		}
 	}
 	
 	public static void createGmailBlank(Context context, String recipient, int count) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail for", recipient});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.notificationTimeout);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, recipient, scroll);
 			String messages = (count == 1 ? "message" : "messages");
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", " GMail"), Protocol.createOled2lines(context, count + " new " + messages, recipient), scroll, len, new VibratePattern(true, 500, 500, 3));			
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "email.bmp", " GMail"), Protocol.createOled2lines(context, count + " new " + messages, recipient), scroll, len, vibratePattern);			
 		}
 	}
 	

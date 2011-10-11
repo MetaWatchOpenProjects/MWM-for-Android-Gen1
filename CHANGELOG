@@ -3,6 +3,10 @@ CHANGELOG
 v0.7:
 =======================================================================
 
+- Made vibrate pattern customizable for:
+  - SMS
+  - Gmail
+
 - Created settings section for analog watch, and moved scroll delay
   into the new section.
 
