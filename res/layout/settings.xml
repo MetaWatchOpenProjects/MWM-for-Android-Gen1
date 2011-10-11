@@ -65,6 +65,16 @@
 			android:summary="@string/settings_Alarm_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsAlarmNumberBuzzes" 
+			android:title="Alarm Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="5"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Music"
 			android:key="NotifyMusic"

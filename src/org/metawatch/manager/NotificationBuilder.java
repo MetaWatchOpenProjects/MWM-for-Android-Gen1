@@ -128,11 +128,12 @@ public class NotificationBuilder {
 	}
 	
 	public static void createAlarm(Context context) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsAlarmNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "timer.bmp", new String[] {"Alarm Clock"});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.notificationTimeout);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm clock"), Protocol.createOled1line(context, null, "Alarm"), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm"), Protocol.createOled1line(context, null, "Alarm"), null, 0, vibratePattern);
 		}
 	}
 	
