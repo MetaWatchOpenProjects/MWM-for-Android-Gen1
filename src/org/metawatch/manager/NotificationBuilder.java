@@ -150,6 +150,17 @@ public class NotificationBuilder {
 		}
 	}
 	
+	public static void createOtherNotification(Context context, String appName, String notificationText) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsOtherNotificationNumberBuzzes");				
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Notification.addTextNotification(context, appName + ": " + notificationText, vibratePattern, Notification.notificationTimeout);
+		} else {
+			byte[] scroll = new byte[800];
+			int len = Protocol.createOled2linesLong(context, notificationText, scroll);
+			Notification.addOledNotification(context, Protocol.createOled1line(context, null, appName), Protocol.createOled2lines(context, "Notification", notificationText), scroll, len, vibratePattern);
+		}
+	}
+	
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {
 		

@@ -107,6 +107,27 @@
  			android:enabled="true" 
  			android:defaultValue="3"
  			/>			
+		<CheckBoxPreference
+			android:title="@string/settings_OtherNotification"
+			android:key="NotifyOtherNotification"
+			android:summary="@string/settings_OtherNotification_desc"
+			android:defaultValue="true"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsOtherNotificationNumberBuzzes" 
+			android:title="Other Apps Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="1"
+ 			/>				
+		<Preference
+			android:title="Application Blacklist"
+			android:key="appBlacklist"
+			android:summary="List of applications to ignore notifications from"
+			/> 			
 	</PreferenceCategory>
 
 	<PreferenceCategory

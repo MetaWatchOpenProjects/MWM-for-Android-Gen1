@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	<ImageView android:id="@+id/app_blacklist_list_item_icon"
+		android:layout_width="48dp" android:layout_height="48dp"
+		android:layout_marginRight="6dip" android:src="@drawable/icon" />
+	<TextView android:layout_width="wrap_content" android:layout_weight="1"
+		android:layout_height="wrap_content" android:id="@+id/app_blacklist_list_item_name"
+		android:textSize="30px" android:text="Hello There"></TextView>
+	<CheckBox android:id="@+id/app_blacklist_list_item_check"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_marginLeft="4px" android:layout_marginRight="10px"></CheckBox>
+</LinearLayout>

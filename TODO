@@ -5,24 +5,6 @@ TO DO
 WISH LIST
 =======================================================================
 
-- Create buzzing scheme:
-  - 1 buzz: minor events (music track change)
-  - 2 buzz: normal events (notifications, email)
-  - 3 buzz: urgent events (SMS, calendar)
-
-- Other notification types via Accessibility?
-	- Pandora track changes?
-	- Facebook notifications?
-	- Twitter notifications?
-	- Google+ notifications?
-	- Parcel notifications?  "Your package has arrived!" :)
-	- Turn-by-turn navigation?
-	- anDGS notifications: "It's your turn to play!"
-	- Remember the Milk notifications: "A task is due!"
-	- Weather channel severe weather?
-
-- Maybe just forward all notifications, with a blacklist? [db1nto]
-
 - Notify on new voicemail?
 
 - Optionally left-pad scrolling text on analog, to maximize the time 

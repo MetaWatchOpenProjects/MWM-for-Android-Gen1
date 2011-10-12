@@ -53,6 +53,12 @@
 			android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask">
 		</activity>
+		<activity
+			android:label="App Blacklist"
+			android:name=".AppBlacklist"
+			android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask">
+		</activity>
         <receiver android:name=".IntentReceiver"> 
             <intent-filter>
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  

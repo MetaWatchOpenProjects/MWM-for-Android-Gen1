@@ -44,10 +44,13 @@ import android.util.Log;
 
 public class Settings extends PreferenceActivity {
 	
+	
+	
 	Context context;
 	
 	PreferenceScreen preferenceScreen;
 	Preference discovery;
+	Preference appBlacklist;
 	
 	EditTextPreference editTextMac;
 
@@ -65,8 +68,6 @@ public class Settings extends PreferenceActivity {
 	@Override
 	protected void onStart() {
 
-		Log.d(MetaWatch.TAG, "set onstart");
-		
 		editTextMac = (EditTextPreference) preferenceScreen.findPreference("MAC");
 		editTextMac.setText(MetaWatchService.Preferences.watchMacAddress);
 		
@@ -82,6 +83,16 @@ public class Settings extends PreferenceActivity {
 				return false;
 			}
 		});
+		
+		
+		appBlacklist = preferenceScreen.findPreference("appBlacklist");
+		appBlacklist.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference arg0) {
+				startActivity(new Intent(context, AppBlacklist.class));
+				return false;
+			}
+		});
+		
 
 		super.onStart();
 	}
