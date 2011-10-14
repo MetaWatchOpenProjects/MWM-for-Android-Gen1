@@ -145,24 +145,34 @@ public class IntentReceiver extends BroadcastReceiver {
 			return;
 		}
 		
-		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
-		if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.nullsoft.winamp.metachanged"))
-		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
-		{	
+		if (intent.getAction().equals("com.android.music.metachanged")
+				|| intent.getAction().equals("com.htc.music.metachanged")
+				|| intent.getAction().equals("mobi.beyondpod.action.PLAYBACK_STATUS")
+				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
+			
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
+
+			/* If the intent specifies a "playing" extra, use it. */
+			if (intent.hasExtra("playing")) {
+				boolean playing = intent.getBooleanExtra("playing", false);
+				if (playing == false) {
+					/* Ignore stop events. */
+					return;
+				}
+			}
 			
 			String artist = "";
 			String track = "";
 			String album = "";
-			
+
 			if (intent.hasExtra("artist"))
 				artist = intent.getStringExtra("artist");
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
 			if (intent.hasExtra("album"))
 				album = intent.getStringExtra("album");
-			
+
 			NotificationBuilder.createMusic(context, artist, track, album);
 			return;
 		}

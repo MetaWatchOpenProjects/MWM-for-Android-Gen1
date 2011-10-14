@@ -18,9 +18,6 @@ WISH LIST
   the right, like Llama and Juice Defender.  How do they do that?
   Something to do with the event timestamp, maybe?
 
-- Receive BeyondPod "now playing" broadcasts. [tilmanb]
-  http://beyondpod.com/support/index.php?/Knowledgebase/Article/View/31/5/beyondpod-public-apis
-  
 - Optionally auto-start on system boot. [tilmanb]
   http://stackoverflow.com/questions/5739588/android-launching-app-when-system-boot
 
