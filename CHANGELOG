@@ -1,5 +1,13 @@
 CHANGELOG
 
+v0.8:
+=======================================================================
+
+- MWM now broadcasts an intent when the connection state changes.
+  Intent: org.metawatch.manager.CONNECTION_CHANGE
+  Extra: key='state' type=boolean (true if now connected, false otherwise)
+  Many thanks to rmrfchik for submitting the code!
+
 v0.7:
 =======================================================================
 

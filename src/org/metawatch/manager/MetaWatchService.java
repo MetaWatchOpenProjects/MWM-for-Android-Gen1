@@ -84,7 +84,7 @@ public class MetaWatchService extends Service {
 	public static int watchState;
 	
 	public static TestSmsLoop testSmsLoop;
-		
+	private boolean lastConnectionState = false;		
 	
 	final class ConnectionState {
 		static final int DISCONNECTED = 0;
@@ -197,24 +197,22 @@ public class MetaWatchService extends Service {
 		Intent notificationIntent = new Intent(this, MetaWatch.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.contentIntent = contentIntent;
-
 		startForeground(1, notification);
 	}
 	
 	public void updateNotification(boolean connected) {
 		if (connected) {
 			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.connected);
-			//notification.icon = R.drawable.connected;
 			notification.icon = notificationIcon;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.connected_large);
 			remoteViews.setTextViewText(R.id.text, "MetaWatch is connected");
 		} else {
 			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
-			//notification.icon = R.drawable.disconnected;
 			notification.icon = notificationIcon;
 			remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected_large);
 			remoteViews.setTextViewText(R.id.text, "MetaWatch is not connected");
 		}
+		broadcastConnection(connected);
 		startForeground(1, notification);
 	}
 	
@@ -364,6 +362,7 @@ public class MetaWatchService extends Service {
 				bluetoothSocket.close();
 		} catch (IOException e) {
 		}		
+		broadcastConnection(false);
 	}
 	
 	void disconnectExit() {
@@ -495,9 +494,22 @@ public class MetaWatchService extends Service {
 		} catch (IOException e) {
 			wakeLock.acquire(5000);
 			if (connectionState != ConnectionState.DISCONNECTING)
-				connectionState = ConnectionState.CONNECTING;			
+			{
+				connectionState = ConnectionState.CONNECTING;
+				broadcastConnection(false);
+			}
 		}
 		
+	}
+	
+	void broadcastConnection(boolean connected) {
+		if (connected != lastConnectionState) {
+			lastConnectionState = connected;
+			Intent intent = new Intent(
+					"org.metawatch.manager.CONNECTION_CHANGE");
+			intent.putExtra("state", connected);
+			sendBroadcast(intent);
+		}
 	}
 	
 	void pressedButton(byte button) {
