@@ -5,6 +5,8 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Review rmrfchik's battery code, and import if possible.
+
 - Notify on new voicemail?
 
 - Optionally left-pad scrolling text on analog, to maximize the time 
@@ -18,9 +20,19 @@ WISH LIST
   the right, like Llama and Juice Defender.  How do they do that?
   Something to do with the event timestamp, maybe?
 
+- Receive BeyondPod "now playing" broadcasts. [tilmanb]
+  http://beyondpod.com/support/index.php?/Knowledgebase/Article/View/31/5/beyondpod-public-apis
+  
+- Optionally auto-start on system boot. [tilmanb]
+  http://stackoverflow.com/questions/5739588/android-launching-app-when-system-boot
+
   
 SOMEDAY / MAYBE
 =======================================================================
+
+- Scroll K9 receipient address on top OLED? [thescreensavers] (Not sure
+  if this is possible; if it is, I probably can't tackle it until the
+  analog message interface is published.) 
 
 - Why does clicking "Start" take so long?  Maybe we should push the
   startup to a working thread?  (It doesn't do anything but start the
