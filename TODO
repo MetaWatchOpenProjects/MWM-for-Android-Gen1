@@ -5,6 +5,9 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Make sure the notification queue waits at least the minimum wait
+  between shipping notifications. [dhg703b]
+
 - Notify on new voicemail?
 
 - Optionally left-pad scrolling text on analog, to maximize the time 
@@ -21,9 +24,15 @@ WISH LIST
 - Optionally auto-start on system boot. [tilmanb]
   http://stackoverflow.com/questions/5739588/android-launching-app-when-system-boot
 
+- Review new message docs -- what new and cool things can we do?
+
+- Add custom RTM handling -- is there an API?  If not, at least
+  ignore syncing messages.
   
 SOMEDAY / MAYBE
 =======================================================================
+
+- Should we wait for status change from watch before sending new notifications?
 
 - Scroll K9 receipient address on top OLED? [thescreensavers] (Not sure
   if this is possible; if it is, I probably can't tackle it until the
@@ -38,3 +47,4 @@ SOMEDAY / MAYBE
 
 - Control Winamp from watch?  Can this be done?  (Can't attempt until
   we get the analog docs -- does the analog watch have an application mode?)
+  
