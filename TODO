@@ -5,11 +5,6 @@ TO DO
 WISH LIST
 =======================================================================
 
-- Make sure the notification queue waits at least the minimum wait
-  between shipping notifications. [dhg703b]
-
-- Make notification timeout a user preference [Smithers]
-
 - Fix GMail count bug? [Smithers]
   "The email icon isn't displaying the number of emails received. Even 
    if I don't look at the phone, I'm not getting a count."

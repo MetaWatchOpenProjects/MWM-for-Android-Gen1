@@ -52,6 +52,7 @@
    	<item>5</item>  
 	</string-array>
     
+    <string name="settings_Digital">Digital Watch</string>
     <string name="settings_Analog">Analog Watch</string>
     <string name="settings_Other">Other</string>
     

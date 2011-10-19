@@ -35,7 +35,9 @@ import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Notification {
@@ -154,7 +156,9 @@ public class Notification {
 					lastNotification = notification;
 
 					/* Give some space between notifications. */
+					Log.d(MetaWatch.TAG, "NotificationSender.run(): Notification sent, sleeping for " + notification.timeout + "ms");
 					Thread.sleep(notification.timeout);
+					Log.d(MetaWatch.TAG, "NotificationSender.run(): Done sleeping.");
 
 					if (MetaWatchService.WatchModes.CALL == false) {
 						exitNotification(context);
@@ -195,7 +199,15 @@ public class Notification {
 		}
 	}
 
-	public static final int notificationTimeout = 5000;
+	public static final String  DEFAULT_NOTIFICATION_TIMEOUT = "5";
+	public static final int NUM_MS_IN_SECOND = 1000;
+	
+	public static int getDefaultNotificationTimeout(Context context) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		String timeoutString = sharedPreferences.getString("notificationTimeout", DEFAULT_NOTIFICATION_TIMEOUT);
+		int timeout = Integer.parseInt(timeoutString) * NUM_MS_IN_SECOND;
+		return timeout;
+	}
 
 	public static Object scrollRequest = new Object();
 
@@ -256,6 +268,8 @@ public class Notification {
 			VibratePattern vibratePattern) {
 		NotificationType notification = new NotificationType();
 		notification.array = array;
+		
+		int notificationTimeout = getDefaultNotificationTimeout(context); 
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
@@ -269,6 +283,7 @@ public class Notification {
 			VibratePattern vibratePattern) {
 		NotificationType notification = new NotificationType();
 		notification.buffer = buffer;
+		int notificationTimeout = getDefaultNotificationTimeout(context); 
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
@@ -286,6 +301,7 @@ public class Notification {
 		notification.oledBottom = bottom;
 		notification.oledScroll = scroll;
 		notification.scrollLength = scrollLength;
+		int notificationTimeout = getDefaultNotificationTimeout(context); 
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);

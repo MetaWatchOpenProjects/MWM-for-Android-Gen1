@@ -37,6 +37,8 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,11 +59,23 @@ public class Test extends Activity {
 	    	NotificationBuilder.createCalendar(this, "Tea with the Hatter - Windmill");
 	        return true;
 	    case R.id.notification:
-	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
-	    		Notification.addTextNotification(this, "Notification", new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
-	    	else
-	    		Notification.addOledNotification(this, Protocol.createOled2lines(this, "Display A, line 1", "Display A, line 2"), Protocol.createOled2lines(this, "Display B, line 1", "Display B, line 2"), null, 0, null);
-	        return true;
+			if (MetaWatchService.watchType == WatchType.DIGITAL) {
+				SharedPreferences sharedPreferences = PreferenceManager
+						.getDefaultSharedPreferences(this);
+				int notificationTimeout = sharedPreferences.getInt(
+						"notificationTimeout", 5)
+						* Notification.NUM_MS_IN_SECOND;
+				Notification.addTextNotification(this, "Notification",
+						new VibratePattern(true, 500, 500, 3),
+						notificationTimeout);
+			} else {
+				Notification.addOledNotification(this, Protocol
+						.createOled2lines(this, "Display A, line 1",
+								"Display A, line 2"), Protocol
+						.createOled2lines(this, "Display B, line 1",
+								"Display B, line 2"), null, 0, null);
+			}
+			return true;
 	    case R.id.application_start:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Application.startAppMode();

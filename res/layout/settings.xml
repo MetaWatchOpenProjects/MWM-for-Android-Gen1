@@ -160,8 +160,15 @@
 	
 	
 	<PreferenceCategory
-		android:title="@string/settings_Other"
+		android:title="@string/settings_Digital"
 		>
+		<EditTextPreference
+			android:title="Notification Timeout"
+			android:key="notificationTimeout"
+			android:summary="Default time to wait before returning to idle screen (seconds)"
+			android:numeric="integer"
+			android:defaultValue="5"
+			/>
 		<CheckBoxPreference
 			android:title="Music Controls (Beta)"
 			android:key="IdleMusicControls"
@@ -174,6 +181,18 @@
 			android:summary="Enable replay of last notification on Idle screen"
 			android:defaultValue="false"
 			/>
+		<CheckBoxPreference
+			android:title="Invert LCD"
+			android:key="InvertLCD"
+			android:summary="Switch black/white bit"
+			android:defaultValue="false"
+			/>
+	</PreferenceCategory>	
+	
+	
+	<PreferenceCategory
+		android:title="@string/settings_Other"
+		>
 		<ListPreference 
 			android:entries="@array/settings_font_size_name" 
 			android:entryValues="@array/settings_font_size_value" 
@@ -202,12 +221,6 @@
 			android:summary="Time between packet sends (ms)"
 			android:numeric="integer"
 			android:defaultValue="10"
-			/>
-		<CheckBoxPreference
-			android:title="Invert LCD"
-			android:key="InvertLCD"
-			android:summary="Switch black/white bit"
-			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
 			android:title="Hide Notification Icon"

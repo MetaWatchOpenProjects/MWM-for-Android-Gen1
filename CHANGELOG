@@ -1,5 +1,16 @@
 CHANGELOG
 
+v0.9:
+=======================================================================
+
+- Digital watch only: On receiving a notification, the time to wait 
+  before returning to the idle screen is now a preference. (Untested)
+  [Smithers]
+  
+- Created a new section for settings that only apply to the digital 
+  watch.
+   
+
 v0.8:
 =======================================================================
 
