@@ -216,17 +216,18 @@ public class MetaWatchService extends Service {
 			case ConnectionState.CONNECTING:
 				notification.icon = R.drawable.connected;
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Connecting");
+				broadcastConnection(false);
 				break;
 			case ConnectionState.CONNECTED:
 				notification.icon = R.drawable.connected;
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Connected");
+				broadcastConnection(true);
 				break;
 			default:
 				notification.icon = R.drawable.disconnected;
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Disconnected");
 				break;
  		}
- 		broadcastConnection(connected);
 		startForeground(1, notification);
 	}
 	

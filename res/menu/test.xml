@@ -11,6 +11,9 @@
     <item android:id="@+id/sms" android:title="SMS (LCD/OLED)"></item>
     <item android:id="@+id/k9" android:title="K9 (LCD/OLED)"></item>
     <item android:id="@+id/gmail" android:title="Gmail (OLED)"></item>
+    <item android:id="@+id/gmail_short" android:title="Gmail Short (OLED)"></item>
+    <item android:id="@+id/gmail_full" android:title="Gmail Long (OLED)"></item>
+    <item android:id="@+id/testShortMessage" android:title="Short Message (OLED)"></item>
     <item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
     <item android:id="@+id/music" android:title="Music (LCD/OLED)"></item>
     <item android:id="@+id/winamp" android:title="Winamp (LCD/OLED)"></item>

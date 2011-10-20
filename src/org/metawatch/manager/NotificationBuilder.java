@@ -152,7 +152,7 @@ public class NotificationBuilder {
 	public static void createTimezonechange(Context context) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "timezone.bmp", new String[] {"Timezone Changed"});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "timezone.bmp", "Timezone"), Protocol.createOled1line(context, null, "Changed"), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
@@ -171,7 +171,7 @@ public class NotificationBuilder {
 	public static void createWinamp(Context context, String artist, String track) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, artist});
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
@@ -179,7 +179,7 @@ public class NotificationBuilder {
 	public static void createBatterylow(Context context) {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "batterylow.bmp", new String[] {"Battery Low"});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "batterylow.bmp", "Warning!"), Protocol.createOled1line(context, null, "Battery low!"), null, 0, new VibratePattern(true, 500, 500, 3));
 		}

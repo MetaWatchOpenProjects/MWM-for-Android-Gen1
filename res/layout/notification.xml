@@ -18,9 +18,8 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
-
+		<!-- style="@android:style/TextAppearance.StatusBar.EventContent.Title" -->
         <TextView android:id="@+id/notification_title"
-            style="@android:style/TextAppearance.StatusBar.EventContent.Title"
             android:focusable="true"
             android:ellipsize="marquee"
             android:singleLine="true"
@@ -28,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+		<!-- style="@android:style/TextAppearance.StatusBar.EventContent" -->
         <TextView android:id="@+id/notification_subtitle"
-            style="@android:style/TextAppearance.StatusBar.EventContent"
             android:layout_gravity="left"
             android:maxLines="2"
             android:scrollHorizontally="true"
