@@ -69,9 +69,7 @@ public class NotificationBuilder {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addTextNotification(context, text, NO_VIBRATE, notificationTimeout);
+			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -83,9 +81,7 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsK9NumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"K9 mail from", sender, subject});
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, subject, scroll);
@@ -97,10 +93,8 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail from", sender, email, subject});
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);	
-			Notification.addTextNotification(context, snippet, NO_VIBRATE, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
+			Notification.addTextNotification(context, snippet, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, snippet, scroll);
@@ -112,9 +106,7 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail for", recipient});	
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, recipient, scroll);
@@ -127,10 +119,8 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsCalendarNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event", text});	
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);	
-			Notification.addTextNotification(context, text, NO_VIBRATE, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
+			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -142,9 +132,7 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsAlarmNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "timer.bmp", new String[] {"Alarm Clock"});		
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm"), Protocol.createOled1line(context, null, "Alarm"), null, 0, vibratePattern);
 		}
@@ -154,9 +142,7 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, album, artist});
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, notificationTimeout);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, track, scroll);
@@ -167,9 +153,7 @@ public class NotificationBuilder {
 	public static void createOtherNotification(Context context, String appName, String notificationText) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsOtherNotificationNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			int notificationTimeout = sharedPreferences.getInt("notificationTimeout", 5) * Notification.NUM_MS_IN_SECOND; 			
-			Notification.addTextNotification(context, appName + ": " + notificationText, vibratePattern, notificationTimeout);
+			Notification.addTextNotification(context, appName + ": " + notificationText, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, notificationText, scroll);

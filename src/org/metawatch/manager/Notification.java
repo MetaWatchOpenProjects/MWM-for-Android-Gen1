@@ -52,7 +52,7 @@ public class Notification {
 			notificationQueue.add(notification);
 		}
 	}
-	
+
 	private static class NotificationSender implements Runnable {
 		private Context context;
 
@@ -104,18 +104,20 @@ public class Notification {
 
 							Log.d(MetaWatch.TAG, "notification.scrollLength = "
 									+ notification.scrollLength);
-							
-							/* If requested, let the notification stay on the 
-							 * screen for a few seconds before starting to 
+
+							/*
+							 * If requested, let the notification stay on the
+							 * screen for a few seconds before starting to
 							 * scroll.
 							 */
 							if (Preferences.pauseBeforeScrolling) {
-								Log.d(MetaWatch.TAG,"Pausing before scrolling.");
-								Thread.sleep(3000);	
+								Log.d(MetaWatch.TAG,
+										"Pausing before scrolling.");
+								Thread.sleep(3000);
 							}
 
 							if (notification.scrollLength >= 240) {
-								
+
 								Protocol.sendOledBufferPart(
 										notification.oledScroll, 0, 240, true,
 										false);
@@ -142,12 +144,12 @@ public class Notification {
 								}
 
 							} else if (notification.scrollLength > 0) {
-								
+
 								int len = notification.scrollLength / 20 + 1;
 								Protocol.sendOledBufferPart(
 										notification.oledScroll, 0, len * 20,
 										true, true);
-								
+
 							}
 						}
 
@@ -156,9 +158,12 @@ public class Notification {
 					lastNotification = notification;
 
 					/* Give some space between notifications. */
-					Log.d(MetaWatch.TAG, "NotificationSender.run(): Notification sent, sleeping for " + notification.timeout + "ms");
+					Log.d(MetaWatch.TAG,
+							"NotificationSender.run(): Notification sent, sleeping for "
+									+ notification.timeout + "ms");
 					Thread.sleep(notification.timeout);
-					Log.d(MetaWatch.TAG, "NotificationSender.run(): Done sleeping.");
+					Log.d(MetaWatch.TAG,
+							"NotificationSender.run(): Done sleeping.");
 
 					if (MetaWatchService.WatchModes.CALL == false) {
 						exitNotification(context);
@@ -199,14 +204,23 @@ public class Notification {
 		}
 	}
 
-	public static final String  DEFAULT_NOTIFICATION_TIMEOUT = "5";
-	public static final int NUM_MS_IN_SECOND = 1000;
-	
+	private static final String NOTIFICATION_TIMEOUT_SETTING = "notificationTimeout";
+	private static final String DEFAULT_NOTIFICATION_TIMEOUT_STRING = "5";
+	private static final int DEFAULT_NOTIFICATION_TIMEOUT = 5;
+	private static final int NUM_MS_IN_SECOND = 1000;
+
 	public static int getDefaultNotificationTimeout(Context context) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		String timeoutString = sharedPreferences.getString("notificationTimeout", DEFAULT_NOTIFICATION_TIMEOUT);
-		int timeout = Integer.parseInt(timeoutString) * NUM_MS_IN_SECOND;
-		return timeout;
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		String timeoutString = sharedPreferences.getString(
+				NOTIFICATION_TIMEOUT_SETTING,
+				DEFAULT_NOTIFICATION_TIMEOUT_STRING);
+		try {
+			int timeout = Integer.parseInt(timeoutString) * NUM_MS_IN_SECOND;
+			return timeout;
+		} catch (NumberFormatException nfe) {
+			return DEFAULT_NOTIFICATION_TIMEOUT;
+		}
 	}
 
 	public static Object scrollRequest = new Object();
@@ -268,8 +282,8 @@ public class Notification {
 			VibratePattern vibratePattern) {
 		NotificationType notification = new NotificationType();
 		notification.array = array;
-		
-		int notificationTimeout = getDefaultNotificationTimeout(context); 
+
+		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
@@ -283,7 +297,7 @@ public class Notification {
 			VibratePattern vibratePattern) {
 		NotificationType notification = new NotificationType();
 		notification.buffer = buffer;
-		int notificationTimeout = getDefaultNotificationTimeout(context); 
+		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
@@ -301,7 +315,7 @@ public class Notification {
 		notification.oledBottom = bottom;
 		notification.oledScroll = scroll;
 		notification.scrollLength = scrollLength;
-		int notificationTimeout = getDefaultNotificationTimeout(context); 
+		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
 			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
