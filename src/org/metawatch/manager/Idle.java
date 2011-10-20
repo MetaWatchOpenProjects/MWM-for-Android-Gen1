@@ -42,6 +42,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 public class Idle {
 	

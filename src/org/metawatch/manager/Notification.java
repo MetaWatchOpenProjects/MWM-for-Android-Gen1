@@ -88,7 +88,6 @@ public class Notification {
 			isSending = true;
 		
 		Thread thread = new Thread() {
-			@Override
 			public void run() {
 				
 				if (notificationQueue.size() > 0) {
