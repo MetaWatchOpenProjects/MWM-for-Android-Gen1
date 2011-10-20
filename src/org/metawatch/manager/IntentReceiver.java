@@ -47,12 +47,12 @@ public class IntentReceiver extends BroadcastReceiver {
 		String action = intent.getAction();		
 		//Log.d(MetaWatch.TAG, action);
 		
-//		Bundle b = intent.getExtras();
-//		for (String key : b.keySet()) {
-//			Log.d(MetaWatch.TAG, "extra: " + key + " = '"+b.getString(key)+"'");
-//        }		
-//		String dataString = intent.getDataString();
-//		Log.d(MetaWatch.TAG, "dataString: " + (dataString == null ? "null" : "'" + dataString + "'"));
+		Bundle b = intent.getExtras();
+		for (String key : b.keySet()) {
+			Log.d(MetaWatch.TAG, "extra: " + key + " = '"+b.getString(key)+"'");
+        }		
+		String dataString = intent.getDataString();
+		Log.d(MetaWatch.TAG, "dataString: " + (dataString == null ? "null" : "'" + dataString + "'"));
 		
 		if (action.equals("android.intent.action.PROVIDER_CHANGED")) {
 
@@ -88,10 +88,8 @@ public class IntentReceiver extends BroadcastReceiver {
 
 					/* This is a total unread count notification. */
 					Log.d(MetaWatch.TAG,
-							"Received Gmail notification: total unread count for '"
+							"IntentReceiver.onReceive(): Received Gmail notification: total unread count for '"
 									+ recipient + "' is " + count + ".");
-					Monitors.updateGmailUnreadCount(recipient, count);
-					Idle.updateLcdIdle(context);
 
 				} else {
 					/* I have no idea what this is. */
@@ -99,6 +97,13 @@ public class IntentReceiver extends BroadcastReceiver {
 							"Unknown Gmail notification: tagLabel is '"+tagLabel+"'");
 				}
 
+				Monitors.updateGmailUnreadCount(recipient, count);
+				Log.d(MetaWatch.TAG,
+						"IntentReceiver.onReceive(): Cached Gmail unread count for account '"
+								+ recipient + "' is "
+								+ Monitors.getGmailUnreadCount(recipient));
+				Idle.updateLcdIdle(context);				
+				
 				return;
 			}
 		}

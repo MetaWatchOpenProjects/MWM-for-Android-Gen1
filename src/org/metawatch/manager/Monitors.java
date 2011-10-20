@@ -87,13 +87,30 @@ public class Monitors {
 	}
 	
 	public static void updateGmailUnreadCount(String account, int count) {
+		Log.d(MetaWatch.TAG, "Monitors.updateGmailUnreadCount(): account='"
+				+ account + "' count='" + count + "'");
 		gmailUnreadCounts.put(account, count);
+		Log.d(MetaWatch.TAG,
+				"Monitors.updateGmailUnreadCount(): new unread count is: "
+						+ gmailUnreadCounts.get(account));
 	}
 	
 	public static int getGmailUnreadCount() {
-		int count = 0;
-		for (int i : gmailUnreadCounts.values())
-			count += i;
+		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount()");
+		int totalCount = 0;
+		for (String key : gmailUnreadCounts.keySet()) {
+			Integer accountCount = gmailUnreadCounts.get(key);
+			totalCount += accountCount.intValue();
+			Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount(): account='"
+					+ key + "' accountCount='" + accountCount
+					+ "' totalCount='" + totalCount + "'");
+		}
+		return totalCount;
+	}
+	
+	public static int getGmailUnreadCount(String account) {
+		int count = gmailUnreadCounts.get(account);
+		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount('"+account+"') returning " + count);
 		return count;
 	}
 	

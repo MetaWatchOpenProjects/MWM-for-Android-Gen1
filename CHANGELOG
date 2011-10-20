@@ -3,7 +3,9 @@ CHANGELOG
 v0.91:
 =======================================================================
 
-- (Hopefully) fixed bug that was crashing digital watches on notification.   
+- Hopefully fixed bug that was crashing digital watches on notification.
+
+- Hopefully fixed Gmail count display on digital watches.   
 
 v0.9:
 =======================================================================
