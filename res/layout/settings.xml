@@ -17,24 +17,64 @@
 			android:summary="@string/settings_SMS_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsSMSNumberBuzzes" 
+			android:title="SMS Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>
 		<CheckBoxPreference
 			android:title="Gmail"
 			android:key="NotifyGmail"
 			android:summary="New E-mail notification (Gmail)"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsGmailNumberBuzzes" 
+			android:title="Gmail Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_K9"
 			android:key="NotifyK9"
 			android:summary="@string/settings_K9_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsK9NumberBuzzes" 
+			android:title="K9 Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Alarm"
 			android:key="NotifyAlarm"
 			android:summary="@string/settings_Alarm_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsAlarmNumberBuzzes" 
+			android:title="Alarm Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="5"
+ 			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Music"
 			android:key="NotifyMusic"
@@ -59,6 +99,53 @@
 			android:summary="@string/settings_Timezonechange_desc"
 			android:defaultValue="true"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsMusicNumberBuzzes" 
+			android:title="Music Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="1"
+ 			/>			
+		<CheckBoxPreference
+			android:title="@string/settings_Calendar"
+			android:key="NotifyCalendar"
+			android:summary="@string/settings_Calendar_desc"
+			android:defaultValue="true"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsCalendarNumberBuzzes" 
+			android:title="Calendar Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
+		<CheckBoxPreference
+			android:title="@string/settings_OtherNotification"
+			android:key="NotifyOtherNotification"
+			android:summary="@string/settings_OtherNotification_desc"
+			android:defaultValue="true"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsOtherNotificationNumberBuzzes" 
+			android:title="Other Apps Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="1"
+ 			/>				
+		<Preference
+			android:title="Application Blacklist"
+			android:key="appBlacklist"
+			android:summary="List of applications to ignore notifications from"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory
@@ -79,8 +166,27 @@
 	
 	
 	<PreferenceCategory
-		android:title="@string/settings_Other"
+		android:title="@string/settings_Analog"
 		>
+		<CheckBoxPreference
+			android:title="Pause Before Scrolling"
+			android:key="pauseBeforeScrolling"
+			android:summary="Pause a few seconds before scrolling long messages on the analog watch"
+			android:defaultValue="false"
+			/>
+	</PreferenceCategory>	
+	
+	
+	<PreferenceCategory
+		android:title="@string/settings_Digital"
+		>
+		<EditTextPreference
+			android:title="Notification Timeout"
+			android:key="notificationTimeout"
+			android:summary="Default time to wait before returning to idle screen (seconds)"
+			android:numeric="integer"
+			android:defaultValue="5"
+			/>
 		<CheckBoxPreference
 			android:title="Music Controls (Beta)"
 			android:key="IdleMusicControls"
@@ -93,6 +199,18 @@
 			android:summary="Enable replay of last notification on Idle screen"
 			android:defaultValue="false"
 			/>
+		<CheckBoxPreference
+			android:title="Invert LCD"
+			android:key="InvertLCD"
+			android:summary="Switch black/white bit"
+			android:defaultValue="false"
+			/>
+	</PreferenceCategory>	
+	
+	
+	<PreferenceCategory
+		android:title="@string/settings_Other"
+		>
 		<ListPreference 
 			android:entries="@array/settings_font_size_name" 
 			android:entryValues="@array/settings_font_size_value" 
@@ -123,9 +241,9 @@
 			android:defaultValue="10"
 			/>
 		<CheckBoxPreference
-			android:title="Invert LCD"
-			android:key="InvertLCD"
-			android:summary="Switch black/white bit"
+			android:title="Hide Notification Icon"
+			android:key="HideNotificationIcon"
+			android:summary="Hide the ongoing notification icon in the status bar (requires restart)"
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
@@ -143,6 +261,7 @@
 			/>
 			
 	</PreferenceCategory>	
+
 	
 </PreferenceScreen>
 

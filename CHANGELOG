@@ -1,0 +1,153 @@
+CHANGELOG
+
+v0.91:
+=======================================================================
+
+- Hopefully fixed bug that was crashing digital watches on notification.
+
+- Hopefully fixed Gmail count display on digital watches.   
+
+v0.9:
+=======================================================================
+
+- Digital watch only: On receiving a notification, the time to wait 
+  before returning to the idle screen is now a preference. (Untested)
+  [Smithers]
+  
+- Created a new section for settings that only apply to the digital 
+  watch.
+   
+
+v0.8:
+=======================================================================
+
+- Support BeyondPod as a music player. [tilmanb]
+
+- MWM now broadcasts an intent when the connection state changes.
+  Intent: org.metawatch.manager.CONNECTION_CHANGE
+  Extra: key='state' type=boolean (true if now connected, false otherwise)
+  Many thanks to [rmrfchik] for submitting the code!
+  
+
+v0.7:
+=======================================================================
+
+- Added option to forward all notifications to the watch.  A new 
+  settings screen is available to blacklist apps that you don't want
+  to receive notifications from. (Requires accessibility in Android
+  Settings) [db1nto, damis648]
+
+- Made vibrate pattern customizable for:
+  - SMS
+  - Gmail
+  - K9
+  - Alarm
+  - Music
+  - Calendar
+  - Other apps
+  
+- Added album info to music notification on digital watch.
+
+- Created settings section for analog watch, and moved scroll delay
+  into the new section.
+
+v0.6:
+=======================================================================
+
+- Add album info to music notification for analog watch.
+
+- Added option to pause a few seconds before scrolling OLED text.
+
+- Scroll recipient name on analog watch for GMail messages (Android 2.3+)
+
+- Removed debug option to right-pad short messages, since the 
+  short messages bug is fixed now.
+
+- Only add notifications to the queue if the watch is connected. [Arlanthir]
+
+
+v0.5:
+=======================================================================
+
+- Implemented a host of changes to try to fix the unresponsive analog
+  watch problem:
+
+  - Low-level protocol messages are now managed by a dedicated thread
+    and synchronized queue, to protect against the possibility of 
+    bytes from different arrays getting mangled.
+    
+  - High-level notification messages are now managed by a (different)
+    dedicated thread and synchronized queue, to protect against the
+    possibility of arrays from different notifications getting
+    mangled.
+    
+  - The notification processing thread no longer aborts when a 
+    scrolling message shorter than the OLED screen size is sent.
+    (This was the "short message" bug -- major thanks to Arlanthir,
+    thescreensavers, and spacejunky for helping me track this one down!)
+    
+  - Numerous minor fixes to improve thread safety; making variables
+    volatile, properly handling InterruptedExceptions, etc.
+  
+- Don't send calender events if the event text is blank.
+
+- Suppress toasts when Bluetooth throws IOExceptions; just log them. 
+
+
+v0.4:
+=======================================================================
+
+- GMail notifications are now sent only on receipt of new messages.
+  This change fixes a nasty bug where the MWM wasn't distinguishing
+  between new message notifications and unread count notifications, 
+  causing double notifications with seemingly random numbers on the 
+  watch.  Digital watch is probably fixed too, but is untested.  
+
+- Scroll subject line of K9 notifications. [DHG703B]
+
+- Scroll snippet line of GMail full notifications. [DHG703B]
+  Note that this doesn't affect phones that can't see the content
+  of GMail messages (Android 2.3 and above, I think).
+
+- Hopefully fix calendar notification to show text on digital watch [dtiens]
+
+- Added debug option to pad short messages with spaces,
+  to help debug possible short notification issue [Arlanthir]
+
+
+v0.3:
+=======================================================================
+
+- Added experimental support for Calendar events.
+  (note that this requires Accessibility in Android Settings.)
+  (works on analog watch, untested on digital)
+
+
+v0.2:
+=======================================================================
+
+- Extended support to Android 2.2 (FroYo) [db1nto]
+
+- Changed music update to single 500ms buzz
+
+- Marked shared variables as volatile to improve thread safety
+
+- Changed send buffer to a BlockingQueue to improve thread safety [spacejunky]
+
+
+Initial version
+=======================================================================
+
+- Support for Android 2.3 (API level 10)
+
+- Optionally hide notification icon in status bar
+
+- Fix bug where newlines were displayed as boxes in analog watch
+
+- Fix bug where GMail was displayed as SMS on analog watch
+
+- Display Gmail unread count on analog watch
+
+- Added music support for Winamp
+
+- Changed vibrate on music update to a single 100ms "tap"

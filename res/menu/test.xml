@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/calendar" android:title="Calendar (LCD/OLED)"></item>
     <item android:id="@+id/notification" android:title="Notification (LCD/OLED)"></item>
     <item android:id="@+id/sms_start" android:title="SMS Start (LCD/OLED)"></item>
     <item android:id="@+id/sms_stop" android:title="SMS Stop (LCD/OLED)"></item>
@@ -24,5 +25,4 @@
     <item android:id="@+id/activate_buffer" android:title="Activate Buffer (Idle) (LCD)"></item>
     <item android:id="@+id/update_display" android:title="Update Display (Idle) (LCD)"></item>    
     <item android:id="@+id/test" android:title="Test (OLED)"></item>
-    
 </menu>

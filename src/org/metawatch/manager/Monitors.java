@@ -32,12 +32,9 @@
 
 package org.metawatch.manager;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Hashtable;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -48,9 +45,7 @@ import org.anddev.android.weatherforecast.weather.WeatherSet;
 import org.anddev.android.weatherforecast.weather.WeatherUtils;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -92,13 +87,30 @@ public class Monitors {
 	}
 	
 	public static void updateGmailUnreadCount(String account, int count) {
+		Log.d(MetaWatch.TAG, "Monitors.updateGmailUnreadCount(): account='"
+				+ account + "' count='" + count + "'");
 		gmailUnreadCounts.put(account, count);
+		Log.d(MetaWatch.TAG,
+				"Monitors.updateGmailUnreadCount(): new unread count is: "
+						+ gmailUnreadCounts.get(account));
 	}
 	
 	public static int getGmailUnreadCount() {
-		int count = 0;
-		for (int i : gmailUnreadCounts.values())
-			count += i;
+		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount()");
+		int totalCount = 0;
+		for (String key : gmailUnreadCounts.keySet()) {
+			Integer accountCount = gmailUnreadCounts.get(key);
+			totalCount += accountCount.intValue();
+			Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount(): account='"
+					+ key + "' accountCount='" + accountCount
+					+ "' totalCount='" + totalCount + "'");
+		}
+		return totalCount;
+	}
+	
+	public static int getGmailUnreadCount(String account) {
+		int count = gmailUnreadCounts.get(account);
+		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount('"+account+"') returning " + count);
 		return count;
 	}
 	

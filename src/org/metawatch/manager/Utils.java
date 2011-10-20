@@ -116,6 +116,7 @@ public class Utils {
 	}
 	
 	public static int getUnreadGmailCount(Context context, String account, String label) {
+		Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): account='"+account+"' label='"+label+"'");
 		try {
 			int nameColumn = 0;
 
@@ -132,7 +133,10 @@ public class Utils {
 				if (c.getString(nameColumn).equals(label))
 					for (int i = 0; i < c.getColumnCount(); i++) {
 						if (c.getColumnName(i).equals("numUnreadConversations")) {
-							return Integer.parseInt(c.getString(i));
+							int count = Integer.parseInt(c.getString(i));
+							Log.d(MetaWatch.TAG,
+									"Utils.getUnreadGmailCount(): found count, returning " + count);
+							return count;
 						}
 					}
 
@@ -143,9 +147,10 @@ public class Utils {
 				}
 			}
 		} catch (Exception x) {
-			Log.d(MetaWatch.TAG, x.toString());
+			Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): caught exception: " + x.toString());
 		}
 
+		Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): couldn't find count, returning 0.");
 		return 0;
 	}
 	

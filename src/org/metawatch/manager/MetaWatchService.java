@@ -85,7 +85,7 @@ public class MetaWatchService extends Service {
 	public static int watchState;
 	
 	public static TestSmsLoop testSmsLoop;
-		
+	private boolean lastConnectionState = false;		
 	
 	final class ConnectionState {
 		static final int DISCONNECTED = 0;
@@ -109,10 +109,10 @@ public class MetaWatchService extends Service {
 	}
 	
 	static class WatchModes {
-		public static boolean IDLE = false;
-		public static boolean APPLICATION = false;
-		public static boolean NOTIFICATION = false;
-		public static boolean CALL = false;
+		public static volatile boolean IDLE = false;
+		public static volatile boolean APPLICATION = false;
+		public static volatile boolean NOTIFICATION = false;
+		public static volatile boolean CALL = false;
 	}
 	
 	static class Preferences {
@@ -125,16 +125,19 @@ public class MetaWatchService extends Service {
 		public static boolean notifyTimezonechange = true;
 		public static boolean notifyMusic = true;
 		public static boolean notifyWinamp = true;
+		public static boolean notifyCalendar = true;
 		public static String watchMacAddress = "";
 		public static int packetWait = 10;
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
+		public static boolean hideNotificationIcon = false;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
 		public static int fontSize = 2;
 		public static int smsLoopInterval = 15;
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
+		public static boolean pauseBeforeScrolling = false;
 	}
 	
 	final class WatchType {		
@@ -156,13 +159,16 @@ public class MetaWatchService extends Service {
 		Preferences.notifyK9 = sharedPreferences.getBoolean("NotifyK9", Preferences.notifyK9);
 		Preferences.notifyAlarm = sharedPreferences.getBoolean("NotifyAlarm", Preferences.notifyAlarm);
 		Preferences.notifyMusic = sharedPreferences.getBoolean("NotifyMusic", Preferences.notifyMusic);
+		Preferences.notifyCalendar = sharedPreferences.getBoolean("NotifyCalendar", Preferences.notifyCalendar);
 		Preferences.watchMacAddress = sharedPreferences.getString("MAC", Preferences.watchMacAddress);		
 		Preferences.skipSDP = sharedPreferences.getBoolean("SkipSDP", Preferences.skipSDP);
 		Preferences.invertLCD = sharedPreferences.getBoolean("InvertLCD", Preferences.invertLCD);
+		Preferences.hideNotificationIcon = sharedPreferences.getBoolean("HideNotificationIcon", Preferences.hideNotificationIcon);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity", Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean("WeatherCelsius", Preferences.weatherCelsius);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay", Preferences.idleReplay);
+		Preferences.pauseBeforeScrolling = sharedPreferences.getBoolean("pauseBeforeScrolling", Preferences.pauseBeforeScrolling);
 		
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString("FontSize", Integer.toString(Preferences.fontSize)));
@@ -182,7 +188,9 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void createNotification() {
-		notification = new android.app.Notification(R.drawable.disconnected, null, System.currentTimeMillis());
+		int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
+		//notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
+		notification = new android.app.Notification(notificationIcon, null, System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
 		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
@@ -218,8 +226,8 @@ public class MetaWatchService extends Service {
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Disconnected");
 				break;
  		}
-
-		startForeground(1, notification);		
+ 		broadcastConnection(connected);
+		startForeground(1, notification);
 	}
 	
 	public void removeNotification() {
@@ -310,12 +318,15 @@ public class MetaWatchService extends Service {
 			connectionState = ConnectionState.CONNECTED;		
 			updateNotification();
 			
+			Protocol.startProtocolSender();
 			Protocol.sendRtcNow(context);			
-			Protocol.getDeviceType();			
+			Protocol.getDeviceType();		
+			
+			Notification.startNotificationSender(this);
 			
 		} catch (IOException ioexception) {
 			Log.d(MetaWatch.TAG, ioexception.toString());
-			sendToast(ioexception.toString());
+			//sendToast(ioexception.toString());
 		} catch (SecurityException e) {
 			Log.d(MetaWatch.TAG, e.toString());
 		} catch (NoSuchMethodException e) {
@@ -352,6 +363,8 @@ public class MetaWatchService extends Service {
 	};
 	
 	void disconnect() {
+		Protocol.stopProtocolSender();
+		Notification.stopNotificationSender();
 		try {
 			if (outputStream != null)
 				outputStream.close();
@@ -367,18 +380,12 @@ public class MetaWatchService extends Service {
 				bluetoothSocket.close();
 		} catch (IOException e) {
 		}		
+		broadcastConnection(false);
 	}
 	
 	void disconnectExit() {
 		connectionState = ConnectionState.DISCONNECTING;
 		disconnect();		
-	}
-	
-	public static void nap(long time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-		}
 	}
 	
 	void start() {
@@ -398,7 +405,12 @@ public class MetaWatchService extends Service {
 						// create initial connection or reconnect
 						updateNotification();
 						connect(context);
-						nap(2000);
+						try {
+						Thread.sleep(2000);
+						} catch (InterruptedException ie) {
+							/* If we've been interrupted, exit gracefully. */
+							run = false;
+						}
 						break;
 					case ConnectionState.CONNECTED:
 						Log.d(MetaWatch.TAG, "state: connected");
@@ -501,9 +513,22 @@ public class MetaWatchService extends Service {
 		} catch (IOException e) {
 			wakeLock.acquire(5000);
 			if (connectionState != ConnectionState.DISCONNECTING)
-				connectionState = ConnectionState.CONNECTING;			
+			{
+				connectionState = ConnectionState.CONNECTING;
+				broadcastConnection(false);
+			}
 		}
 		
+	}
+	
+	void broadcastConnection(boolean connected) {
+		if (connected != lastConnectionState) {
+			lastConnectionState = connected;
+			Intent intent = new Intent(
+					"org.metawatch.manager.CONNECTION_CHANGE");
+			intent.putExtra("state", connected);
+			sendBroadcast(intent);
+		}
 	}
 	
 	void pressedButton(byte button) {

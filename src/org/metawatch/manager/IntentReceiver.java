@@ -40,45 +40,74 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 public class IntentReceiver extends BroadcastReceiver {
-
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		String action = intent.getAction();		
 		//Log.d(MetaWatch.TAG, action);
 		
-		/*
 		Bundle b = intent.getExtras();
 		for (String key : b.keySet()) {
-			Log.d(MetaWatch.TAG, "extra: " + key);
+			Log.d(MetaWatch.TAG, "extra: " + key + " = '"+b.getString(key)+"'");
         }		
-		Log.d(MetaWatch.TAG, intent.getDataString());
-		*/
+		String dataString = intent.getDataString();
+		Log.d(MetaWatch.TAG, "dataString: " + (dataString == null ? "null" : "'" + dataString + "'"));
 		
 		if (action.equals("android.intent.action.PROVIDER_CHANGED")) {
-			
+
 			if (!MetaWatchService.Preferences.notifyGmail)
 				return;
-			
+
 			if (!Utils.isGmailAccessSupported(context)) {
-				String recipient = "You";
 				Bundle bundle = intent.getExtras();
-				
+
+				/* Get recipient and count */
+				String recipient = "You";
 				if (bundle.containsKey("account"))
 					recipient = bundle.getString("account");
-				Log.d(MetaWatch.TAG, "count for " + recipient + ": " + bundle.getInt("count"));
-				int count = bundle.getInt("count");				
+				int count = bundle.getInt("count");
+
+				/* What kind of update is this? */
+				String tagLabel = bundle.getString("tagLabel");
+				if (tagLabel.equals("^^unseen-^i")) {
+
+					/* This is a new message notification. */
+					if (count > 0) {
+						NotificationBuilder.createGmailBlank(context,
+								recipient, count);
+						Log.d(MetaWatch.TAG,
+								"Received Gmail new message notification; "
+										+ count + " new message(s).");
+					} else {
+						Log.d(MetaWatch.TAG,
+								"Ignored Gmail new message notification; no new messages.");
+					}
+
+				} else if (tagLabel.equals("^^unseen-^iim")) {
+
+					/* This is a total unread count notification. */
+					Log.d(MetaWatch.TAG,
+							"IntentReceiver.onReceive(): Received Gmail notification: total unread count for '"
+									+ recipient + "' is " + count + ".");
+
+				} else {
+					/* I have no idea what this is. */
+					Log.d(MetaWatch.TAG,
+							"Unknown Gmail notification: tagLabel is '"+tagLabel+"'");
+				}
+
 				Monitors.updateGmailUnreadCount(recipient, count);
+				Log.d(MetaWatch.TAG,
+						"IntentReceiver.onReceive(): Cached Gmail unread count for account '"
+								+ recipient + "' is "
+								+ Monitors.getGmailUnreadCount(recipient));
+				Idle.updateLcdIdle(context);				
 				
-				if (count > 0)
-					NotificationBuilder.createGmailBlank(context, recipient);
-				else
-					Idle.updateLcdIdle(context);
 				return;
 			}
 		}
 		else if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
-			
 			if (!MetaWatchService.Preferences.notifySMS)
 				return;
 			
@@ -123,7 +152,7 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createBatterylow(context);
 			return;
 		}
-else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
+		else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
 			
 			if (!MetaWatchService.Preferences.notifyTimezonechange)
 				return;
@@ -136,16 +165,28 @@ else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
 		{	
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
+
+			/* If the intent specifies a "playing" extra, use it. */
+			if (intent.hasExtra("playing")) {
+				boolean playing = intent.getBooleanExtra("playing", false);
+				if (playing == false) {
+					/* Ignore stop events. */
+					return;
+				}
+			}
 			
 			String artist = "";
 			String track = "";
-			
+			String album = "";
+
 			if (intent.hasExtra("artist"))
 				artist = intent.getStringExtra("artist");
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
-			
-			NotificationBuilder.createMusic(context, artist, track);
+			if (intent.hasExtra("album"))
+				album = intent.getStringExtra("album");
+
+			NotificationBuilder.createMusic(context, artist, track, album);
 			return;
 		}
 		else if (intent.getAction().equals("com.nullsoft.winamp.metachanged"))

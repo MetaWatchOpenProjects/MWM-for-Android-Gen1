@@ -122,6 +122,7 @@ public class MetaWatch extends Activity {
     	
     	WebView webView = new WebView(this);
 		String html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>About</title></head><body>" + 
+						"<p>Craig's Metawatch v0.91, based on:</p>" +
 						"<h1>MetaWatch</h1>" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
 						"<p>Modified by Dobie Wollert, Chris Sewell and Prash D</p>" +

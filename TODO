@@ -1,0 +1,49 @@
+TO DO
+=======================================================================
+
+
+WISH LIST
+=======================================================================
+
+- Add options to backup/restore settings to SD card. [thescreensavers]
+
+- Notify on new voicemail?
+
+- Optionally left-pad scrolling text on analog, to maximize the time 
+  before the beginning of the message scrolls off.
+
+- Low phone battery?  (Already implemented by AkiraYasha -- maybe
+  request permission to import their changes?)
+
+- When the notification icon is hidden, it can sometimes be seen as
+  an empty block next to other icons.  Other apps push their icon to
+  the right, like Llama and Juice Defender.  How do they do that?
+  Something to do with the event timestamp, maybe?
+
+- Optionally auto-start on system boot. [tilmanb]
+  http://stackoverflow.com/questions/5739588/android-launching-app-when-system-boot
+
+- Review new message docs -- what new and cool things can we do?
+
+- Add custom RTM handling -- is there an API?  If not, at least
+  ignore syncing messages.
+  
+SOMEDAY / MAYBE
+=======================================================================
+
+- Should we wait for status change from watch before sending new notifications?
+
+- Scroll K9 receipient address on top OLED? [thescreensavers] (Not sure
+  if this is possible; if it is, I probably can't tackle it until the
+  analog message interface is published.) 
+
+- Why does clicking "Start" take so long?  Maybe we should push the
+  startup to a working thread?  (It doesn't do anything but start the
+  service intent -- I don't think there's anything I can do to improve it.)
+
+- Scroll big text on oled?  (Can't even attempt until we have the 
+  analog watch message structure.)
+
+- Control Winamp from watch?  Can this be done?  (Can't attempt until
+  we get the analog docs -- does the analog watch have an application mode?)
+  

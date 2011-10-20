@@ -132,10 +132,12 @@ public class Idle {
 					count = Integer.toString(Utils.getUnreadSmsCount(context));
 					break;
 				case 2:
+					Log.d(MetaWatch.TAG, "Idle: About to draw Gmail count.");
 					if (Utils.isGmailAccessSupported(context))
 						count = Integer.toString(Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i"));
 					else 
 						count = Integer.toString(Monitors.getGmailUnreadCount());
+					Log.d(MetaWatch.TAG, "Idle: Gmail count is " + count);
 					break;				
 			}
 			

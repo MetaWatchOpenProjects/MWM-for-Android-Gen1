@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MetaWatch</string>
+    <string name="app_name">Craig\'s MetaWatch</string>
     
     <string name="settings_Notifications">Notifications</string>
 	<string name="settings_Call">Call</string>
@@ -19,6 +19,10 @@
     <string name="settings_Timezonechange_desc">Notify that the phone has changed timezones.</string>
     <string name="settings_Batterylow">Low battery</string>
     <string name="settings_Batterylow_desc">Displays a warning when the battery of this device is low.</string>
+	<string name="settings_Calendar">Calendar</string>
+	<string name="settings_Calendar_desc">Calendar notifications (requires Accessibility in Android settings)</string>
+	<string name="settings_OtherNotification">Other Apps</string>
+	<string name="settings_OtherNotification_desc">Other notifications (requires Accessibility in Android settings)</string>
     <string name="settings_Device">Device</string>
     <string name="settings_Mac">MAC</string>
     <string name="settings_Mac_desc">Watch Bluetooth MAC address</string>
@@ -28,12 +32,33 @@
    	<item>Medium</item>
    	<item>Large</item>     
 	</string-array> 
+
 	<string-array name="settings_font_size_value"> 
 	<item>1</item>
    	<item>2</item>
    	<item>3</item>  
 	</string-array>
     
+	<string-array name="settings_number_buzzes_names">
+	<item>No Vibrate</item> 
+	<item>One Buzz</item>
+   	<item>Two Buzzes</item>
+   	<item>Three Buzzes</item>  
+   	<item>Four Buzzes</item>  
+   	<item>Five Buzzes</item>  
+	</string-array>
+
+	<string-array name="settings_number_buzzes_values"> 
+	<item>0</item>
+	<item>1</item>
+   	<item>2</item>
+   	<item>3</item>  
+   	<item>4</item>  
+   	<item>5</item>  
+	</string-array>
+    
+    <string name="settings_Digital">Digital Watch</string>
+    <string name="settings_Analog">Analog Watch</string>
     <string name="settings_Other">Other</string>
     
     

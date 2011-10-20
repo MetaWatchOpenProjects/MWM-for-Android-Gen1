@@ -37,6 +37,7 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,12 +54,23 @@ public class Test extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-	    case R.id.notification:
-	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
-	    		Notification.addTextNotification(this, "Notification", new VibratePattern(true, 500, 500, 3), Notification.notificationTimeout);
-	    	else
-	    		Notification.addOledNotification(this, Protocol.createOled2lines(this, "Display A, line 1", "Display A, line 2"), Protocol.createOled2lines(this, "Display B, line 1", "Display B, line 2"), null, 0, null);
+	    case R.id.calendar:	   
+	    	NotificationBuilder.createCalendar(this, "Tea with the Hatter - Windmill");
 	        return true;
+		case R.id.notification:
+			if (MetaWatchService.watchType == WatchType.DIGITAL) {
+				Notification.addTextNotification(this, "Notification",
+						new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(this));
+			} else {
+				Notification.addOledNotification(this, Protocol
+						.createOled2lines(this, "Display A, line 1",
+								"Display A, line 2"), Protocol
+						.createOled2lines(this, "Display B, line 1",
+								"Display B, line 2"), null, 0, null);
+				Log.d(MetaWatch.TAG, "Notification timeout is: " + Notification.getDefaultNotificationTimeout(this));
+				
+			}
+			return true;
 	    case R.id.application_start:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Application.startAppMode();
@@ -79,22 +91,27 @@ public class Test extends Activity {
 	        return true;
 	    case R.id.sms:	   
 	    	NotificationBuilder.createSMS(this, "555-123-456", "Rights groups report systematic state violence is being unleashed on Bahrain's opposition movement.");
-	    	//NotificationBuilder.createSMS(this, "123-456-789", "Test SMS #" + "x");
+	        return true;
+	    case R.id.testShortMessage:	   
+	    	NotificationBuilder.createSMS(this, "555-123-456", "Hi.");
 	        return true;
 	    case R.id.k9:	   
-	    	NotificationBuilder.createK9(this, "e@mail.com", "Subject line");
+	    	NotificationBuilder.createK9(this, "doctor@gallifrey.net", "Would you like a jelly baby?");
 	        return true;
-	    case R.id.gmail:	   
-	    	NotificationBuilder.createGmailBlank(this, "me@gmail.com");
+	    case R.id.gmail_short:	   
+	    	NotificationBuilder.createGmailBlank(this, "me@gmail.com", 513);
+	        return true;
+	    case R.id.gmail_full:	   
+	    	NotificationBuilder.createGmail(this, "bruce@wayneenterprises.com", "me@gmail.com", "Need a ride", "Alfred, would you bring the car around to the docks?");
 	        return true;
 	    case R.id.alarm:	   
 	    	NotificationBuilder.createAlarm(this);
 	        return true;
 	    case R.id.timezone:	   
 	    	NotificationBuilder.createTimezonechange(this);
-	        return true;
+	        return true;	        
 	    case R.id.music:	   
-	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra");
+	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra", "Building a Better");
 	        return true;
 	    case R.id.winamp:	   
 	    	NotificationBuilder.createWinamp(this, "Winamp", "It really whips the llama's...");
@@ -126,9 +143,6 @@ public class Test extends Activity {
 	    case R.id.write_bufer:	 
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
 	    		Protocol.writeBuffer();
-	        return true;
-	    case R.id.Batterylow:	   
-	    	NotificationBuilder.createBatterylow(this);
 	        return true;
 	    case R.id.test: {
 	    	//Protocol.test(this);
