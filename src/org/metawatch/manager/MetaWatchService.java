@@ -448,18 +448,18 @@ public class MetaWatchService extends Service {
 				str+= "0x" + Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1) + ", ";
 			}
 			Log.d(MetaWatch.TAG, str);
-			
+			/*
 			switch (bytes[2]) {
-				case 0x02:
+				case eMessageType.GetDeviceTypeResponse.msg:
 					Log.d(MetaWatch.TAG, "received: device type response");
 					break;
-				case 0x31:
+				case eMessageType.NvalOperationResponseMsg.msg:
 					Log.d(MetaWatch.TAG, "received: nval response");
 					break;
-				case 0x33:
+				case eMessageType.StatusChangeEvent.msg:
 					Log.d(MetaWatch.TAG, "received: status change event");
 					break;
-			}
+			}*/
 			/*
 			if (bytes[2] == 0x31) { // nval response
 				if (bytes[3] == 0x00) // success
@@ -468,7 +468,7 @@ public class MetaWatchService extends Service {
 			}
 			*/
 			
-			if (bytes[2] == 0x33) { // status change event
+			if (bytes[2] == eMessageType.StatusChangeEvent.msg) { // status change event
 				if (bytes[4] == 0x11) {
 					Log.d(MetaWatch.TAG, "notify scroll request");
 					
@@ -478,12 +478,12 @@ public class MetaWatchService extends Service {
 				}
 			}
 			
-			if (bytes[2] == 0x34) { // button press
+			if (bytes[2] == eMessageType.ButtonEventMsg.msg) { // button press
 				Log.d(MetaWatch.TAG, "button event");
 				pressedButton(bytes[3]);
 			}
 			
-			if (bytes[2] == 0x02) { // device type
+			if (bytes[2] == eMessageType.GetDeviceTypeResponse.msg) { // device type
 				if (bytes[4] == 1 || bytes[4] == 4) {
 					watchType = WatchType.ANALOG;
 					
@@ -508,6 +508,31 @@ public class MetaWatchService extends Service {
 					
 					Protocol.queryNvalTime();
 					
+				}
+			}
+			
+			if (bytes[2] == eMessageType.GeneralPurposePhoneMsg.msg) {
+				// Music Message
+				if(bytes[3] == 0x42)
+				{
+					switch(bytes[4])
+					{
+					case MediaControl.NEXT:
+						MediaControl.next(context);
+						break;
+					case MediaControl.PREVIOUS:
+						MediaControl.previous(context);
+						break;
+					case MediaControl.TOGGLE:
+						MediaControl.togglePause(context);
+						break;
+					case MediaControl.VOLUME_UP:
+						MediaControl.volumeUp(audioManager);
+						break;
+					case MediaControl.VOLUME_DOWN:
+						MediaControl.volumeDown(audioManager);
+						break;
+					}
 				}
 			}
 			

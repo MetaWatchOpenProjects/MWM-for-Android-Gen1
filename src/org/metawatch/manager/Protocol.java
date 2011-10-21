@@ -143,9 +143,9 @@ public class Protocol {
 			byte[] bytes = new byte[30];
 
 			bytes[0] = 0x01;
-			bytes[1] = (byte) (bytes.length + 2); // packet length
-			bytes[2] = 0x40;
-			bytes[3] = (byte) bufferType;
+			bytes[1] = (byte) (bytes.length+2); // packet length
+			bytes[2] = eMessageType.WriteBuffer.msg; 
+			bytes[3] = (byte) bufferType; 
 
 			bytes[4] = (byte) i; // row A
 			for (int j = 0; j < 12; j++)
@@ -198,9 +198,9 @@ public class Protocol {
 
 			byte[] bytes = new byte[7];
 
-			bytes[0] = 0x01;
+			bytes[0] = eMessageType.start;
 			bytes[1] = 9; // length
-			bytes[2] = 0x20; // advance watch hands
+			bytes[2] = eMessageType.AdvanceWatchHandsMsg.msg; // advance watch hands
 			bytes[3] = 0x04; // complete
 
 			bytes[4] = (byte) hour;
@@ -218,6 +218,7 @@ public class Protocol {
 		boolean isMMDD = true;
 		char[] ch = DateFormat.getDateFormatOrder(context);
 
+<<<<<<< HEAD
 		for (int i = 0; i < ch.length; i++) {
 			if (ch[i] == DateFormat.DATE) {
 				isMMDD = false;
@@ -227,6 +228,35 @@ public class Protocol {
 				isMMDD = true;
 				break;
 			}
+=======
+			bytes[0] = eMessageType.start;
+			bytes[1] = (byte) (bytes.length+2); // length
+			bytes[2] = eMessageType.SetRealTimeClock.msg; // set rtc
+			bytes[3] = 0x00; // not used
+
+			bytes[4] = (byte) (year/256);
+			bytes[5] = (byte) (year%256);
+			bytes[6] = (byte) (calendar.get(Calendar.MONTH) + 1);
+			bytes[7] = (byte) calendar.get(Calendar.DAY_OF_MONTH);
+			bytes[8] = (byte) (calendar.get(Calendar.DAY_OF_WEEK) - 1);
+			bytes[9] = (byte) calendar.get(Calendar.HOUR_OF_DAY);
+			bytes[10] = (byte) calendar.get(Calendar.MINUTE);
+			bytes[11] = (byte) calendar.get(Calendar.SECOND);
+			if (DateFormat.is24HourFormat(context))
+				bytes[12] = (byte) 1; // 24hr
+			else
+				bytes[12] = (byte) 0; // 12hr
+			if (isMMDD)
+				bytes[13] = (byte) 0; // mm/dd
+			else
+				bytes[13] = (byte) 1; // dd/mm
+
+			//send(bytes);
+			sendQueue.add(bytes);
+			processSendQueue();
+			
+		} catch (Exception x) {
+>>>>>>> 89574c66b9a231b8886b33a0d8a6f24d8834b27b
 		}
 
 		Date date = new Date();
@@ -331,8 +361,8 @@ public class Protocol {
 		byte[] bytes = new byte[5];
 
 		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x44; // load template
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.LoadTemplate.msg; // load template
 		bytes[3] = (byte) mode;
 
 		bytes[4] = (byte) 0; // write all "0"
@@ -344,9 +374,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[4];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x42; // activate buffer
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.ConfigureIdleBufferSize.msg; // activate buffer
 		bytes[3] = (byte) mode;
 
 		sendQueue.add(bytes);
@@ -356,9 +386,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[4];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x43; // update display
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.UpdateDisplay.msg; // update display
 		bytes[3] = (byte) (bufferType + 16);
 
 		sendQueue.add(bytes);
@@ -368,9 +398,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[10];
 
-		bytes[0] = 0x01;
+		bytes[0] = eMessageType.start;
 		bytes[1] = 12; // delka
-		bytes[2] = 0x23; // set vibrate
+		bytes[2] = eMessageType.SetVibrateMode.msg; // set vibrate
 		bytes[3] = 0x00; // unused
 
 		bytes[4] = 0x01; // enabled
@@ -385,42 +415,43 @@ public class Protocol {
 
 	public static void writeBuffer() {
 
-		// for (int j = 0; j < 96; j = j+2) {
-		byte[] bytes = new byte[17];
-
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x40; // write lcd buffer
-		// bytes[3] = 0x02; // notif, two lines
-		// bytes[3] = 18;
-		bytes[3] = 0;
-		// bytes[3] = 16;
-
-		bytes[4] = 31;
-
-		bytes[5] = 15;
-		bytes[6] = 15;
-		bytes[7] = 15;
-		bytes[8] = 15;
-		bytes[9] = 15;
-		bytes[10] = 15;
-		bytes[11] = 15;
-		bytes[12] = 15;
-		bytes[13] = 15;
-		bytes[14] = 15;
-		bytes[15] = 15;
-		bytes[16] = 15;
-
-		sendQueue.add(bytes);
-		// }
+		//for (int j = 0; j < 96; j = j+2) {		
+			byte[] bytes = new byte[17];
+			
+			bytes[0] = eMessageType.start;
+			bytes[1] = (byte) (bytes.length+2); // length
+			bytes[2] = eMessageType.WriteBuffer.msg; // write lcd buffer
+			//bytes[3] = 0x02; // notif, two lines
+			//bytes[3] = 18;
+			bytes[3] = 0;
+			//bytes[3] = 16;
+			
+			bytes[4] = 31;
+			
+			bytes[5] = 15;
+			bytes[6] = 15;
+			bytes[7] = 15;
+			bytes[8] = 15;
+			bytes[9] = 15;
+			bytes[10] = 15;
+			bytes[11] = 15;
+			bytes[12] = 15;
+			bytes[13] = 15;
+			bytes[14] = 15;
+			bytes[15] = 15;
+			bytes[16] = 15;
+	
+			sendQueue.add(bytes);
+			processSendQueue();
+		//}
 	}
 
 	public static void enableButton(int button, int type, int code) {
 		byte[] bytes = new byte[9];
-
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x46; // enable button
+		
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.EnableButtonMsg.msg; // enable button
 		bytes[3] = 0; // not used
 
 		bytes[4] = 0; // idle
@@ -434,10 +465,10 @@ public class Protocol {
 
 	public static void disableButton(int button, int type) {
 		byte[] bytes = new byte[7];
-
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x47; // disable button
+		
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.DisableButtonMsg.msg; // disable button
 		bytes[3] = 0; // not used
 
 		bytes[4] = 0; // idle
@@ -486,10 +517,10 @@ public class Protocol {
 
 	public static void readButtonConfiguration() {
 		byte[] bytes = new byte[9];
-
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x48; // enable button
+		
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.ReadButtonConfigMsg.msg; // 
 		bytes[3] = 0; // not used
 
 		bytes[4] = 0;
@@ -505,9 +536,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[6];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x41; // enable button
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.ConfigureMode.msg; // 
 		bytes[3] = 0;
 
 		bytes[4] = 10;
@@ -520,9 +551,9 @@ public class Protocol {
 		Log.d(MetaWatch.TAG, "Asking watch what kind it is.");
 		byte[] bytes = new byte[4];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x01; // enable button
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.GetDeviceType.msg;
 		bytes[3] = 0;
 
 		sendQueue.add(bytes);
@@ -532,9 +563,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[7];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x30; // nval operations
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.NvalOperationMsg.msg; // nval operations
 		bytes[3] = 0x01; // read
 
 		bytes[4] = 0x09;
@@ -548,9 +579,9 @@ public class Protocol {
 
 		byte[] bytes = new byte[8];
 
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x30; // nval operations
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.NvalOperationMsg.msg; // nval operations
 		bytes[3] = 0x02; // write
 
 		bytes[4] = 0x09;
@@ -747,10 +778,10 @@ public class Protocol {
 
 			for (int a = 0; a < 160; a += 20) {
 				bytes = new byte[27];
-				bytes[0] = 0x01;
-				bytes[1] = (byte) (bytes.length + 2); // length
-				bytes[2] = 0x10; // oled write
-				if (scroll)
+				bytes[0] = eMessageType.start;
+				bytes[1] = (byte) (bytes.length+2); // length
+				bytes[2] = eMessageType.OledWriteBufferMsg.msg; // oled write
+				if (scroll)				
 					bytes[3] = (byte) 0x82; // notification + scroll
 				else
 					bytes[3] = 0x02; // notification
@@ -775,9 +806,10 @@ public class Protocol {
 
 	public static void updateOledNotification(boolean top, boolean scroll) {
 		byte[] bytes = new byte[7];
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x10; // oled write
+
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.OledWriteBufferMsg.msg; // oled write
 		if (scroll)
 			bytes[3] = (byte) 0xC2; // notification, activate, scroll
 		else
@@ -800,9 +832,9 @@ public class Protocol {
 
 	public static void sendOledBuffer(boolean startScroll) {
 		byte[] bytes = new byte[25];
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x13; // write oled buffer
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.OledWriteScrollBufferMsg.msg; // write oled buffer		
 		if (startScroll)
 			bytes[3] = 0x02; // not last, start
 		else
@@ -823,9 +855,9 @@ public class Protocol {
 
 		for (int j = start; j < start + length; j += 20) {
 			byte[] bytes = new byte[25];
-			bytes[0] = 0x01;
-			bytes[1] = (byte) (bytes.length + 2); // length
-			bytes[2] = 0x13; // write oled buffer
+			bytes[0] = eMessageType.start;
+			bytes[1] = (byte) (bytes.length+2); // length
+			bytes[2] = eMessageType.OledWriteScrollBufferMsg.msg; // write oled buffer		
 			bytes[3] = 0x00; // not last
 
 			if (j + 20 >= start + length) { // is last packet
