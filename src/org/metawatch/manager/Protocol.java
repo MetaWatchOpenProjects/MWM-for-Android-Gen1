@@ -213,22 +213,28 @@ public class Protocol {
 	}
 
 	public static void sendRtcNow(Context context) {
-		Log.d(MetaWatch.TAG, "Setting time of watch");
+		try {
+			boolean isMMDD = true;
+			char[] ch = DateFormat.getDateFormatOrder(context);
 
-		boolean isMMDD = true;
-		char[] ch = DateFormat.getDateFormatOrder(context);
+			for (int i = 0; i < ch.length; i++) {
+				if (ch[i] == DateFormat.DATE) {
+					isMMDD = false;
+					break;
+				}
+				if (ch[i] == DateFormat.MONTH) {
+					isMMDD = true;
+					break;
+				}	
+			}
 
-<<<<<<< HEAD
-		for (int i = 0; i < ch.length; i++) {
-			if (ch[i] == DateFormat.DATE) {
-				isMMDD = false;
-				break;
-			}
-			if (ch[i] == DateFormat.MONTH) {
-				isMMDD = true;
-				break;
-			}
-=======
+			Date date = new Date();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			int year = calendar.get(Calendar.YEAR);
+
+			byte[] bytes = new byte[14];
+
 			bytes[0] = eMessageType.start;
 			bytes[1] = (byte) (bytes.length+2); // length
 			bytes[2] = eMessageType.SetRealTimeClock.msg; // set rtc
@@ -253,44 +259,10 @@ public class Protocol {
 
 			//send(bytes);
 			sendQueue.add(bytes);
-			processSendQueue();
-			
+			//processSendQueue();
+
 		} catch (Exception x) {
->>>>>>> 89574c66b9a231b8886b33a0d8a6f24d8834b27b
 		}
-
-		Date date = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		int year = calendar.get(Calendar.YEAR);
-
-		byte[] bytes = new byte[14];
-
-		bytes[0] = 0x01;
-		bytes[1] = (byte) (bytes.length + 2); // length
-		bytes[2] = 0x26; // set rtc
-		bytes[3] = 0x00; // not used
-
-		bytes[4] = (byte) (year / 256);
-		bytes[5] = (byte) (year % 256);
-		bytes[6] = (byte) (calendar.get(Calendar.MONTH) + 1);
-		bytes[7] = (byte) calendar.get(Calendar.DAY_OF_MONTH);
-		bytes[8] = (byte) (calendar.get(Calendar.DAY_OF_WEEK) - 1);
-		bytes[9] = (byte) calendar.get(Calendar.HOUR_OF_DAY);
-		bytes[10] = (byte) calendar.get(Calendar.MINUTE);
-		bytes[11] = (byte) calendar.get(Calendar.SECOND);
-		if (DateFormat.is24HourFormat(context))
-			bytes[12] = (byte) 1; // 24hr
-		else
-			bytes[12] = (byte) 0; // 12hr
-		if (isMMDD)
-			bytes[13] = (byte) 0; // mm/dd
-		else
-			bytes[13] = (byte) 1; // dd/mm
-
-		// send(bytes);
-		sendQueue.add(bytes);
-
 	}
 
 	public static byte[] crc(byte[] bytes) {
@@ -442,7 +414,7 @@ public class Protocol {
 			bytes[16] = 15;
 	
 			sendQueue.add(bytes);
-			processSendQueue();
+			//processSendQueue();
 		//}
 	}
 
