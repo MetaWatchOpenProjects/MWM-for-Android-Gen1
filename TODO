@@ -25,8 +25,17 @@ WISH LIST
 
 - Review new message docs -- what new and cool things can we do?
 
+- Add dialog to send custom messages to the watch? [db1nto]
+    maybe a small form with
+    - dropdown menu (for icon) + textfield for upper OLED
+    - textfield for bottom OLED
+    - dropdown menu for vibrating (1, 2 or 3 times)
+    - checkbox for scrolling?
+    - send button
+
 - Add custom RTM handling -- is there an API?  If not, at least
   ignore syncing messages.
+  
   
 SOMEDAY / MAYBE
 =======================================================================

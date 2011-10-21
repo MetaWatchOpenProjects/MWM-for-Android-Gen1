@@ -19,8 +19,6 @@ am broadcast -a org.metawatch.manager.NOTIFICATION -e text "Buzz!" -e vibrate_on
 am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1 "The Top" -e oled2 "The Bottom"
 am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1a "Line 1" -e oled1b "Line 2" -e oled2a "Line 3" -e oled2b "Line 4"
 am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1 "Hey There" -e oled2a "Wake up!" -e oled2b "It's time to get out of bed!"
-
-
    
 
 v0.91:
@@ -29,6 +27,7 @@ v0.91:
 - Hopefully fixed bug that was crashing digital watches on notification.
 
 - Hopefully fixed Gmail count display on digital watches.   
+
 
 v0.9:
 =======================================================================
