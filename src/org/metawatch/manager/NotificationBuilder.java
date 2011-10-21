@@ -54,7 +54,6 @@ public class NotificationBuilder {
 	}
 	
 	public static final String DEFAULT_NUMBER_OF_BUZZES = "3";
-	public static final VibratePattern NO_VIBRATE = new VibratePattern(false,0,0,0);
 	
 	private static VibratePattern createVibratePatternFromPreference(Context context, String preferenceName) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -69,7 +68,7 @@ public class NotificationBuilder {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
-			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+			Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -94,7 +93,7 @@ public class NotificationBuilder {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail from", sender, email, subject});
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
-			Notification.addTextNotification(context, snippet, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+			Notification.addTextNotification(context, snippet, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, snippet, scroll);
@@ -120,7 +119,7 @@ public class NotificationBuilder {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event", text});	
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
-			Notification.addTextNotification(context, text, NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+			Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);

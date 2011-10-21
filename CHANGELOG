@@ -1,5 +1,28 @@
 CHANGELOG
 
+v0.92:
+=======================================================================
+
+- Added some extras to the org.metawatch.manager.NOTIFICATION intent.
+  All of these extras are Strings.
+  - text: Displays text on the digital watch. (digital only, untested)
+  - oled1: Displays large text on the top OLED. (analog only)
+  - oled1a: Displays small text on the upper half of the top OLED (analog only)
+  - oled1b: Displays small text on the lower half of the top OLED (analog only)
+  - oled2: Displays large text on the bottom OLED. (analog only)
+  - oled2a: Displays small text on the upper half of the bottom OLED (analog only)
+  - oled2b: Displays small text on the lower half of the bottom OLED (analog only)
+  
+Some example notifications, as adb shell commands
+am broadcast -a org.metawatch.manager.NOTIFICATION -e text "Hi there"
+am broadcast -a org.metawatch.manager.NOTIFICATION -e text "Buzz!" -e vibrate_on 500 -e vibrate_off 500 -e vibrate_cycles 3
+am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1 "The Top" -e oled2 "The Bottom"
+am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1a "Line 1" -e oled1b "Line 2" -e oled2a "Line 3" -e oled2b "Line 4"
+am broadcast -a org.metawatch.manager.NOTIFICATION -e oled1 "Hey There" -e oled2a "Wake up!" -e oled2b "It's time to get out of bed!"
+
+
+   
+
 v0.91:
 =======================================================================
 

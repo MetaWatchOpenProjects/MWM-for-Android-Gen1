@@ -241,6 +241,9 @@ public class Notification {
 	}
 
 	public static class VibratePattern {
+		
+		public static final VibratePattern NO_VIBRATE = new VibratePattern(false,0,0,0);
+		
 		boolean vibrate = false;
 		int on;
 		int off;
