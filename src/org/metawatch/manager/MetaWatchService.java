@@ -138,6 +138,7 @@ public class MetaWatchService extends Service {
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
 		public static boolean pauseBeforeScrolling = false;
+		public static boolean disableWeather = false;
 	}
 	
 	final class WatchType {		
@@ -169,6 +170,7 @@ public class MetaWatchService extends Service {
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay", Preferences.idleReplay);
 		Preferences.pauseBeforeScrolling = sharedPreferences.getBoolean("pauseBeforeScrolling", Preferences.pauseBeforeScrolling);
+		Preferences.disableWeather = sharedPreferences.getBoolean("DisableWeather", Preferences.disableWeather);
 		
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString("FontSize", Integer.toString(Preferences.fontSize)));

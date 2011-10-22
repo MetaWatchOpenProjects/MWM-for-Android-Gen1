@@ -188,6 +188,12 @@
 			android:defaultValue="5"
 			/>
 		<CheckBoxPreference
+			android:title="Disable Weather"
+			android:key="DisableWeather"
+			android:summary="Disable weaather on idle screen"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
 			android:title="Music Controls (Beta)"
 			android:key="IdleMusicControls"
 			android:summary="Enable music controls on Idle screen"
