@@ -41,6 +41,9 @@ SOMEDAY / MAYBE
 =======================================================================
 
 - Should we wait for status change from watch before sending new notifications?
+  Specifically, it looks like the watch sends a status change when it's done
+  scrolling.  Maybe we should wait for that before sending a new notification
+  on top of the old one.
 
 - Scroll K9 receipient address on top OLED? [thescreensavers] (Not sure
   if this is possible; if it is, I probably can't tackle it until the

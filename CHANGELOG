@@ -4,7 +4,7 @@ v0.92:
 =======================================================================
 
 - Added some extras to the org.metawatch.manager.NOTIFICATION intent.
-  All of these extras are Strings.
+  All of these extras are Strings. [sesteve]
   - text: Displays text on the digital watch. (digital only, untested)
   - oled1: Displays large text on the top OLED. (analog only)
   - oled1a: Displays small text on the upper half of the top OLED (analog only)
