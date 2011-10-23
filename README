@@ -1,17 +1,12 @@
-This is Craig's custom MetaWatch Manager.
+This is the MetaWatch Manager, based on MetaWatch OpenSource, AkiraYasha, Chris Sewell, and PurpleGuitars modifications
+all in one place.
 
 It's based on the official MetaWatch manager (see README.orig)
-
-See CHANGELOG for changes in this version.
-
-Questions, comments, bug reports, and suggestions are welcome.  
-I'm PurpleGuitar on the MetaWatch forums.
-
-APK download: http://dl.dropbox.com/u/7375584/MetaWatch/MetaWatch.apk
-
-Source code: https://github.com/PurpleGuitar/MWM-for-Android
 
 Disclaimer: This is development code; it may contain bugs, cause your
 phone / watch to reset, or any other of a host of unpleasant things.
 You use it AT YOUR OWN RISK, and I offer NO WARRANTY for anything it
 may do to you, your phone, your watch, or anything else.
+
+https://github.com/AkiraYasha/MetaWatch
+https://github.com/PurpleGuitar/MWM-for-Android
