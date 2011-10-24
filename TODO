@@ -8,11 +8,9 @@ WISH LIST
 
 - Maybe make the call vibrate pattern an option?
 
-- Since we're now notifying the watch on timezone change, why not set
-  the watch time while we're at it?
-
 - Remove cached settings in MetaWatch Service -- they don't improve performance
-  noticably, they just make changes to settings force a restart.
+  noticably, they just force the user to restart the service when changes
+  are saved.
 
 - Add options to backup/restore settings to SD card. [thescreensavers]
 
@@ -20,9 +18,6 @@ WISH LIST
 
 - Optionally left-pad scrolling text on analog, to maximize the time 
   before the beginning of the message scrolls off.
-
-- Low phone battery?  (Already implemented by AkiraYasha -- maybe
-  request permission to import their changes?)
 
 - When the notification icon is hidden, it can sometimes be seen as
   an empty block next to other icons.  Other apps push their icon to
@@ -57,10 +52,6 @@ SOMEDAY / MAYBE
 - Scroll K9 receipient address on top OLED? [thescreensavers] (Not sure
   if this is possible; if it is, I probably can't tackle it until the
   analog message interface is published.) 
-
-- Why does clicking "Start" take so long?  Maybe we should push the
-  startup to a working thread?  (It doesn't do anything but start the
-  service intent -- I don't think there's anything I can do to improve it.)
 
 - Scroll big text on oled?  (Can't even attempt until we have the 
   analog watch message structure.)
