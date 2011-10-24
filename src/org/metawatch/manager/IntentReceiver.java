@@ -136,7 +136,10 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createK9(context, sender, subject);
 			return;
 		}	
-		else if (action.equals("com.android.alarmclock.ALARM_ALERT") || action.equals("com.htc.android.worldclock.ALARM_ALERT") || action.equals("com.android.deskclock.ALARM_ALERT") || action.equals("com.sonyericsson.alarm.ALARM_ALERT") ) {
+		else if (action.equals("com.android.alarmclock.ALARM_ALERT")
+				|| action.equals("com.htc.android.worldclock.ALARM_ALERT")
+				|| action.equals("com.android.deskclock.ALARM_ALERT")
+				|| action.equals("com.sonyericsson.alarm.ALARM_ALERT")) {
 			
 			if (!MetaWatchService.Preferences.notifyAlarm)
 				return;
@@ -154,15 +157,22 @@ public class IntentReceiver extends BroadcastReceiver {
 		}
 		else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
 			
+			/*
+			 * If we're in a new time zone, then the time has probably changed.
+			 * Notify the watch.
+			 */
+			Protocol.sendRtcNow(context);
+
 			if (!MetaWatchService.Preferences.notifyTimezonechange)
 				return;
-			
+
 			NotificationBuilder.createTimezonechange(context);
 			return;
 		}
-		else if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
-		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
-		{	
+		else if (intent.getAction().equals("com.android.music.metachanged")
+				|| intent.getAction().equals(
+						"mobi.beyondpod.action.PLAYBACK_STATUS")
+				|| intent.getAction().equals("com.htc.music.metachanged")) {
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
 
@@ -190,20 +200,22 @@ public class IntentReceiver extends BroadcastReceiver {
 			return;
 		}
 		else if (intent.getAction().equals("com.nullsoft.winamp.metachanged"))
-		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
 		{	
-			if (!MetaWatchService.Preferences.notifyWinamp)
+			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
 			
 			String artist = "";
 			String track = "";
+			String album = "";
 			
 			if (intent.hasExtra("artist"))
 				artist = intent.getStringExtra("artist");
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
+			if (intent.hasExtra("album"))
+				album = intent.getStringExtra("album");
 			
-			NotificationBuilder.createWinamp(context, artist, track);
+			NotificationBuilder.createWinamp(context, artist, track, album);
 			return;
 		}
 		

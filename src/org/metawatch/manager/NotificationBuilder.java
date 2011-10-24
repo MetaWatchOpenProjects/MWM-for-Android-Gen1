@@ -148,12 +148,17 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled2lines(context, album, track), scroll, len, vibratePattern);
 		}
 	}
+	
 	public static void createTimezonechange(Context context) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsTimezoneNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "timezone.bmp", new String[] {"Timezone Changed"});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "timezone.bmp", "Timezone"), Protocol.createOled1line(context, null, "Changed"), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(
+					context, "timezone.bmp", "Timezone"), Protocol
+					.createOled1line(context, null, "Changed"), null, 0,
+					vibratePattern);
 		}
 	}
 	
@@ -167,23 +172,33 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, null, appName), Protocol.createOled2lines(context, "Notification", notificationText), scroll, len, vibratePattern);
 		}
 	}
-	public static void createWinamp(Context context, String artist, String track) {
+	public static void createWinamp(Context context, String artist, String track, String album) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, artist});
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.getDefaultNotificationTimeout(context));
+			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, album, artist});
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
+			byte[] scroll = new byte[800];
+			int len = Protocol.createOled2linesLong(context, track, scroll);
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled2lines(context, album, track), scroll, len, vibratePattern);
 		}
 	}
+
 	public static void createBatterylow(Context context) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(
+				context, "settingsBatteryNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "batterylow.bmp", new String[] {"Battery Low"});		
-			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
+			Bitmap bitmap = smartLines(context, "batterylow.bmp",
+					new String[] { "Phone Battery Low" });
+			Notification.addBitmapNotification(context, bitmap, vibratePattern,
+					Notification.getDefaultNotificationTimeout(context));
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "batterylow.bmp", "Warning!"), Protocol.createOled1line(context, null, "Battery low!"), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification.addOledNotification(context, Protocol.createOled1line(
+					context, "batterylow.bmp", "Warning!"), Protocol
+					.createOled1line(context, null, "PhoneBatLow!"), null, 0,
+					vibratePattern);
 		}
-	}
-	
+	}	
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {
 		

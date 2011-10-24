@@ -1,5 +1,22 @@
 CHANGELOG
 
+v0.93:
+=======================================================================
+
+- Merged in Pedlar, AkiraYasha and Chris Sewell's changes -- thanks for sharing!
+  This adds many new features -- I may have missed some of them:
+  - Phone can now notify watch when the phone battery is low.
+  - Phone can now notify the watch when the time zone has changed.
+  - Winamp tracks now get their own icon. 
+    (I merged with music handling, and added album info.)
+  - The user can now disable the weather display on the digital watch.
+  - Lots of new icons.
+
+- Vibrate pattern for battery and time zone notifications is now customizable.
+
+- The phone will now reset the time on the watch when the time zone changes. 
+
+
 v0.92:
 =======================================================================
 

@@ -124,7 +124,6 @@ public class MetaWatchService extends Service {
 		public static boolean notifyBatterylow = true;
 		public static boolean notifyTimezonechange = true;
 		public static boolean notifyMusic = true;
-		public static boolean notifyWinamp = true;
 		public static boolean notifyCalendar = true;
 		public static String watchMacAddress = "";
 		public static int packetWait = 10;
@@ -392,7 +391,7 @@ public class MetaWatchService extends Service {
 	}
 	
 	void start() {
-		Thread thread = new Thread() {
+		Thread thread = new Thread("MetaWatch Service Thread") {
 			@Override
 			public void run() {
 				boolean run = true;
@@ -556,6 +555,9 @@ public class MetaWatchService extends Service {
 					"org.metawatch.manager.CONNECTION_CHANGE");
 			intent.putExtra("state", connected);
 			sendBroadcast(intent);
+			Log.d(MetaWatch.TAG,
+					"MetaWatchService.broadcastConnection(): Broadcast connection change: state='"
+							+ connected + "'");
 		}
 	}
 	

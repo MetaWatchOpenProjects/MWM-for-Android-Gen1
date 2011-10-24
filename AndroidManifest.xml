@@ -95,6 +95,9 @@
 			<intent-filter>
 				<action android:name="com.nullsoft.winamp.metachanged" />
 			</intent-filter>
+			<intent-filter>
+-                <action android:name="mobi.beyondpod.action.PLAYBACK_STATUS" />
+-            </intent-filter>			
         </receiver> 
         <receiver android:name=".ApiIntentReceiver"> 
             <intent-filter>

@@ -2,8 +2,17 @@ TO DO
 =======================================================================
 
 
+
 WISH LIST
 =======================================================================
+
+- Maybe make the call vibrate pattern an option?
+
+- Since we're now notifying the watch on timezone change, why not set
+  the watch time while we're at it?
+
+- Remove cached settings in MetaWatch Service -- they don't improve performance
+  noticably, they just make changes to settings force a restart.
 
 - Add options to backup/restore settings to SD card. [thescreensavers]
 

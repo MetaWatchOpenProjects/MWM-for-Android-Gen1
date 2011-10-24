@@ -263,7 +263,7 @@ public class Notification {
 		notification.bitmap = Protocol.createTextBitmap(context, text);
 		notification.timeout = timeout;
 		if (vibratePattern == null)
-			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
+			notification.vibratePattern = VibratePattern.NO_VIBRATE;
 		else
 			notification.vibratePattern = vibratePattern;
 		addToNotificationQueue(notification);
@@ -275,7 +275,7 @@ public class Notification {
 		notification.bitmap = bitmap;
 		notification.timeout = timeout;
 		if (vibratePattern == null)
-			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
+			notification.vibratePattern = VibratePattern.NO_VIBRATE;
 		else
 			notification.vibratePattern = vibratePattern;
 		addToNotificationQueue(notification);
@@ -289,7 +289,7 @@ public class Notification {
 		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
-			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
+			notification.vibratePattern = VibratePattern.NO_VIBRATE;
 		else
 			notification.vibratePattern = vibratePattern;
 		addToNotificationQueue(notification);
@@ -303,7 +303,7 @@ public class Notification {
 		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
-			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
+			notification.vibratePattern = VibratePattern.NO_VIBRATE;
 		else
 			notification.vibratePattern = vibratePattern;
 		addToNotificationQueue(notification);
@@ -321,7 +321,7 @@ public class Notification {
 		int notificationTimeout = getDefaultNotificationTimeout(context);
 		notification.timeout = notificationTimeout;
 		if (vibratePattern == null)
-			notification.vibratePattern = new VibratePattern(false, 0, 0, 0);
+			notification.vibratePattern = VibratePattern.NO_VIBRATE;
 		else
 			notification.vibratePattern = vibratePattern;
 		addToNotificationQueue(notification);

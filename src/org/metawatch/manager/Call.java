@@ -59,7 +59,11 @@ public class Call {
 			Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.NOTIFICATION);		
 			Protocol.updateDisplay(2);
 		} else {
-			Notification.addOledNotification(context, Protocol.createOled1line(context, "phone.bmp", "Call from"), Protocol.createOled1line(context, null, name), null, 0, new VibratePattern(true, 500, 500, 3));
+			Notification
+					.addOledNotification(context, Protocol.createOled1line(
+							context, "phone.bmp", "Call from"), Protocol
+							.createOled1line(context, null, name), null, 0,
+							new VibratePattern(true, 500, 500, 3));
 		}
 		
 		Thread ringer = new Thread(new CallVibrate());

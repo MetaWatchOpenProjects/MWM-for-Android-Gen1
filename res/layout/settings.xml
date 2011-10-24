@@ -81,24 +81,6 @@
 			android:summary="@string/settings_Music_desc"
 			android:defaultValue="true"
 			/>
-		<CheckBoxPreference
-			android:title="@string/settings_Winamp"
-			android:key="NotifyWinamp"
-			android:summary="@string/settings_Winamp_desc"
-			android:defaultValue="true"
-			/>
-		<CheckBoxPreference
-			android:title="@string/settings_Batterylow"
-			android:key="NotifyBatterylow"
-			android:summary="@string/settings_Batterylow_desc"
-			android:defaultValue="true"
-			/>
-		<CheckBoxPreference
-			android:title="@string/settings_Timezonechange"
-			android:key="NotifyTimezonechange"
-			android:summary="@string/settings_Timezonechange_desc"
-			android:defaultValue="true"
-			/>
 		<ListPreference 
 			android:entries="@array/settings_number_buzzes_names" 
 			android:entryValues="@array/settings_number_buzzes_values" 
@@ -124,6 +106,38 @@
 			android:negativeButtonText="Cancel" 
  			android:enabled="true" 
  			android:defaultValue="3"
+ 			/>			
+		<CheckBoxPreference
+			android:title="@string/settings_Batterylow"
+			android:key="NotifyBatterylow"
+			android:summary="@string/settings_Batterylow_desc"
+			android:defaultValue="true"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsBatteryNumberBuzzes" 
+			android:title="Battery Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="3"
+ 			/>			
+		<CheckBoxPreference
+			android:title="@string/settings_Timezonechange"
+			android:key="NotifyTimezonechange"
+			android:summary="@string/settings_Timezonechange_desc"
+			android:defaultValue="true"
+			/> 			
+		<ListPreference 
+			android:entries="@array/settings_number_buzzes_names" 
+			android:entryValues="@array/settings_number_buzzes_values" 
+			android:dialogTitle="Number of Buzzes" 
+			android:key="settingsTimezoneNumberBuzzes" 
+			android:title="Timezone Vibrate Pattern" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="2"
  			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_OtherNotification"
