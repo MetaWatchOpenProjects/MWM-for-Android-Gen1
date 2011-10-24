@@ -125,6 +125,7 @@ public class MetaWatch extends Activity {
 						"<p>Craig's Metawatch v0.92, based on:</p>" +
 						"<h1>MetaWatch</h1>" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
+						"<p>Modified by Dobie Wollert, Chris Sewell and Prash D</p>" +
 						"<p>© Copyright 2011 Meta Watch Ltd.</p>" +
 						"</body></html>";
         webView.loadData(html, "text/html", "utf-8");

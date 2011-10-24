@@ -10,10 +10,15 @@
     <item android:id="@+id/application_stop" android:title="Application Stop (LCD)"></item>
     <item android:id="@+id/sms" android:title="SMS (LCD/OLED)"></item>
     <item android:id="@+id/k9" android:title="K9 (LCD/OLED)"></item>
-    <item android:id="@+id/gmail_short" android:title="GMail short(LCD/OLED)"></item>
-    <item android:id="@+id/gmail_full" android:title="GMail full(LCD/OLED)"></item>
+    <item android:id="@+id/gmail" android:title="Gmail (OLED)"></item>
+    <item android:id="@+id/gmail_short" android:title="Gmail Short (OLED)"></item>
+    <item android:id="@+id/gmail_full" android:title="Gmail Long (OLED)"></item>
+    <item android:id="@+id/testShortMessage" android:title="Short Message (OLED)"></item>
     <item android:id="@+id/alarm" android:title="Alarm (LCD/OLED)"></item>
     <item android:id="@+id/music" android:title="Music (LCD/OLED)"></item>
+    <item android:id="@+id/winamp" android:title="Winamp (LCD/OLED)"></item>
+    <item android:id="@+id/Batterylow" android:title="Battery Low (LCD/OLED)"></item>
+    <item android:id="@+id/timezone" android:title="Timezone Change (LCD/OLED)"></item>
     <item android:id="@+id/call_start" android:title="Call Start (LCD/OLED)"></item>
     <item android:id="@+id/call_stop" android:title="Call Stop (LCD/OLED)"></item>    
     <item android:id="@+id/vibrate" android:title="Vibrate (LCD/OLED)"></item>
@@ -22,6 +27,5 @@
     <item android:id="@+id/write_bufer" android:title="Write Buffer (Idle) (LCD)"></item>
     <item android:id="@+id/activate_buffer" android:title="Activate Buffer (Idle) (LCD)"></item>
     <item android:id="@+id/update_display" android:title="Update Display (Idle) (LCD)"></item>    
-    <item android:id="@+id/testShortMessage" android:title="Test Short Message (OLED)"></item>
     <item android:id="@+id/test" android:title="Test (OLED)"></item>
 </menu>

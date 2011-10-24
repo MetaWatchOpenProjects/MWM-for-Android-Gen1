@@ -148,6 +148,14 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "play.bmp", artist), Protocol.createOled2lines(context, album, track), scroll, len, vibratePattern);
 		}
 	}
+	public static void createTimezonechange(Context context) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "timezone.bmp", new String[] {"Timezone Changed"});		
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "timezone.bmp", "Timezone"), Protocol.createOled1line(context, null, "Changed"), null, 0, new VibratePattern(true, 500, 500, 3));
+		}
+	}
 	
 	public static void createOtherNotification(Context context, String appName, String notificationText) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsOtherNotificationNumberBuzzes");				
@@ -157,6 +165,22 @@ public class NotificationBuilder {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, notificationText, scroll);
 			Notification.addOledNotification(context, Protocol.createOled1line(context, null, appName), Protocol.createOled2lines(context, "Notification", notificationText), scroll, len, vibratePattern);
+		}
+	}
+	public static void createWinamp(Context context, String artist, String track) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, artist});
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 150, 0, 1), Notification.getDefaultNotificationTimeout(context));
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "winamp.bmp", artist), Protocol.createOled1line(context, null, track), null, 0, new VibratePattern(true, 500, 500, 3));
+		}
+	}
+	public static void createBatterylow(Context context) {
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			Bitmap bitmap = smartLines(context, "batterylow.bmp", new String[] {"Battery Low"});		
+			Notification.addBitmapNotification(context, bitmap, new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(context));
+		} else {
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "batterylow.bmp", "Warning!"), Protocol.createOled1line(context, null, "Battery low!"), null, 0, new VibratePattern(true, 500, 500, 3));
 		}
 	}
 	

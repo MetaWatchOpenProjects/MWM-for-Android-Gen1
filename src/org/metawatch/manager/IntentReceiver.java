@@ -107,10 +107,7 @@ public class IntentReceiver extends BroadcastReceiver {
 				return;
 			}
 		}
-
-		
-		if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
-			
+		else if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {		
 			if (!MetaWatchService.Preferences.notifySMS)
 				return;
 			
@@ -128,8 +125,7 @@ public class IntentReceiver extends BroadcastReceiver {
 			}
 			return;
 		}
-		
-		if (action.equals("com.fsck.k9.intent.action.EMAIL_RECEIVED")) {
+		else if (action.equals("com.fsck.k9.intent.action.EMAIL_RECEIVED")) {
 			
 			if (!MetaWatchService.Preferences.notifyK9)
 				return;
@@ -139,9 +135,8 @@ public class IntentReceiver extends BroadcastReceiver {
 			String sender = bundle.getString("com.fsck.k9.intent.extra.FROM");
 			NotificationBuilder.createK9(context, sender, subject);
 			return;
-		}
-				
-		if (action.equals("com.android.alarmclock.ALARM_ALERT") || action.equals("com.htc.android.worldclock.ALARM_ALERT") || action.equals("com.android.deskclock.ALARM_ALERT") || action.equals("com.sonyericsson.alarm.ALARM_ALERT") ) {
+		}	
+		else if (action.equals("com.android.alarmclock.ALARM_ALERT") || action.equals("com.htc.android.worldclock.ALARM_ALERT") || action.equals("com.android.deskclock.ALARM_ALERT") || action.equals("com.sonyericsson.alarm.ALARM_ALERT") ) {
 			
 			if (!MetaWatchService.Preferences.notifyAlarm)
 				return;
@@ -149,12 +144,25 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createAlarm(context);
 			return;
 		}
-		
-		if (intent.getAction().equals("com.android.music.metachanged")
-				|| intent.getAction().equals("com.htc.music.metachanged")
-				|| intent.getAction().equals("mobi.beyondpod.action.PLAYBACK_STATUS")
-				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
+		else if (action.equals("android.intent.action.BATTERY_LOW") ) {
 			
+			if (!MetaWatchService.Preferences.notifyBatterylow)
+				return;
+			
+			NotificationBuilder.createBatterylow(context);
+			return;
+		}
+		else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
+			
+			if (!MetaWatchService.Preferences.notifyTimezonechange)
+				return;
+			
+			NotificationBuilder.createTimezonechange(context);
+			return;
+		}
+		else if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged"))
+		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
+		{	
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
 
@@ -179,6 +187,23 @@ public class IntentReceiver extends BroadcastReceiver {
 				album = intent.getStringExtra("album");
 
 			NotificationBuilder.createMusic(context, artist, track, album);
+			return;
+		}
+		else if (intent.getAction().equals("com.nullsoft.winamp.metachanged"))
+		//if (intent.getAction().equals("com.android.music.metachanged") || intent.getAction().equals("com.htc.music.metachanged") || intent.getAction().equals("com.android.music.playstatechanged") || intent.getAction().equals("com.htc.music.playstatechanged"))  
+		{	
+			if (!MetaWatchService.Preferences.notifyWinamp)
+				return;
+			
+			String artist = "";
+			String track = "";
+			
+			if (intent.hasExtra("artist"))
+				artist = intent.getStringExtra("artist");
+			if (intent.hasExtra("track"))
+				track = intent.getStringExtra("track");
+			
+			NotificationBuilder.createWinamp(context, artist, track);
 			return;
 		}
 		

@@ -32,6 +32,7 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Monitors.WeatherData;
 
 import android.content.Context;
@@ -67,29 +68,29 @@ public class Idle {
 		canvas.drawColor(Color.WHITE);
 		
 		canvas = drawLine(canvas, 32);		
-		
-		if (WeatherData.received) {
-			// condition
-			canvas.save();
-			TextPaint paint = new TextPaint(paintSmall);
-			StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 36, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
-			canvas.translate(3, 40); //position the text
-			layout.draw(canvas);
-			canvas.restore();						
+		if(!Preferences.disableWeather) {
+			if (WeatherData.received) {
+				// condition
+				canvas.save();
+				TextPaint paint = new TextPaint(paintSmall);
+				StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 36, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
+				canvas.translate(3, 40); //position the text
+				layout.draw(canvas);
+				canvas.restore();						
 			
-			// icon
-			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-			canvas.drawBitmap(image, 38, 37, null);
+				// icon
+				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
+				canvas.drawBitmap(image, 38, 37, null);
 			
-			// temperatures
-			canvas.drawText(WeatherData.temp, 64, 46, paintLarge);				
-			canvas.drawText(WeatherData.tempHigh, 64, 54, paintSmall);
-			canvas.drawText(WeatherData.tempLow, 64, 62, paintSmall);
-		} else {
-			canvas.drawText("no data", 34, 50, paintSmall);
+				// temperatures
+				canvas.drawText(WeatherData.temp, 64, 46, paintLarge);				
+				canvas.drawText(WeatherData.tempHigh, 64, 54, paintSmall);
+				canvas.drawText(WeatherData.tempLow, 64, 62, paintSmall);
+			} else {
+				canvas.drawText("no data", 34, 50, paintSmall);
+			}
+			canvas = drawLine(canvas, 64);
 		}
-		
-		canvas = drawLine(canvas, 64);
 		
 		// icons row
 		//Bitmap imageI = Utils.loadBitmapFromAssets(context, "idle_icons_row.bmp");
@@ -102,7 +103,7 @@ public class Idle {
 		else
 			rows = 2;
 		*/
-				
+		int yPos = !Preferences.disableWeather ? 67 : 36;
 		// icons
 		for (int i = 0; i < rows; i++) {
 			int slotSpace = 96/rows;
@@ -110,13 +111,13 @@ public class Idle {
 			int iconX = slotSpace*i + slotX;
 			switch (i) {
 				case 0:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_call.bmp"), iconX, 67, null);
+					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_call.bmp"), iconX, yPos, null);
 					break;
 				case 1:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), iconX, 67, null);
+					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), iconX, yPos, null);
 					break;
 				case 2:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), iconX, 67, null);
+					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), iconX, yPos, null);
 					break;
 			}
 		}
@@ -145,7 +146,11 @@ public class Idle {
 			int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2);
 			int countX = slotSpace*i + slotX;
 			
-			canvas.drawText(count, countX, 92, paintSmall);
+			canvas.drawText(count, countX, !Preferences.disableWeather ? 92 : 62, paintSmall);
+		}
+		if(Preferences.disableWeather) {
+			canvas = drawLine(canvas, 64);
+			//Add more icons here in future.
 		}
 		
 		/*

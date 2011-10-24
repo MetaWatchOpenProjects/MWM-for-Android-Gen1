@@ -81,6 +81,24 @@
 			android:summary="@string/settings_Music_desc"
 			android:defaultValue="true"
 			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Winamp"
+			android:key="NotifyWinamp"
+			android:summary="@string/settings_Winamp_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Batterylow"
+			android:key="NotifyBatterylow"
+			android:summary="@string/settings_Batterylow_desc"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Timezonechange"
+			android:key="NotifyTimezonechange"
+			android:summary="@string/settings_Timezonechange_desc"
+			android:defaultValue="true"
+			/>
 		<ListPreference 
 			android:entries="@array/settings_number_buzzes_names" 
 			android:entryValues="@array/settings_number_buzzes_values" 
@@ -127,7 +145,7 @@
 			android:title="Application Blacklist"
 			android:key="appBlacklist"
 			android:summary="List of applications to ignore notifications from"
-			/> 			
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory
@@ -168,6 +186,12 @@
 			android:summary="Default time to wait before returning to idle screen (seconds)"
 			android:numeric="integer"
 			android:defaultValue="5"
+			/>
+		<CheckBoxPreference
+			android:title="Disable Weather"
+			android:key="DisableWeather"
+			android:summary="Disable weaather on idle screen"
+			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
 			android:title="Music Controls (Beta)"

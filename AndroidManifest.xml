@@ -26,6 +26,7 @@
 	<uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.BATTERY_STATS"/>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
         <activity android:name=".MetaWatch"
@@ -57,14 +58,15 @@
 			android:label="App Blacklist"
 			android:name=".AppBlacklist"
 			android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask">
+			android:launchMode="singleTask">
 		</activity>
-        <receiver android:name=".IntentReceiver"> 
+        <receiver android:name=".IntentReceiver" android:exported="true">
             <intent-filter>
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
             	<action android:name="android.intent.action.BOOT_COMPLETED"/>
+            	<action android:name="android.intent.action.BATTERY_LOW"/>
             	<action android:name="com.android.music.metachanged" />
-            	
+            	<action android:name="android.intent.action.TIMEZONE_CHANGED" />
             	<action android:name="com.android.alarmclock.ALARM_ALERT" />
             	<action android:name="com.htc.android.worldclock.ALARM_ALERT" />
             	<action android:name="com.android.deskclock.ALARM_ALERT" />
@@ -91,13 +93,8 @@
 					/>
 			</intent-filter>
 			<intent-filter>
-                <action
-                    android:name="com.nullsoft.winamp.metachanged" />
-            </intent-filter>
-			<intent-filter>
-                <action
-                    android:name="mobi.beyondpod.action.PLAYBACK_STATUS" />
-            </intent-filter>
+				<action android:name="com.nullsoft.winamp.metachanged" />
+			</intent-filter>
         </receiver> 
         <receiver android:name=".ApiIntentReceiver"> 
             <intent-filter>

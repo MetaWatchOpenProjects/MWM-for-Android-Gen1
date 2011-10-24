@@ -1,3 +1,4 @@
+
                                                                      
                                                                      
                                                                      
@@ -120,7 +121,10 @@ public class MetaWatchService extends Service {
 		public static boolean notifyGmail = true;
 		public static boolean notifyK9 = true;
 		public static boolean notifyAlarm = true;
+		public static boolean notifyBatterylow = true;
+		public static boolean notifyTimezonechange = true;
 		public static boolean notifyMusic = true;
+		public static boolean notifyWinamp = true;
 		public static boolean notifyCalendar = true;
 		public static String watchMacAddress = "";
 		public static int packetWait = 10;
@@ -134,6 +138,7 @@ public class MetaWatchService extends Service {
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
 		public static boolean pauseBeforeScrolling = false;
+		public static boolean disableWeather = false;
 	}
 	
 	final class WatchType {		
@@ -165,6 +170,7 @@ public class MetaWatchService extends Service {
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay", Preferences.idleReplay);
 		Preferences.pauseBeforeScrolling = sharedPreferences.getBoolean("pauseBeforeScrolling", Preferences.pauseBeforeScrolling);
+		Preferences.disableWeather = sharedPreferences.getBoolean("DisableWeather", Preferences.disableWeather);
 		
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString("FontSize", Integer.toString(Preferences.fontSize)));
@@ -190,29 +196,40 @@ public class MetaWatchService extends Service {
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
 		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
-		remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected);
-		remoteViews.setTextViewText(R.id.text, "MetaWatch service is running");
+		remoteViews.setTextViewText(R.id.notification_title, getString(R.string.app_name));
+		remoteViews.setImageViewResource(R.id.notification_button, R.drawable.connected_large);
+ 		
 		notification.contentView = remoteViews;
+		notification.contentIntent = createNotificationPendingIntent();
 
-		Intent notificationIntent = new Intent(this, MetaWatch.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.contentIntent = contentIntent;
 		startForeground(1, notification);
 	}
 	
-	public void updateNotification(boolean connected) {
-		if (connected) {
-			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.connected);
-			notification.icon = notificationIcon;
-			remoteViews.setImageViewResource(R.id.image, R.drawable.connected_large);
-			remoteViews.setTextViewText(R.id.text, "MetaWatch is connected");
-		} else {
-			int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
-			notification.icon = notificationIcon;
-			remoteViews.setImageViewResource(R.id.image, R.drawable.disconnected_large);
-			remoteViews.setTextViewText(R.id.text, "MetaWatch is not connected");
-		}
-		broadcastConnection(connected);
+	private PendingIntent createNotificationPendingIntent() {
+		return PendingIntent.getActivity(
+			this,
+			0,
+			new Intent(this, MetaWatch.class),
+			0);
+	}
+	
+	public void updateNotification() {
+		switch (connectionState) {
+			case ConnectionState.CONNECTING:
+				notification.icon = R.drawable.connected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Connecting");
+				broadcastConnection(false);
+				break;
+			case ConnectionState.CONNECTED:
+				notification.icon = R.drawable.connected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Connected");
+				broadcastConnection(true);
+				break;
+			default:
+				notification.icon = R.drawable.disconnected;
+				remoteViews.setTextViewText(R.id.notification_subtitle, "Disconnected");
+				break;
+ 		}
 		startForeground(1, notification);
 	}
 	
@@ -262,7 +279,11 @@ public class MetaWatchService extends Service {
 			if (Preferences.watchMacAddress.equals(""))
 				loadPreferences(context);
 			BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(Preferences.watchMacAddress);
-			
+
+			if (!bluetoothAdapter.isEnabled()) {
+				return;
+			}
+
 			/*
 			Log.d(MetaWatch.TAG, "remote device name: " + bluetoothDevice.getName());
 			int bondState = bluetoothDevice.getBondState();
@@ -298,7 +319,7 @@ public class MetaWatchService extends Service {
 			outputStream = bluetoothSocket.getOutputStream();
 			
 			connectionState = ConnectionState.CONNECTED;		
-			updateNotification(true);
+			updateNotification();
 			
 			Protocol.startProtocolSender();
 			Protocol.sendRtcNow(context);			
@@ -371,7 +392,8 @@ public class MetaWatchService extends Service {
 	}
 	
 	void start() {
-		Thread thread = new Thread("MetaWatch Service Thread") {
+		Thread thread = new Thread() {
+			@Override
 			public void run() {
 				boolean run = true;
 				Looper.prepare();				
@@ -384,7 +406,7 @@ public class MetaWatchService extends Service {
 					case ConnectionState.CONNECTING:
 						Log.d(MetaWatch.TAG, "state: connecting");
 						// create initial connection or reconnect
-						updateNotification(false);
+						updateNotification();
 						connect(context);
 						try {
 						Thread.sleep(2000);
@@ -428,18 +450,18 @@ public class MetaWatchService extends Service {
 				str+= "0x" + Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1) + ", ";
 			}
 			Log.d(MetaWatch.TAG, str);
-			
+			/*
 			switch (bytes[2]) {
-				case 0x02:
+				case eMessageType.GetDeviceTypeResponse.msg:
 					Log.d(MetaWatch.TAG, "received: device type response");
 					break;
-				case 0x31:
+				case eMessageType.NvalOperationResponseMsg.msg:
 					Log.d(MetaWatch.TAG, "received: nval response");
 					break;
-				case 0x33:
+				case eMessageType.StatusChangeEvent.msg:
 					Log.d(MetaWatch.TAG, "received: status change event");
 					break;
-			}
+			}*/
 			/*
 			if (bytes[2] == 0x31) { // nval response
 				if (bytes[3] == 0x00) // success
@@ -448,7 +470,7 @@ public class MetaWatchService extends Service {
 			}
 			*/
 			
-			if (bytes[2] == 0x33) { // status change event
+			if (bytes[2] == eMessageType.StatusChangeEvent.msg) { // status change event
 				if (bytes[4] == 0x11) {
 					Log.d(MetaWatch.TAG, "notify scroll request");
 					
@@ -458,12 +480,12 @@ public class MetaWatchService extends Service {
 				}
 			}
 			
-			if (bytes[2] == 0x34) { // button press
+			if (bytes[2] == eMessageType.ButtonEventMsg.msg) { // button press
 				Log.d(MetaWatch.TAG, "button event");
 				pressedButton(bytes[3]);
 			}
 			
-			if (bytes[2] == 0x02) { // device type
+			if (bytes[2] == eMessageType.GetDeviceTypeResponse.msg) { // device type
 				if (bytes[4] == 1 || bytes[4] == 4) {
 					watchType = WatchType.ANALOG;
 					
@@ -488,6 +510,31 @@ public class MetaWatchService extends Service {
 					
 					Protocol.queryNvalTime();
 					
+				}
+			}
+			
+			if (bytes[2] == eMessageType.GeneralPurposePhoneMsg.msg) {
+				// Music Message
+				if(bytes[3] == 0x42)
+				{
+					switch(bytes[4])
+					{
+					case MediaControl.NEXT:
+						MediaControl.next(context);
+						break;
+					case MediaControl.PREVIOUS:
+						MediaControl.previous(context);
+						break;
+					case MediaControl.TOGGLE:
+						MediaControl.togglePause(context);
+						break;
+					case MediaControl.VOLUME_UP:
+						MediaControl.volumeUp(audioManager);
+						break;
+					case MediaControl.VOLUME_DOWN:
+						MediaControl.volumeDown(audioManager);
+						break;
+					}
 				}
 			}
 			

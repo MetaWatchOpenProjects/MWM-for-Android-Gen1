@@ -107,8 +107,14 @@ public class Test extends Activity {
 	    case R.id.alarm:	   
 	    	NotificationBuilder.createAlarm(this);
 	        return true;
+	    case R.id.timezone:	   
+	    	NotificationBuilder.createTimezonechange(this);
+	        return true;	        
 	    case R.id.music:	   
 	    	NotificationBuilder.createMusic(this, "Park", "Who is Aliandra", "Building a Better");
+	        return true;
+	    case R.id.winamp:	   
+	    	NotificationBuilder.createWinamp(this, "Winamp", "It really whips the llama's...");
 	        return true;
 	    case R.id.call_start:	   
 	    	Call.startCall(this, "555-123-4567");
