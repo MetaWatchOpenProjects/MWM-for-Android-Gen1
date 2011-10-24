@@ -129,7 +129,6 @@ public class MetaWatchService extends Service {
 		public static int packetWait = 10;
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
-		public static boolean hideNotificationIcon = false;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
 		public static int fontSize = 2;
@@ -163,7 +162,6 @@ public class MetaWatchService extends Service {
 		Preferences.watchMacAddress = sharedPreferences.getString("MAC", Preferences.watchMacAddress);		
 		Preferences.skipSDP = sharedPreferences.getBoolean("SkipSDP", Preferences.skipSDP);
 		Preferences.invertLCD = sharedPreferences.getBoolean("InvertLCD", Preferences.invertLCD);
-		Preferences.hideNotificationIcon = sharedPreferences.getBoolean("HideNotificationIcon", Preferences.hideNotificationIcon);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity", Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean("WeatherCelsius", Preferences.weatherCelsius);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
@@ -189,8 +187,10 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void createNotification() {
-		int notificationIcon = (Preferences.hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
-		//notification = new android.app.Notification(R.drawable.disconnected_large, null, System.currentTimeMillis());
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean hideNotificationIcon = sharedPreferences.getBoolean("HideNotificationIcon", false);
+		Log.d(MetaWatch.TAG, "MetaWatchService.createNotification(): hideNotificationIcon=" + hideNotificationIcon);
+		int notificationIcon = (hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
 		notification = new android.app.Notification(notificationIcon, null, System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
@@ -213,20 +213,24 @@ public class MetaWatchService extends Service {
 	}
 	
 	public void updateNotification() {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean hideNotificationIcon = sharedPreferences.getBoolean("HideNotificationIcon", false);
+		Log.d(MetaWatch.TAG, "MetaWatchService.updateNotification(): hideNotificationIcon=" + hideNotificationIcon);
 		switch (connectionState) {
 			case ConnectionState.CONNECTING:
-				notification.icon = R.drawable.connected;
+				notification.icon = (hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Connecting");
 				broadcastConnection(false);
 				break;
 			case ConnectionState.CONNECTED:
-				notification.icon = R.drawable.connected;
+				notification.icon = (hideNotificationIcon ? R.drawable.transparent_square : R.drawable.connected);
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Connected");
 				broadcastConnection(true);
 				break;
 			default:
-				notification.icon = R.drawable.disconnected;
+				notification.icon = (hideNotificationIcon ? R.drawable.transparent_square : R.drawable.disconnected);
 				remoteViews.setTextViewText(R.id.notification_subtitle, "Disconnected");
+				broadcastConnection(false);
 				break;
  		}
 		startForeground(1, notification);
