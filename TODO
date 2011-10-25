@@ -6,6 +6,13 @@ TO DO
 WISH LIST
 =======================================================================
 
+- [tilmanb] Test 12/24 hour display on watch; also dd/mm display
+	I have one problem. I don't actually think its with the app, because there is code to deal with it.
+	My Analog Watch shows date and time in wrong format. (US date and am/pm clock)
+	Either the DateFormat.is24HourFormat() test is b0rked or my watch does it wrong.
+	Anyone any ideas? I'm actually sure it used to do it right some time ago.
+	Firmware version APP 0.7.42
+
 - Maybe make the call vibrate pattern an option?
 
 - Remove cached settings in MetaWatch Service -- they don't improve performance
