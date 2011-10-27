@@ -1,5 +1,13 @@
 CHANGELOG
 
+v1.01:
+=======================================================================
+
+- Moved weather update into its own thread so that it doesn't lock up
+  the AlarmReceiver.  Hopefully this will fix the problem where the OS 
+  was killing the MWM service because the weather lookup was taking too 
+  long.
+
 v1.0:
 =======================================================================
 

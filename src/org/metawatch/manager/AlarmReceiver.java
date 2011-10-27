@@ -44,7 +44,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		Log.d(MetaWatch.TAG, "intent rec: "+ intent.toString());
+		Log.d(MetaWatch.TAG, "AlarmReceiver.onReceive(): received intent: " + intent.toString());
 		
 		if (intent.hasExtra("action_update")) {
 			
