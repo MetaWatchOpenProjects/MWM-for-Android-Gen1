@@ -8,13 +8,10 @@ WISH LIST
 
 - Move notification settings into their own screen?
 
-- Investigate crash with AlarmReceiver
-
 - If the MWM is killed by the OS, it probably doesn't get a chance to
   broadcast a DISCONNECT.  Maybe it should broadcast DISCONNECT on startup?
 
-- Remove scrolling option -- it's buggy.  Maybe replace with padding on
-  either side of the message?
+- Add option to create padding on either side of scrolling messages?
 
 - Have the MWM reboot the watch if there's a sudden voltage drop?
 

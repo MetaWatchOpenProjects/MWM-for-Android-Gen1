@@ -135,7 +135,6 @@ public class MetaWatchService extends Service {
 		public static int smsLoopInterval = 15;
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
-		public static boolean pauseBeforeScrolling = false;
 		public static boolean disableWeather = false;
 	}
 	
@@ -166,7 +165,6 @@ public class MetaWatchService extends Service {
 		Preferences.weatherCelsius = sharedPreferences.getBoolean("WeatherCelsius", Preferences.weatherCelsius);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean("IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay", Preferences.idleReplay);
-		Preferences.pauseBeforeScrolling = sharedPreferences.getBoolean("pauseBeforeScrolling", Preferences.pauseBeforeScrolling);
 		Preferences.disableWeather = sharedPreferences.getBoolean("DisableWeather", Preferences.disableWeather);
 		
 		try {

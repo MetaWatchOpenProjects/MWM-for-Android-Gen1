@@ -31,7 +31,6 @@ package org.metawatch.manager;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 
 import android.content.Context;
@@ -104,17 +103,6 @@ public class Notification {
 
 							Log.d(MetaWatch.TAG, "notification.scrollLength = "
 									+ notification.scrollLength);
-
-							/*
-							 * If requested, let the notification stay on the
-							 * screen for a few seconds before starting to
-							 * scroll.
-							 */
-							if (Preferences.pauseBeforeScrolling) {
-								Log.d(MetaWatch.TAG,
-										"Pausing before scrolling.");
-								Thread.sleep(3000);
-							}
 
 							if (notification.scrollLength >= 240) {
 
