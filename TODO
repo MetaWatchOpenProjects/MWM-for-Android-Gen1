@@ -6,6 +6,17 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Investigate crash with AlarmReceiver
+
+- Remove scrolling option -- it's buggy.  Maybe replace with padding on
+  either side of the message?
+
+- Have the MWM reboot the watch if there's a sudden voltage drop?
+
+- Have the MWM log watch voltage over time?
+
+- [sesteve] Replay last notification on watch button press?
+
 - [tilmanb] Test 12/24 hour display on watch; also dd/mm display
 	I have one problem. I don't actually think its with the app, because there is code to deal with it.
 	My Analog Watch shows date and time in wrong format. (US date and am/pm clock)
