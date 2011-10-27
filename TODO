@@ -11,13 +11,9 @@ WISH LIST
 - If the MWM is killed by the OS, it probably doesn't get a chance to
   broadcast a DISCONNECT.  Maybe it should broadcast DISCONNECT on startup?
 
-- Add option to create padding on either side of scrolling messages?
-
 - Have the MWM reboot the watch if there's a sudden voltage drop?
 
 - Have the MWM log watch voltage over time?
-
-- [sesteve] Replay last notification on watch button press?
 
 - [tilmanb] Test 12/24 hour display on watch; also dd/mm display
 	I have one problem. I don't actually think its with the app, because there is code to deal with it.
@@ -35,9 +31,6 @@ WISH LIST
 - Add options to backup/restore settings to SD card. [thescreensavers]
 
 - Notify on new voicemail?
-
-- Optionally left-pad scrolling text on analog, to maximize the time 
-  before the beginning of the message scrolls off.
 
 - When the notification icon is hidden, it can sometimes be seen as
   an empty block next to other icons.  Other apps push their icon to

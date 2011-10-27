@@ -328,6 +328,11 @@ public class MetaWatchService extends Service {
 			
 			Notification.startNotificationSender(this);
 			
+			if (Preferences.idleReplay)
+				Protocol.enableReplayButton();
+			else
+				Protocol.disableReplayButton();			
+			
 		} catch (IOException ioexception) {
 			Log.d(MetaWatch.TAG, ioexception.toString());
 			//sendToast(ioexception.toString());
@@ -496,6 +501,9 @@ public class MetaWatchService extends Service {
 				if (bytes[4] == 1 || bytes[4] == 4) {
 					watchType = WatchType.ANALOG;
 					Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): device type response; analog watch");
+					
+					Idle.toIdle(this);					
+					
 				}
 				else {
 					watchType = WatchType.DIGITAL;
@@ -505,11 +513,6 @@ public class MetaWatchService extends Service {
 						Protocol.enableMediaButtons();
 					//else 
 						//Protocol.disableMediaButtons();
-					
-					if (Preferences.idleReplay)
-						Protocol.enableReplayButton();
-					//else
-						//Protocol.disableReplayButton();
 					
 					Protocol.configureMode();
 					Idle.toIdle(this);
@@ -579,6 +582,7 @@ public class MetaWatchService extends Service {
 	void pressedButton(byte button) {
 		Log.d(MetaWatch.TAG, "button code: " + Byte.toString(button));
 		
+		Log.d(MetaWatch.TAG, "MetaWatchService.pressedButton(): watchState=" + watchState);
 		switch (watchState) {
 			case WatchStates.IDLE: {
 				switch (button) { 

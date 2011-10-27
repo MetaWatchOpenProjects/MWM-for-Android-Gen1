@@ -188,14 +188,17 @@ public class Idle {
 		MetaWatchService.WatchModes.IDLE = true;
 		MetaWatchService.watchState = MetaWatchService.WatchStates.IDLE;
 		
-		sendLcdIdle(context);
-		//Protocol.updateDisplay(0);
+		if (MetaWatchService.watchType == MetaWatchService.WatchType.DIGITAL) {
+			sendLcdIdle(context);
+			//Protocol.updateDisplay(0);
+		}
 		
 		return true;
 	}
 	
 	public static void updateLcdIdle(Context context) {
-		if (MetaWatchService.watchState == MetaWatchService.WatchStates.IDLE)
+		if (MetaWatchService.watchState == MetaWatchService.WatchStates.IDLE
+				&& MetaWatchService.watchType == MetaWatchService.WatchType.DIGITAL)
 			sendLcdIdle(context);
 	}
 	

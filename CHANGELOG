@@ -1,7 +1,15 @@
 CHANGELOG
 
-v1.01:
+v1.1:
 =======================================================================
+
+- Added experimental support for the last notification replay button on 
+  the analog watch.  To use this feature, enable it in Settings and 
+  connect to the watch.  After receiving a notification, press the center 
+  (crown) button. I have to press it fairly hard on my watch.  After a 
+  second or few, the watch should replay the last notification received, 
+  minus the vibration.  It's possible this may now work for the digital 
+  watch too, but I can't test it. [sesteve]
 
 - Moved weather update into its own thread and synchronized it, so that 
   it doesn't lock up the AlarmReceiver.  Hopefully this will fix the 
@@ -10,7 +18,8 @@ v1.01:
   too long.
   
 - Removed the option to pause before scrolling the analog watch.  It was
-  buggy and sometimes caused the notification to terminate early.
+  buggy and sometimes caused the notification to terminate early.  It's
+  probably not necessary now anyway, if the last notification replay works.
   
 - Added a bunch of message-level debug lines for development.
 

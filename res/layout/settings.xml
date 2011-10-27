@@ -214,12 +214,6 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
-			android:title="Last Notification Replay (Beta)"
-			android:key="IdleReplay"
-			android:summary="Enable replay of last notification on Idle screen"
-			android:defaultValue="false"
-			/>
-		<CheckBoxPreference
 			android:title="Invert LCD"
 			android:key="InvertLCD"
 			android:summary="Switch black/white bit"
@@ -231,6 +225,12 @@
 	<PreferenceCategory
 		android:title="@string/settings_Other"
 		>
+		<CheckBoxPreference
+			android:title="Last Notification Replay (Beta)"
+			android:key="IdleReplay"
+			android:summary="Enable replay of last notification on Idle screen"
+			android:defaultValue="false"
+			/>
 		<ListPreference 
 			android:entries="@array/settings_font_size_name" 
 			android:entryValues="@array/settings_font_size_value" 

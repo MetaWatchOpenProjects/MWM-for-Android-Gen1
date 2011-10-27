@@ -102,7 +102,10 @@ public class IntentReceiver extends BroadcastReceiver {
 						"IntentReceiver.onReceive(): Cached Gmail unread count for account '"
 								+ recipient + "' is "
 								+ Monitors.getGmailUnreadCount(recipient));
-				Idle.updateLcdIdle(context);				
+				
+				if (MetaWatchService.watchType == MetaWatchService.WatchType.DIGITAL) {
+					Idle.updateLcdIdle(context);
+				}
 				
 				return;
 			}

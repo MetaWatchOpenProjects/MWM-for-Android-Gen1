@@ -329,6 +329,7 @@ public class Notification {
 	}
 
 	public static void replay(Context context) {
+		Log.d(MetaWatch.TAG, "Notification.replay()");
 		if (lastNotification != null) {
 			lastNotification.vibratePattern.vibrate = false;
 			addToNotificationQueue(lastNotification);
