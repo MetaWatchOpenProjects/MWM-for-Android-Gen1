@@ -472,28 +472,34 @@ public class MetaWatchService extends Service {
 			*/
 			
 			if (bytes[2] == eMessageType.StatusChangeEvent.msg) { // status change event
+				Log.d(MetaWatch.TAG,
+						"MetaWatchService.readFromDevice(): status change");
 				if (bytes[4] == 0x11) {
-					Log.d(MetaWatch.TAG, "notify scroll request");
+					Log.d(MetaWatch.TAG,
+							"MetaWatchService.readFromDevice(): scroll request notification");
 					
 					synchronized (Notification.scrollRequest) {
 						Notification.scrollRequest.notify();
 					}
+				} else if (bytes[4] == 0x10) {
+					Log.d(MetaWatch.TAG,
+							"MetaWatchService.readFromDevice(): scroll complete.");
 				}
 			}
 			
-			if (bytes[2] == eMessageType.ButtonEventMsg.msg) { // button press
-				Log.d(MetaWatch.TAG, "button event");
+			else if (bytes[2] == eMessageType.ButtonEventMsg.msg) { // button press
+				Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): button event");
 				pressedButton(bytes[3]);
 			}
 			
-			if (bytes[2] == eMessageType.GetDeviceTypeResponse.msg) { // device type
+			else if (bytes[2] == eMessageType.GetDeviceTypeResponse.msg) { // device type
 				if (bytes[4] == 1 || bytes[4] == 4) {
 					watchType = WatchType.ANALOG;
-					
+					Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): device type response; analog watch");
 				}
 				else {
 					watchType = WatchType.DIGITAL;
-					
+					Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): device type response; digital watch");
 					
 					if (Preferences.idleMusicControls)
 						Protocol.enableMediaButtons();
@@ -514,10 +520,14 @@ public class MetaWatchService extends Service {
 				}
 			}
 			
-			if (bytes[2] == eMessageType.GeneralPurposePhoneMsg.msg) {
+			else if (bytes[2] == eMessageType.GeneralPurposePhoneMsg.msg) {
+				Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): general purpose message");
 				// Music Message
 				if(bytes[3] == 0x42)
 				{
+					Log.d(MetaWatch.TAG,
+							"MetaWatchService.readFromDevice(): music message");
+
 					switch(bytes[4])
 					{
 					case MediaControl.NEXT:
@@ -537,6 +547,9 @@ public class MetaWatchService extends Service {
 						break;
 					}
 				}
+			}
+			else {
+				Log.d(MetaWatch.TAG, "MetaWatchService.readFromDevice(): Unknown message?");
 			}
 			
 		} catch (IOException e) {

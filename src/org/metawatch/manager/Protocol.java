@@ -101,6 +101,7 @@ public class Protocol {
 	}
 
 	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {
+		Log.d(MetaWatch.TAG, "Protocol.sendLcdBitmap()");
 		int pixelArray[] = new int[96 * 96];
 		bitmap.getPixels(pixelArray, 0, 96, 0, 0, 96, 96);
 
@@ -188,6 +189,7 @@ public class Protocol {
 
 	public static void sendAdvanceHands() {
 		try {
+			Log.d(MetaWatch.TAG, "Protocol.sendAdvanceHands()");
 			Date date = new Date();
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
@@ -214,6 +216,7 @@ public class Protocol {
 
 	public static void sendRtcNow(Context context) {
 		try {
+			Log.d(MetaWatch.TAG, "Protocol.sendRtcNow()");
 			boolean isMMDD = true;
 			char[] ch = DateFormat.getDateFormatOrder(context);
 
@@ -330,6 +333,7 @@ public class Protocol {
 	}
 
 	public static void loadTemplate(int mode) {
+		Log.d(MetaWatch.TAG, "Protocol.loadTemplate(): mode=" + mode);
 		byte[] bytes = new byte[5];
 
 		bytes[0] = 0x01;
@@ -343,7 +347,7 @@ public class Protocol {
 	}
 
 	public static void activateBuffer(int mode) {
-
+		Log.d(MetaWatch.TAG, "Protocol.activateBuffer(): mode="+mode);
 		byte[] bytes = new byte[4];
 
 		bytes[0] = eMessageType.start;
@@ -355,7 +359,7 @@ public class Protocol {
 	}
 
 	public static void updateDisplay(int bufferType) {
-
+		Log.d(MetaWatch.TAG, "Protocol.updateDisplay(): bufferType="+bufferType);
 		byte[] bytes = new byte[4];
 
 		bytes[0] = eMessageType.start;
@@ -367,7 +371,7 @@ public class Protocol {
 	}
 
 	public static void vibrate(int on, int off, int cycles) {
-
+		Log.d(MetaWatch.TAG, "Protocol.vibrate(): on="+on+" off="+off+" cycles="+cycles);
 		byte[] bytes = new byte[10];
 
 		bytes[0] = eMessageType.start;
@@ -419,6 +423,7 @@ public class Protocol {
 	}
 
 	public static void enableButton(int button, int type, int code) {
+		Log.d(MetaWatch.TAG, "Protocol.enableButton(): button="+button+" type="+type+" code=" + code);
 		byte[] bytes = new byte[9];
 		
 		bytes[0] = eMessageType.start;
@@ -436,6 +441,7 @@ public class Protocol {
 	}
 
 	public static void disableButton(int button, int type) {
+		Log.d(MetaWatch.TAG, "Protocol.disableButton(): button="+button+" type="+type);
 		byte[] bytes = new byte[7];
 		
 		bytes[0] = eMessageType.start;
@@ -488,6 +494,7 @@ public class Protocol {
 	}
 
 	public static void readButtonConfiguration() {
+		Log.d(MetaWatch.TAG, "Protocol.readButtonConfiguration()");
 		byte[] bytes = new byte[9];
 		
 		bytes[0] = eMessageType.start;
@@ -505,7 +512,7 @@ public class Protocol {
 	}
 
 	public static void configureMode() {
-
+		Log.d(MetaWatch.TAG, "Protocol.configureMode()");
 		byte[] bytes = new byte[6];
 
 		bytes[0] = eMessageType.start;
@@ -520,7 +527,7 @@ public class Protocol {
 	}
 
 	public static void getDeviceType() {
-		Log.d(MetaWatch.TAG, "Asking watch what kind it is.");
+		Log.d(MetaWatch.TAG, "Protocol.getDeviceType()");
 		byte[] bytes = new byte[4];
 
 		bytes[0] = eMessageType.start;
@@ -532,7 +539,7 @@ public class Protocol {
 	}
 
 	public static void queryNvalTime() {
-
+		Log.d(MetaWatch.TAG, "Protocol.queryNvalTime()");
 		byte[] bytes = new byte[7];
 
 		bytes[0] = eMessageType.start;
@@ -548,7 +555,7 @@ public class Protocol {
 	}
 
 	public static void setNvalTime(boolean militaryTime) {
-
+		Log.d(MetaWatch.TAG, "Protocol.setNvalTime()");
 		byte[] bytes = new byte[8];
 
 		bytes[0] = eMessageType.start;
@@ -568,7 +575,6 @@ public class Protocol {
 	}
 
 	public static void test(Context context) {
-
 		sendOledDisplay(createOled1line(context, null, "test abc 123"), true,
 				false);
 		sendOledDisplay(
@@ -744,6 +750,7 @@ public class Protocol {
 
 	public static void sendOledDisplay(byte[] display, boolean top,
 			boolean scroll) {
+		Log.d(MetaWatch.TAG, "Protocol.sendOledDisplay()");
 		try {
 
 			byte[] bytes;
@@ -773,10 +780,12 @@ public class Protocol {
 			updateOledNotification(top, scroll);
 
 		} catch (Exception x) {
+			Log.e(MetaWatch.TAG, "Protocol.sendOledDisplay(): exception occured", x);
 		}
 	}
 
 	public static void updateOledNotification(boolean top, boolean scroll) {
+		Log.d(MetaWatch.TAG, "Protocol.updateOledNotification(): top="+top+" scroll="+scroll);
 		byte[] bytes = new byte[7];
 
 		bytes[0] = eMessageType.start;
@@ -803,6 +812,7 @@ public class Protocol {
 	}
 
 	public static void sendOledBuffer(boolean startScroll) {
+		Log.d(MetaWatch.TAG, "Protocol.sendOledBuffer(): startScroll=" + startScroll);
 		byte[] bytes = new byte[25];
 		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
@@ -822,7 +832,7 @@ public class Protocol {
 	public static void sendOledBufferPart(byte[] display, int start,
 			int length, boolean startScroll, boolean last) {
 
-		Log.d(MetaWatch.TAG, "sending oled buffer part, start: " + start
+		Log.d(MetaWatch.TAG, "Protocol.sendOledBufferPart(): sending oled buffer part, start: " + start
 				+ ", length: " + length);
 
 		for (int j = start; j < start + length; j += 20) {

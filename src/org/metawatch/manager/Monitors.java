@@ -154,102 +154,107 @@ public class Monitors {
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
 		stopAlarmTicker();		
 	}
+	
+	private static synchronized void updateWeatherDataInternal(Context context) {
+		try {
+
+			Log.d(MetaWatch.TAG,
+					"Monitors.updateWeatherData(): start");
+			
+			URL url;
+			String queryString = "http://www.google.com/ig/api?weather="
+					+ Preferences.weatherCity;
+			url = new URL(queryString.replace(" ", "%20"));
+
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
+			XMLReader xr = sp.getXMLReader();
+
+			GoogleWeatherHandler gwh = new GoogleWeatherHandler();
+			xr.setContentHandler(gwh);
+			xr.parse(new InputSource(url.openStream()));
+			WeatherSet ws = gwh.getWeatherSet();
+			WeatherCurrentCondition wcc = ws
+					.getWeatherCurrentCondition();
+
+			// IndexOutOfBoundsException: Invalid index 0, size is 0
+			WeatherForecastCondition wfc = ws
+					.getWeatherForecastConditions().get(0);
+
+			String cond = wcc.getCondition();
+			String temp;
+			if (Preferences.weatherCelsius) {
+				WeatherData.tempHigh = "High "
+						+ Integer.toString(wfc.getTempMaxCelsius());
+				WeatherData.tempLow = "Low "
+						+ Integer.toString(wfc.getTempMinCelsius());
+				temp = Integer.toString(wcc.getTempCelcius()) + "°C";
+			} else {
+				WeatherData.tempHigh = "High "
+						+ Integer.toString(WeatherUtils
+								.celsiusToFahrenheit(wfc
+										.getTempMaxCelsius()));
+				WeatherData.tempLow = "Low "
+						+ Integer.toString(WeatherUtils
+								.celsiusToFahrenheit(wfc
+										.getTempMinCelsius()));
+				temp = Integer.toString(wcc.getTempFahrenheit()) + "°F";
+			}
+			// String place = gwh.city;
+
+			WeatherData.condition = cond;
+			WeatherData.temp = temp;
+
+			cond = cond.toLowerCase();
+
+			if (cond.equals("clear") || cond.equals("mostly sunny")
+					|| cond.equals("partly sunny")
+					|| cond.equals("sunny"))
+				WeatherData.icon = "weather_sunny.bmp";
+			else if (cond.equals("cloudy")
+					|| cond.equals("mostly cloudy")
+					|| cond.equals("overcast")
+					|| cond.equals("partly cloudy"))
+				WeatherData.icon = "weather_cloudy.bmp";
+			else if (cond.equals("light rain") || cond.equals("rain")
+					|| cond.equals("rain showers")
+					|| cond.equals("showers")
+					|| cond.equals("chance of showers")
+					|| cond.equals("scattered showers")
+					|| cond.equals("freezing rain")
+					|| cond.equals("freezing drizzle")
+					|| cond.equals("rain and snow"))
+				WeatherData.icon = "weather_rain.bmp";
+			else if (cond.equals("thunderstorm")
+					|| cond.equals("chance of storm")
+					|| cond.equals("isolated thunderstorms"))
+				WeatherData.icon = "weather_thunderstorm.bmp";
+			else if (cond.equals("chance of snow")
+					|| cond.equals("snow showers")
+					|| cond.equals("ice/snow")
+					|| cond.equals("flurries"))
+				WeatherData.icon = "weather_snow.bmp";
+			else
+				WeatherData.icon = "weather_cloudy.bmp";
+
+			WeatherData.received = true;
+
+			Idle.updateLcdIdle(context);
+
+		} catch (Exception e) {
+			Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
+		} finally {
+			Log.d(MetaWatch.TAG,
+					"Monitors.updateWeatherData(): finish");
+		}
+		
+	}
 
 	public static void updateWeatherData(final Context context) {
 		Thread thread = new Thread("WeatherUpdater") {
 			@Override
 			public void run() {
-				try {
-
-					Log.d(MetaWatch.TAG,
-							"Monitors.updateWeatherData(): start");
-					
-					URL url;
-					String queryString = "http://www.google.com/ig/api?weather="
-							+ Preferences.weatherCity;
-					url = new URL(queryString.replace(" ", "%20"));
-
-					SAXParserFactory spf = SAXParserFactory.newInstance();
-					SAXParser sp = spf.newSAXParser();
-					XMLReader xr = sp.getXMLReader();
-
-					GoogleWeatherHandler gwh = new GoogleWeatherHandler();
-					xr.setContentHandler(gwh);
-					xr.parse(new InputSource(url.openStream()));
-					WeatherSet ws = gwh.getWeatherSet();
-					WeatherCurrentCondition wcc = ws
-							.getWeatherCurrentCondition();
-
-					// IndexOutOfBoundsException: Invalid index 0, size is 0
-					WeatherForecastCondition wfc = ws
-							.getWeatherForecastConditions().get(0);
-
-					String cond = wcc.getCondition();
-					String temp;
-					if (Preferences.weatherCelsius) {
-						WeatherData.tempHigh = "High "
-								+ Integer.toString(wfc.getTempMaxCelsius());
-						WeatherData.tempLow = "Low "
-								+ Integer.toString(wfc.getTempMinCelsius());
-						temp = Integer.toString(wcc.getTempCelcius()) + "°C";
-					} else {
-						WeatherData.tempHigh = "High "
-								+ Integer.toString(WeatherUtils
-										.celsiusToFahrenheit(wfc
-												.getTempMaxCelsius()));
-						WeatherData.tempLow = "Low "
-								+ Integer.toString(WeatherUtils
-										.celsiusToFahrenheit(wfc
-												.getTempMinCelsius()));
-						temp = Integer.toString(wcc.getTempFahrenheit()) + "°F";
-					}
-					// String place = gwh.city;
-
-					WeatherData.condition = cond;
-					WeatherData.temp = temp;
-
-					cond = cond.toLowerCase();
-
-					if (cond.equals("clear") || cond.equals("mostly sunny")
-							|| cond.equals("partly sunny")
-							|| cond.equals("sunny"))
-						WeatherData.icon = "weather_sunny.bmp";
-					else if (cond.equals("cloudy")
-							|| cond.equals("mostly cloudy")
-							|| cond.equals("overcast")
-							|| cond.equals("partly cloudy"))
-						WeatherData.icon = "weather_cloudy.bmp";
-					else if (cond.equals("light rain") || cond.equals("rain")
-							|| cond.equals("rain showers")
-							|| cond.equals("showers")
-							|| cond.equals("chance of showers")
-							|| cond.equals("scattered showers")
-							|| cond.equals("freezing rain")
-							|| cond.equals("freezing drizzle")
-							|| cond.equals("rain and snow"))
-						WeatherData.icon = "weather_rain.bmp";
-					else if (cond.equals("thunderstorm")
-							|| cond.equals("chance of storm")
-							|| cond.equals("isolated thunderstorms"))
-						WeatherData.icon = "weather_thunderstorm.bmp";
-					else if (cond.equals("chance of snow")
-							|| cond.equals("snow showers")
-							|| cond.equals("ice/snow")
-							|| cond.equals("flurries"))
-						WeatherData.icon = "weather_snow.bmp";
-					else
-						WeatherData.icon = "weather_cloudy.bmp";
-
-					WeatherData.received = true;
-
-					Idle.updateLcdIdle(context);
-
-				} catch (Exception e) {
-					Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
-				} finally {
-					Log.d(MetaWatch.TAG,
-							"Monitors.updateWeatherData(): finish");
-				}
+				updateWeatherDataInternal(context);
 			}
 		};
 		thread.start();
