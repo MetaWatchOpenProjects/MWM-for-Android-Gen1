@@ -482,8 +482,8 @@ public class MetaWatchService extends Service {
 					boolean run = true;
 					while (run) {
 						try {
-							/* Sleep for five minutes */
-							Thread.sleep(5 * 60 * 1000);
+							/* Sleep for a while */
+							Thread.sleep(10 * 60 * 1000);
 							if (connectionState == ConnectionState.CONNECTED) {
 								Protocol.readBatteryVoltage();
 							}
