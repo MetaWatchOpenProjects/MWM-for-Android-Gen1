@@ -14,8 +14,7 @@ WISH LIST
   broadcast a DISCONNECT.  Maybe it should broadcast DISCONNECT on startup?
 
 - Have the MWM reboot the watch if there's a sudden voltage drop?
-
-- Have the MWM log watch voltage over time?
+  I don't see any messages that reset the watch.  Maybe send a notification?
 
 - [tilmanb] Test 12/24 hour display on watch; also dd/mm display
 	I have one problem. I don't actually think its with the app, because there is code to deal with it.
