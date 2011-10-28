@@ -269,7 +269,7 @@
 		<CheckBoxPreference
 			android:title="Skip SDP lookup"
 			android:key="SkipSDP"
-			android:summary="Connnect directly to port 1"
+			android:summary="Connect directly to port 1"
 			android:defaultValue="false"
 			/>
 		<EditTextPreference
@@ -278,6 +278,12 @@
 			android:summary="Time between test SMS notifications (in s)"
 			android:numeric="integer"
 			android:defaultValue="15"
+			/>
+		<CheckBoxPreference
+			android:title="Collect watch voltage"
+			android:key="readWatchVoltage"
+			android:summary="Periodically collect watch voltage"
+			android:defaultValue="false"
 			/>
 			
 	</PreferenceCategory>	

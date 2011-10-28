@@ -537,6 +537,18 @@ public class Protocol {
 
 		sendQueue.add(bytes);
 	}
+	
+	public static void readBatteryVoltage() {
+		Log.d(MetaWatch.TAG, "Protocol.readBatteryVoltage()");
+		byte[] bytes = new byte[4];
+
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.ReadBatteryVoltageMsg.msg;
+		bytes[3] = 0;
+
+		sendQueue.add(bytes);		
+	}
 
 	public static void queryNvalTime() {
 		Log.d(MetaWatch.TAG, "Protocol.queryNvalTime()");
