@@ -635,15 +635,18 @@ public class MetaWatchService extends Service {
 								+ " battery_charging=" + batteryCharging
 								+ " battery_sense=" + batterySense
 								+ " battery_average=" + batteryAverage);
-				if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-						"readWatchVoltage", false)) {
+				String voltageFrequencyString = PreferenceManager.getDefaultSharedPreferences(this).getString(
+						"collectWatchVoltage", "0");
+				final int voltageFrequency = Integer.parseInt(voltageFrequencyString);
+				if (voltageFrequency > 0) {
 					File sdcard = Environment.getExternalStorageDirectory();
 					File csv = new File(sdcard,"metawatch_voltage.csv");
 					FileWriter fw = new FileWriter(csv, true);
 					Date date = new Date();
 					fw.write("\"" + date.toString()+ "\"," + batteryAverage + "\n");
+					fw.flush();
 					fw.close();
-				}
+				}				
 			} else {
 				Log.d(MetaWatch.TAG,
 						"MetaWatchService.readFromDevice(): Unknown message?");
