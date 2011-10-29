@@ -440,6 +440,10 @@ public class MetaWatchService extends Service {
 						Notification.scrollRequest.notify();
 					}
 				}
+				
+				if (bytes[4] == 0x10) {
+					Log.d(MetaWatch.TAG, "scroll completed");										
+				}
 			}
 			
 			if (bytes[2] == 0x34) { // button press
