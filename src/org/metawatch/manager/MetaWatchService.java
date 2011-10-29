@@ -480,18 +480,27 @@ public class MetaWatchService extends Service {
 				@Override
 				public void run() {
 					boolean run = true;
+					Log.d(MetaWatch.TAG,
+							"MetaWatchService.start(): Starting voltage monitoring thread.");
 					while (run) {
 						try {
 							/* Sleep for a while */
-							Thread.sleep(10 * 60 * 1000);
+							long sleep = 10 * 60 * 1000;
+							Log.d(MetaWatch.TAG,
+									"MetaWatchService.start(): Sleeping for "+sleep+" ms.");
+							Thread.sleep(sleep);
 							if (connectionState == ConnectionState.CONNECTED) {
 								Protocol.readBatteryVoltage();
 							}
 						} catch (InterruptedException ie) {
 							/* If we've been interrupted, exit gracefully. */
 							run = false;
+							Log.d(MetaWatch.TAG,
+									"MetaWatchService.start(): voltage monitoring thread interrupted.");
 						}
 					}
+					Log.d(MetaWatch.TAG,
+							"MetaWatchService.start(): voltage monitoring thread ended.");
 				}
 			};
 			voltageThread.setDaemon(true);
