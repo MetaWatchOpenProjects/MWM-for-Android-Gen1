@@ -129,21 +129,27 @@ public class Notification {
 								// wait continue with scroll 
 																
 								for (int i = 240; i < notification.scrollLength; i += 80) {
+									// wait for next request
 									try {
 										synchronized (Notification.scrollRequest) {
 												Notification.scrollRequest.wait(60000);									
 										}
 									} catch (InterruptedException e) {
-											e.printStackTrace();
 									}
 									
 									if (i+80 >= notification.scrollLength)
 										Protocol.sendOledBufferPart(notification.oledScroll, i, 80, false, true);
 									else
 										Protocol.sendOledBufferPart(notification.oledScroll, i, 80, false, false);
+								}								
+								
+								// wait for scroll to finish
+								try {
+									synchronized (Notification.scrollRequest) {
+											Notification.scrollRequest.wait(60000);									
+									}
+								} catch (InterruptedException e) {
 								}
-								
-								
 								
 							} else {
 								int len = notification.scrollLength / 20 + 1;

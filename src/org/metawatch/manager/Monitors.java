@@ -156,7 +156,11 @@ public class Monitors {
 			
 			GoogleWeatherHandler gwh = new GoogleWeatherHandler();
 			xr.setContentHandler(gwh);
-			xr.parse(new InputSource(url.openStream()));
+			
+			InputSource src = new InputSource(url.openStream());
+			src.setEncoding("ISO-8859-1");
+			xr.parse(src);
+			
 			WeatherSet ws = gwh.getWeatherSet();						
 			WeatherCurrentCondition wcc = ws.getWeatherCurrentCondition();
 			
