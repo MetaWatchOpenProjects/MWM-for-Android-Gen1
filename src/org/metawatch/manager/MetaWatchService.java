@@ -470,7 +470,6 @@ public class MetaWatchService extends Service {
 				}
 			}
 		};
-		thread.setDaemon(true);
 		thread.start();
 
 		/* DEBUG */

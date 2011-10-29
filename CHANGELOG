@@ -5,6 +5,9 @@ v1.1.2:
 
 - Restored option to pause messages before scrolling [thescreensavers]
 
+- Possible bug fix for delayed notifications.  I mistakenly made the
+  MWM service thread a daemon, which may have allowed the OS to kill it.
+
 
 v1.1.1:
 =======================================================================
