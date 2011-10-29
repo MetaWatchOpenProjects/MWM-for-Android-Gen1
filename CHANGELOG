@@ -12,6 +12,7 @@ v1.1.1:
 - Added debug option to monitor the watch's battery voltage and log it
   to a file on the sd card.
 
+
 v1.1:
 =======================================================================
 
