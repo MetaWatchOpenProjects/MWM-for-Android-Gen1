@@ -1,6 +1,12 @@
 CHANGELOG
 
-v1.11:
+v1.1.2:
+=======================================================================
+
+- Restored option to pause messages before scrolling [thescreensavers]
+
+
+v1.1.1:
 =======================================================================
 
 - Added debug option to monitor the watch's battery voltage and log it

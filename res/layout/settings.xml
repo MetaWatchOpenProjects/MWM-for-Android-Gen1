@@ -178,18 +178,16 @@
 			/>
 	</PreferenceCategory>	
 	
-<!-- 	
-	<PreferenceCategory
-		android:title="@string/settings_Analog"
-		>
-		<CheckBoxPreference
-			android:title="Pad scrolling messages"
-			android:key="padScrollingMessages"
-			android:summary="Pad scrolling messages so they stay on the screen longer"
-			android:defaultValue="false"
-			/>
-	</PreferenceCategory>	
--->
+ 	<PreferenceCategory
+ 		android:title="@string/settings_Analog"
+ 		>
+ 		<CheckBoxPreference
+			android:title="Pause Before Scrolling"
+			android:key="pauseBeforeScrolling"
+			android:summary="Pause a few seconds before scrolling long messages on the analog watch"
+ 			android:defaultValue="false"
+ 			/>
+ 	</PreferenceCategory>	
 	
 	<PreferenceCategory
 		android:title="@string/settings_Digital"
