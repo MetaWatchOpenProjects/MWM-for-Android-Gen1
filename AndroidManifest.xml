@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.metawatch.manager"
-      android:versionCode="1"
-      android:installLocation="internalOnly" android:versionName="0.2.4">
+      android:versionCode="3"
+      android:installLocation="internalOnly" android:versionName="0.2.5">
     <uses-sdk android:minSdkVersion="7" />
     <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
     
@@ -54,7 +54,7 @@
             android:launchMode="singleTask">
 		</activity>
         <receiver android:name=".IntentReceiver"> 
-            <intent-filter>
+            <intent-filter android:priority="200">
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
             	<action android:name="android.intent.action.BOOT_COMPLETED"/>
             	<action android:name="com.android.music.metachanged" />
