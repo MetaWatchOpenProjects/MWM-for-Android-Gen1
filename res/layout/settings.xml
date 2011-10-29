@@ -277,12 +277,17 @@
 			android:numeric="integer"
 			android:defaultValue="15"
 			/>
-		<CheckBoxPreference
-			android:title="Collect watch voltage"
-			android:key="readWatchVoltage"
-			android:summary="Periodically collect watch voltage"
-			android:defaultValue="false"
-			/>
+		<ListPreference 
+			android:entries="@array/settings_collect_voltage_names" 
+			android:entryValues="@array/settings_collect_voltage_values" 
+			android:dialogTitle="Collection Frequency" 
+			android:key="collectWatchVoltage" 
+			android:title="Collect Watch Voltage" 
+			android:summary="Collect voltage reports from watch and write to SD card (requires restart)"
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="0"
+ 			/>					
 			
 	</PreferenceCategory>	
 

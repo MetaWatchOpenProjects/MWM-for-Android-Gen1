@@ -474,8 +474,10 @@ public class MetaWatchService extends Service {
 		thread.start();
 
 		/* DEBUG */
-		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-				"readWatchVoltage", false)) {
+		String voltageFrequencyString = PreferenceManager.getDefaultSharedPreferences(this).getString(
+				"collectWatchVoltage", "0");
+		final int voltageFrequency = Integer.parseInt(voltageFrequencyString);
+		if (voltageFrequency > 0) {
 			Thread voltageThread = new Thread("Voltage monitoring thread") {
 				@Override
 				public void run() {
@@ -485,7 +487,7 @@ public class MetaWatchService extends Service {
 					while (run) {
 						try {
 							/* Sleep for a while */
-							long sleep = 10 * 60 * 1000;
+							long sleep = voltageFrequency * 60 * 1000;
 							Log.d(MetaWatch.TAG,
 									"MetaWatchService.start(): Sleeping for "+sleep+" ms.");
 							Thread.sleep(sleep);
