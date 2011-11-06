@@ -64,6 +64,16 @@ WISH LIST
 	- read light sensor (one time broadcast)  
   
 - Inform the user when Bluetooth is disabled? [GnoStiC]  
+
+- Check odd email count [ronaldheld]
+	Over 2.5 hours, I kept track of the gmails. the first number is the watch's 
+	notitfication number and the second is the actual new gmails:
+	2 1
+	3 2
+	4 2
+	3 1
+	3 1
+	3.1
   
 SOMEDAY / MAYBE
 =======================================================================
