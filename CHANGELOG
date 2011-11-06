@@ -5,6 +5,9 @@ v1.1.3:
 
 - Fixed application mode bug where application mode intent
   APPLICATION_STOP was restarting application mode. [Kallex]
+  
+- Fixed MWM crash on startup -- it was a bug in some debug code 
+I added to the intent receiver.  [thescreensavers, Smithers, etc.]
 
 v1.1.2:
 =======================================================================

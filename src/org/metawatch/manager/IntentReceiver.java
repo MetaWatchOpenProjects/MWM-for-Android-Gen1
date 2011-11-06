@@ -43,16 +43,19 @@ public class IntentReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		
 		String action = intent.getAction();		
-		//Log.d(MetaWatch.TAG, action);
+		Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): received intent, action='"+action+"'");
 		
 		Bundle b = intent.getExtras();
-		for (String key : b.keySet()) {
-			Log.d(MetaWatch.TAG, "extra: " + key + " = '"+b.getString(key)+"'");
-        }		
-		String dataString = intent.getDataString();
-		Log.d(MetaWatch.TAG, "dataString: " + (dataString == null ? "null" : "'" + dataString + "'"));
+		if (b != null) {
+			for (String key : b.keySet()) {
+				Log.d(MetaWatch.TAG,
+						"extra: " + key + " = '" + b.getString(key) + "'");
+			}
+			String dataString = intent.getDataString();
+			Log.d(MetaWatch.TAG, "dataString: "
+					+ (dataString == null ? "null" : "'" + dataString + "'"));
+		}
 		
 		if (action.equals("android.intent.action.PROVIDER_CHANGED")) {
 
