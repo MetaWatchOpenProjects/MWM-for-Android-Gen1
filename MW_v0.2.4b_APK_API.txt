@@ -8,6 +8,14 @@ org.metawatch.manager.NOTIFICATION
   "vibrate_on" - int // ms
   "vibrate_off" - int // ms
   "vibrate_cycles" - int 
+  --
+  - text: Displays text on the digital watch. (digital only, untested)
+  - oled1: Displays large text on the top OLED. (analog only)
+  - oled1a: Displays small text on the upper half of the top OLED (analog only)
+  - oled1b: Displays small text on the lower half of the top OLED (analog only)
+  - oled2: Displays large text on the bottom OLED. (analog only)
+  - oled2a: Displays small text on the upper half of the bottom OLED (analog only)
+  - oled2b: Displays small text on the lower half of the bottom OLED (analog only)  
 
 org.metawatch.manager.APPLICATION_UPDATE
   "array" - int[96*96]

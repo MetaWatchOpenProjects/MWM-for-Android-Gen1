@@ -1,10 +1,13 @@
 TO DO
 =======================================================================
 
+- Investigate crash on startup.  Possibly an issue in the accessibility service?
 
 
 WISH LIST
 =======================================================================
+
+- Make pause before scrolling configurable? [db1nto]
 
 - Notify phone on loss of mobile signal or data? [Smithers]
 
@@ -53,7 +56,14 @@ WISH LIST
 
 - Add custom RTM handling -- is there an API?  If not, at least
   ignore syncing messages.
+
+- Add some more intents? [GnoStiC]
+	- read voltage (one time broadcast)
+	- read accelerometer (one time broadcast or X ms intervals until user requests accelerometer off)
+	- light on/off
+	- read light sensor (one time broadcast)  
   
+- Inform the user when Bluetooth is disabled? [GnoStiC]  
   
 SOMEDAY / MAYBE
 =======================================================================
