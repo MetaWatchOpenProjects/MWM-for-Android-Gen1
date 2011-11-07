@@ -6,8 +6,6 @@ TO DO
 WISH LIST
 =======================================================================
 
-- Use an intent callback to check watch voltage instead of a sleep loop.
-
 - Notify user when the watch battery starts to drop quickly?
 
 - Make pause before scrolling configurable? [db1nto]

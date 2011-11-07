@@ -635,9 +635,13 @@ public class MetaWatchService extends Service {
 				if (voltageFrequency > 0) {
 					File sdcard = Environment.getExternalStorageDirectory();
 					File csv = new File(sdcard,"metawatch_voltage.csv");
+					boolean fileExists = csv.exists();
 					FileWriter fw = new FileWriter(csv, true);
+					if (fileExists == false) {
+						fw.write("Date,Sense,Average\n");
+					}
 					Date date = new Date();
-					fw.write("\"" + date.toString()+ "\"," + batteryAverage + "\n");
+					fw.write("\"" + date.toString()+ "\"," + batterySense + "," + batteryAverage + "\n");
 					fw.flush();
 					fw.close();
 				}				
