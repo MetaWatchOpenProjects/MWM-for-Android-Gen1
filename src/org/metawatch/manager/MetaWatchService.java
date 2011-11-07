@@ -39,6 +39,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.UUID;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -80,7 +81,7 @@ public class MetaWatchService extends Service {
 	public static PowerManager powerManger;
 	public static PowerManager.WakeLock wakeLock;
 
-	static int connectionState;
+	static volatile int connectionState;
 	public static int watchType;
 	public static int watchState;
 
@@ -473,39 +474,33 @@ public class MetaWatchService extends Service {
 		thread.start();
 
 		/* DEBUG */
-		String voltageFrequencyString = PreferenceManager.getDefaultSharedPreferences(this).getString(
-				"collectWatchVoltage", "0");
-		final int voltageFrequency = Integer.parseInt(voltageFrequencyString);
-		if (voltageFrequency > 0) {
-			Thread voltageThread = new Thread("Voltage monitoring thread") {
-				@Override
-				public void run() {
-					boolean run = true;
-					Log.d(MetaWatch.TAG,
-							"MetaWatchService.start(): Starting voltage monitoring thread.");
-					while (run) {
-						try {
-							/* Sleep for a while */
-							long sleep = voltageFrequency * 60 * 1000;
-							Log.d(MetaWatch.TAG,
-									"MetaWatchService.start(): Sleeping for "+sleep+" ms.");
-							Thread.sleep(sleep);
-							if (connectionState == ConnectionState.CONNECTED) {
-								Protocol.readBatteryVoltage();
-							}
-						} catch (InterruptedException ie) {
-							/* If we've been interrupted, exit gracefully. */
-							run = false;
-							Log.d(MetaWatch.TAG,
-									"MetaWatchService.start(): voltage monitoring thread interrupted.");
-						}
-					}
-					Log.d(MetaWatch.TAG,
-							"MetaWatchService.start(): voltage monitoring thread ended.");
-				}
-			};
-			voltageThread.setDaemon(true);
-			voltageThread.start();
+		String voltageFrequencyString = PreferenceManager
+				.getDefaultSharedPreferences(this).getString(
+						"collectWatchVoltage", "0");
+		try {
+			
+			final int voltageFrequency = Integer
+					.parseInt(voltageFrequencyString);
+			if (voltageFrequency > 0) {
+				
+				AlarmManager alarmManager = (AlarmManager) context
+						.getSystemService(Context.ALARM_SERVICE);
+				Intent intent = new Intent(context, AlarmReceiver.class);
+				intent.putExtra("action_poll_voltage", "poll_voltage");
+				PendingIntent sender = PendingIntent.getBroadcast(context, 1,
+						intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				long sleep = voltageFrequency * 60 * 1000;
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 0, sleep,
+						sender);
+				Log.d(MetaWatch.TAG,
+						"MetaWatchService.start(): Set voltage reading every "
+								+ sleep + "ms");
+			}
+			
+		} catch (NumberFormatException nfe) {
+			Log.e(MetaWatch.TAG,
+					"MetaWatchService.start(): bad voltage frequency string '"
+							+ voltageFrequencyString + "'");
 		}
 
 	}

@@ -52,6 +52,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 			
 			return;
 		}
+
+		if (intent.hasExtra("action_poll_voltage")) {
+
+			if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
+				Protocol.readBatteryVoltage();
+			}
+
+			return;
+		}		
 		
 	}
 

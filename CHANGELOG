@@ -7,7 +7,12 @@ v1.1.3:
   APPLICATION_STOP was restarting application mode. [Kallex]
   
 - Fixed MWM crash on startup -- it was a bug in some debug code 
-I added to the intent receiver.  [thescreensavers, Smithers, etc.]
+  I added to the intent receiver.  [thescreensavers, Smithers, etc.]
+
+- Fixed voltage monitoring to use alarm callback instead of trying
+  to sleep in the thread.  Turns out there's no guarantee that the OS
+  will wake up a sleeping thread when requested.  Specifically, a 
+  Thread.sleep(10000) may not wake up for hours!
 
 v1.1.2:
 =======================================================================
