@@ -6,6 +6,14 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Log the receipt of an SMS notification?  (This might help some users
+  debug their SMS wierdness.)
+
+- Swap the order of sending in Notification.java:92 -- send the
+  vibrate first, then the text; this will give the analog user
+  another split second to see the text before it vanishes from
+  the OLED.
+
 - Notify user when the watch battery starts to drop quickly?
 
 - Make pause before scrolling configurable? [db1nto]
