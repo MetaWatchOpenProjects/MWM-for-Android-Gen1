@@ -125,7 +125,7 @@
  			/>			
 		<CheckBoxPreference
 			android:title="@string/settings_Timezonechange"
-			android:key="NotifyTimezonechange"
+			android:key="settingsNotifyTimezoneChange"
 			android:summary="@string/settings_Timezonechange_desc"
 			android:defaultValue="true"
 			/> 			

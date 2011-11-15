@@ -1,5 +1,14 @@
 CHANGELOG
 
+v1.1.4:
+=======================================================================
+
+- The phone will now set the time on the watch if the phone's time 
+  changes (e.g. setting the time in Android Settings).
+
+- Fixed bug where the MWM was sending timezone alerts to the watch
+  even if disabled in the settings.
+
 v1.1.3:
 =======================================================================
 

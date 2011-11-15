@@ -123,7 +123,6 @@ public class MetaWatchService extends Service {
 		public static boolean notifyK9 = true;
 		public static boolean notifyAlarm = true;
 		public static boolean notifyBatterylow = true;
-		public static boolean notifyTimezonechange = true;
 		public static boolean notifyMusic = true;
 		public static boolean notifyCalendar = true;
 		public static String watchMacAddress = "";

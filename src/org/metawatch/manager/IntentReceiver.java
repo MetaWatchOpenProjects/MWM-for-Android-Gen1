@@ -35,7 +35,9 @@ package org.metawatch.manager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -161,7 +163,17 @@ public class IntentReceiver extends BroadcastReceiver {
 			NotificationBuilder.createBatterylow(context);
 			return;
 		}
+		else if (action.equals("android.intent.action.TIME_SET") ) {
+			
+			Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received time set intent.");
+			
+			/* The time has changed, so notify the watch. */
+			Protocol.sendRtcNow(context);
+			return;
+		}		
 		else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
+			
+			Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received timezone changed intent.");
 			
 			/*
 			 * If we're in a new time zone, then the time has probably changed.
@@ -169,10 +181,12 @@ public class IntentReceiver extends BroadcastReceiver {
 			 */
 			Protocol.sendRtcNow(context);
 
-			if (!MetaWatchService.Preferences.notifyTimezonechange)
-				return;
-
-			NotificationBuilder.createTimezonechange(context);
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			if (sharedPreferences.getBoolean("settingsNotifyTimezoneChange",
+					false)) {
+				NotificationBuilder.createTimezonechange(context);
+			}
 			return;
 		}
 		else if (intent.getAction().equals("com.android.music.metachanged")
