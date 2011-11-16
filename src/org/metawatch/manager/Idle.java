@@ -63,6 +63,7 @@ public class Idle {
 		paintLarge.setColor(Color.BLACK);
 		paintLarge.setTextSize(16);
 		Typeface typefaceLarge = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");
+		//Typeface typefaceLarge = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
 		paintLarge.setTypeface(typefaceLarge);
 		
 		canvas.drawColor(Color.WHITE);
@@ -70,22 +71,47 @@ public class Idle {
 		canvas = drawLine(canvas, 32);		
 		if(!Preferences.disableWeather) {
 			if (WeatherData.received) {
-				// condition
-				canvas.save();
-				TextPaint paint = new TextPaint(paintSmall);
-				StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 36, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
-				canvas.translate(3, 40); //position the text
-				layout.draw(canvas);
-				canvas.restore();						
-			
+				
 				// icon
 				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
 				canvas.drawBitmap(image, 38, 37, null);
+				
+				// condition
+				canvas.save();
+				TextPaint paint = new TextPaint(paintSmall);
+				StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 60, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
+				canvas.translate(1, 35); //position the text
+				layout.draw(canvas);
+				canvas.restore();								
 			
 				// temperatures
-				canvas.drawText(WeatherData.temp, 64, 46, paintLarge);				
-				canvas.drawText(WeatherData.tempHigh, 64, 54, paintSmall);
-				canvas.drawText(WeatherData.tempLow, 64, 62, paintSmall);
+
+
+				if (Preferences.weatherCelsius) {
+					paintLarge.setTextAlign(Paint.Align.RIGHT);
+					canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
+					//RM: since the degree symbol draws wrong...
+					canvas.drawText("O", 82, 40, paintSmall);
+					canvas.drawText("C", 95, 46, paintLarge);
+				}
+				else {
+					paintLarge.setTextAlign(Paint.Align.RIGHT);
+					canvas.drawText(WeatherData.temp, 83, 46, paintLarge);
+					//RM: since the degree symbol draws wrong...
+					canvas.drawText("O", 83, 40, paintSmall);
+					canvas.drawText("F", 95, 46, paintLarge);
+				}
+				paintLarge.setTextAlign(Paint.Align.LEFT);
+				
+				
+				
+				canvas.drawText("High", 64, 54, paintSmall);
+				canvas.drawText("Low", 64, 62, paintSmall);
+				
+				paintSmall.setTextAlign(Paint.Align.RIGHT);
+				canvas.drawText(WeatherData.tempHigh, 95, 54, paintSmall);
+				canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
+				paintSmall.setTextAlign(Paint.Align.LEFT);
 			} else {
 				canvas.drawText("no data", 34, 50, paintSmall);
 			}

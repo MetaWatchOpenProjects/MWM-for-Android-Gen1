@@ -184,24 +184,24 @@ public class Monitors {
 			String cond = wcc.getCondition();
 			String temp;
 			if (Preferences.weatherCelsius) {
-				WeatherData.tempHigh = "High "
-						+ Integer.toString(wfc.getTempMaxCelsius());
-				WeatherData.tempLow = "Low "
-						+ Integer.toString(wfc.getTempMinCelsius());
-				temp = Integer.toString(wcc.getTempCelcius()) + "°C";
+				WeatherData.tempHigh = 
+						  Integer.toString(wfc.getTempMaxCelsius());
+				WeatherData.tempLow = 
+						  Integer.toString(wfc.getTempMinCelsius());
+				temp = Integer.toString(wcc.getTempCelcius());
 			} else {
-				WeatherData.tempHigh = "High "
-						+ Integer.toString(WeatherUtils
+				WeatherData.tempHigh = 
+						  Integer.toString(WeatherUtils
 								.celsiusToFahrenheit(wfc
 										.getTempMaxCelsius()));
-				WeatherData.tempLow = "Low "
-						+ Integer.toString(WeatherUtils
+				WeatherData.tempLow = 
+						  Integer.toString(WeatherUtils
 								.celsiusToFahrenheit(wfc
 										.getTempMinCelsius()));
-				temp = Integer.toString(wcc.getTempFahrenheit()) + "°F";
+				temp = Integer.toString(wcc.getTempFahrenheit());
 			}
-			// String place = gwh.city;
-
+			// String place = gwh.city
+			
 			WeatherData.condition = cond;
 			WeatherData.temp = temp;
 
