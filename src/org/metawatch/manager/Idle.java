@@ -42,7 +42,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 
 public class Idle {
 	
@@ -75,16 +74,19 @@ public class Idle {
 			StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 36, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
 			canvas.translate(3, 40); //position the text
 			layout.draw(canvas);
+			
 			canvas.restore();						
 			
 			// icon
 			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-			canvas.drawBitmap(image, 38, 37, null);
+			canvas.drawBitmap(image, 36, 37, null);
 			
 			// temperatures
 			canvas.drawText(WeatherData.temp, 64, 46, paintLarge);				
 			canvas.drawText(WeatherData.tempHigh, 64, 54, paintSmall);
 			canvas.drawText(WeatherData.tempLow, 64, 62, paintSmall);
+			canvas.drawText(WeatherData.city, 3, 62, paintSmall);
+			
 		} else {
 			canvas.drawText("no data", 34, 50, paintSmall);
 		}
