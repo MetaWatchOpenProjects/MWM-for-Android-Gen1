@@ -31,4 +31,9 @@
     
     <string name="settings_Other">Other</string>
     
+    <string name="activitiy_title_main"></string>
+    <string name="activitiy_title_tests">Tests</string>
+    <string name="activitiy_title_settings">Settings</string>
+    
+    
 </resources>

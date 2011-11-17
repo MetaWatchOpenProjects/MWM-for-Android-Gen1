@@ -52,6 +52,7 @@ public class MetaWatch extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        setTitle(getString(R.string.app_name));
     }
 
 	@Override
@@ -124,7 +125,7 @@ public class MetaWatch extends Activity {
 		String html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>About</title></head><body>" + 
 						"<h1>MetaWatch</h1>" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
-						"<p>© Copyright 2011 Meta Watch Ltd.</p>" +
+						"<p>ï¿½ Copyright 2011 Meta Watch Ltd.</p>" +
 						"</body></html>";
         webView.loadData(html, "text/html", "utf-8");
         
