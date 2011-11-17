@@ -1,5 +1,5 @@
-This is the MetaWatch Manager, based on MetaWatch OpenSource, AkiraYasha, Chris Sewell, and PurpleGuitars modifications
-all in one place.
+This is benjymous' fork of the MetaWatch Manager, based on MetaWatch OpenSource, AkiraYasha, Chris Sewell, and PurpleGuitars modifications
+with some extra modifications of my own (currently just tweaks to the weather display layout)
 
 It's based on the official MetaWatch manager (see README.orig)
 
@@ -10,3 +10,4 @@ may do to you, your phone, your watch, or anything else.
 
 https://github.com/AkiraYasha/MetaWatch
 https://github.com/PurpleGuitar/MWM-for-Android
+https://github.com/benjymous/MWM-for-Android/
