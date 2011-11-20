@@ -333,14 +333,16 @@ public class Protocol {
 				android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
 		
 		int top = 1;
+		int left = 1;
 		if( Preferences.notificationCenter ) {
 			top = 48 - (staticLayout.getHeight()/2);
 			if( top<1 ) {
 				top = 1;
 			}
+			left = 48;
 		}
 		
-		canvas.translate(48, top); // position the text
+		canvas.translate(left, top); // position the text
 		staticLayout.draw(canvas);
 		return canvas;
 	}
