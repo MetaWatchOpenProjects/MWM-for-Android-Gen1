@@ -44,6 +44,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 
 public class NotificationBuilder {
 	
@@ -66,9 +68,13 @@ public class NotificationBuilder {
 		String name = Utils.getContactNameFromNumber(context, number);
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsSMSNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
-			Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+			//Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
+			//Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
+			//Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+			
+			Bitmap bitmap = smartNotify(context, "message.bmp", name, text);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);
+			
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -249,6 +255,67 @@ public class NotificationBuilder {
 	}
 	
 	
+	static Bitmap smartNotify(Context context, String iconPath, String header, String body) {
+		
+		String font = null;
+		int size = 8;
+		int realSize = 7;
+		
+		switch (Preferences.fontSize) {
+			case FontSize.SMALL:
+				font = "metawatch_8pt_5pxl_CAPS.ttf";
+				realSize = 5;
+				break;
+			case FontSize.MEDIUM:
+				font = "metawatch_8pt_7pxl_CAPS.ttf";
+				realSize = 7;
+				break;
+			case FontSize.LARGE:
+				font = "metawatch_16pt_11pxl.ttf";
+				realSize = 11;
+				size = 16;
+				break;
+		}
+		
+		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);		
+		
+		Paint paintHead = new Paint();
+		paintHead.setColor(Color.BLACK);		
+		paintHead.setTextSize(16);
+		Typeface typeface = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");		
+		paintHead.setTypeface(typeface);
+		
+		Paint paint = new Paint();
+		paint.setColor(Color.BLACK);		
+		paint.setTextSize(size);
+		typeface = Typeface.createFromAsset(context.getAssets(), font);		
+		paint.setTypeface(typeface);
+		
+		
+		canvas.drawColor(Color.WHITE);
+		
+		Bitmap icon = Utils.loadBitmapFromAssets(context, iconPath);
+		
+		
+		canvas.drawBitmap(icon, 0, 0, paint);
+		canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
+		
+		canvas.drawLine(0, icon.getHeight(), 88, icon.getHeight(), paint);
+		canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
+		
+		canvas.drawText("X", 90, 93, paint);
+		
+		
+		TextPaint textPaint = new TextPaint(paint);
+		StaticLayout staticLayout = new StaticLayout(body, textPaint, 86,
+				android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
+		
+		canvas.translate(1, icon.getHeight()+2); // position the text
+		staticLayout.draw(canvas);
+		
+		return bitmap;
+	}
 	
 	
 }

@@ -728,6 +728,19 @@ public class MetaWatchService extends Service {
 			broadcastButton(button, watchState);
 			break;
 		case WatchStates.NOTIFICATION:
+			switch (button) {
+			case Notification.NOTIFICATION_UP:
+				Notification.notifyButtonPress = Notification.NOTIFICATION_UP;
+				break;
+				
+			case Notification.NOTIFICATION_DOWN:
+				Notification.notifyButtonPress = Notification.NOTIFICATION_DOWN;
+				break;
+				
+			case Notification.NOTIFICATION_DISMISS:
+				Notification.notifyButtonPress = Notification.NOTIFICATION_DOWN;
+				break;
+			}
 			break;
 		}
 

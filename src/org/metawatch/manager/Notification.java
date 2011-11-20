@@ -43,6 +43,12 @@ public class Notification {
 
 	private static NotificationType lastNotification = null;
 
+	final static byte NOTIFICATION_UP = 30;
+	final static byte NOTIFICATION_DOWN = 31;
+	final static byte NOTIFICATION_DISMISS = 32;
+	
+	public static byte notifyButtonPress = 0;
+	
 	private static BlockingQueue<NotificationType> notificationQueue = new LinkedBlockingQueue<NotificationType>();
 	private static volatile boolean notificationSenderRunning = false;
 
@@ -159,13 +165,33 @@ public class Notification {
 					lastNotification = notification;
 
 					/* Give some space between notifications. */
-					Log.d(MetaWatch.TAG,
-							"NotificationSender.run(): Notification sent, sleeping for "
-									+ notification.timeout + "ms");
-					Thread.sleep(notification.timeout);
-					Log.d(MetaWatch.TAG,
-							"NotificationSender.run(): Done sleeping.");
+					
+					if (notification.timeout < 0) {
+						notifyButtonPress = 0;
+						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom
 
+						Log.d(MetaWatch.TAG,
+								"NotificationSender.run(): Notification sent, waiting for dismiss " );
+						
+						while (notifyButtonPress==0) {
+							Thread.sleep(250);
+						}
+						
+						Protocol.disableButton(2, 0, 2); // Right bottom
+						
+						Log.d(MetaWatch.TAG,
+								"NotificationSender.run(): Done sleeping.");
+						
+					}
+					else {
+						Log.d(MetaWatch.TAG,
+								"NotificationSender.run(): Notification sent, sleeping for "
+										+ notification.timeout + "ms");
+						Thread.sleep(notification.timeout);
+						Log.d(MetaWatch.TAG,
+								"NotificationSender.run(): Done sleeping.");
+					}
+					
 					if (MetaWatchService.WatchModes.CALL == false) {
 						exitNotification(context);
 					}

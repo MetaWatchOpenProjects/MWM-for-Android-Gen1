@@ -170,6 +170,7 @@ public class Protocol {
 		byteArrayOutputStream.write(bytes);
 		byteArrayOutputStream.write(crc(bytes));
 
+		/*
 		String str = "sending: ";
 		byte[] b = byteArrayOutputStream.toByteArray();
 		for (int i = 0; i < b.length; i++) {
@@ -179,6 +180,7 @@ public class Protocol {
 					+ ", ";
 		}
 		Log.d(MetaWatch.TAG, str);
+		*/
 
 		if (MetaWatchService.outputStream == null)
 			throw new IOException("OutputStream is null");
@@ -438,6 +440,10 @@ public class Protocol {
 	}
 
 	public static void enableButton(int button, int type, int code) {
+		enableButton(button,type,code,0);
+	}
+	
+	public static void enableButton(int button, int type, int code, int mode) {
 		Log.d(MetaWatch.TAG, "Protocol.enableButton(): button="+button+" type="+type+" code=" + code);
 		byte[] bytes = new byte[9];
 		
@@ -446,7 +452,7 @@ public class Protocol {
 		bytes[2] = eMessageType.EnableButtonMsg.msg; // enable button
 		bytes[3] = 0; // not used
 
-		bytes[4] = 0; // idle
+		bytes[4] = (byte) mode; // (idle,etc)
 		bytes[5] = (byte) button;
 		bytes[6] = (byte) type; // immediate
 		bytes[7] = 0x34;
@@ -456,6 +462,10 @@ public class Protocol {
 	}
 
 	public static void disableButton(int button, int type) {
+		disableButton(button,type,0);
+	}
+	
+	public static void disableButton(int button, int type, int mode) {
 		Log.d(MetaWatch.TAG, "Protocol.disableButton(): button="+button+" type="+type);
 		byte[] bytes = new byte[7];
 		
@@ -464,7 +474,7 @@ public class Protocol {
 		bytes[2] = eMessageType.DisableButtonMsg.msg; // disable button
 		bytes[3] = 0; // not used
 
-		bytes[4] = 0; // idle
+		bytes[4] = (byte) mode; // (idle,etc)
 		bytes[5] = (byte) button;
 		bytes[6] = (byte) type; // immediate
 
