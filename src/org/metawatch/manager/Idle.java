@@ -33,6 +33,7 @@
 package org.metawatch.manager;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
 
 import android.content.Context;
@@ -63,7 +64,6 @@ public class Idle {
 		paintLarge.setColor(Color.BLACK);
 		paintLarge.setTextSize(16);
 		Typeface typefaceLarge = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");
-		//Typeface typefaceLarge = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL);
 		paintLarge.setTypeface(typefaceLarge);
 		
 		canvas.drawColor(Color.WHITE);
@@ -85,8 +85,6 @@ public class Idle {
 				canvas.restore();								
 			
 				// temperatures
-
-
 				if (Preferences.weatherCelsius) {
 					paintLarge.setTextAlign(Paint.Align.RIGHT);
 					canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
@@ -102,9 +100,7 @@ public class Idle {
 					canvas.drawText("F", 95, 46, paintLarge);
 				}
 				paintLarge.setTextAlign(Paint.Align.LEFT);
-				
-				
-				
+							
 				canvas.drawText("High", 64, 54, paintSmall);
 				canvas.drawText("Low", 64, 62, paintSmall);
 				
@@ -112,9 +108,29 @@ public class Idle {
 				canvas.drawText(WeatherData.tempHigh, 95, 54, paintSmall);
 				canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
 				paintSmall.setTextAlign(Paint.Align.LEFT);
+				
+				canvas.drawText(WeatherData.locationName, 1, 63, paintSmall);
 			} else {
-				canvas.drawText("no data", 34, 50, paintSmall);
+				paintSmall.setTextAlign(Paint.Align.CENTER);
+				if (Preferences.weatherGeolocation) {
+					if( !LocationData.received ) {
+						canvas.drawText("awaiting location", 48, 50, paintSmall);
+					}
+					else {
+						canvas.drawText("awaiting weather", 48, 50, paintSmall);
+					}
+				}
+				else {
+					canvas.drawText("no data", 48, 50, paintSmall);
+				}
+				paintSmall.setTextAlign(Paint.Align.LEFT);
 			}
+						
+			// Debug current time
+			//String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+			//String currentTimeString = new SimpleDateFormat("HH:mm").format(new Date());
+			//canvas.drawText(currentTimeString, 0, 56, paintSmall);
+			
 			canvas = drawLine(canvas, 64);
 		}
 		

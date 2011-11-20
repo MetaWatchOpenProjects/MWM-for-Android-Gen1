@@ -129,12 +129,16 @@ public class MetaWatchService extends Service {
 		public static int packetWait = 10;
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
+		public static boolean notificationCenter = false;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
+		public static boolean weatherGeolocation = false;
+		public static String wundergroundKey = "";
 		public static int fontSize = 2;
 		public static int smsLoopInterval = 15;
 		public static boolean idleMusicControls = false;
 		public static boolean idleReplay = false;
+		public static boolean notificationLarger = false;
 		public static boolean disableWeather = false;
 	}
 
@@ -172,10 +176,16 @@ public class MetaWatchService extends Service {
 				Preferences.skipSDP);
 		Preferences.invertLCD = sharedPreferences.getBoolean("InvertLCD",
 				Preferences.invertLCD);
+		Preferences.notificationCenter = sharedPreferences.getBoolean(
+				"notificationCenter", Preferences.notificationCenter);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity",
 				Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean(
 				"WeatherCelsius", Preferences.weatherCelsius);
+		Preferences.weatherGeolocation = sharedPreferences.getBoolean(
+				"WeatherGeolocation", Preferences.weatherGeolocation);
+		Preferences.wundergroundKey = sharedPreferences.getString(
+				"WundergroundKey", Preferences.wundergroundKey);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean(
 				"IdleMusicControls", Preferences.idleMusicControls);
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay",
@@ -643,7 +653,15 @@ public class MetaWatchService extends Service {
 					fw.write("\"" + date.toString()+ "\"," + batterySense + "," + batteryAverage + "\n");
 					fw.flush();
 					fw.close();
-				}				
+				}		
+			} else if (bytes[2] == eMessageType.ReadLightSensorResponse.msg) {
+				float lightSense = (((int) bytes[1] << 8) + (int) bytes[0]) / 1000.0f;
+				float lightAverage = (((int) bytes[3] << 8) + (int) bytes[2]) / 1000.0f;
+				Log.d(MetaWatch.TAG,
+						"MetaWatchService.readFromDevice(): received light sensore response."
+								+ " light_sense=" + lightSense
+								+ " light_average=" + lightAverage);
+			
 			} else {
 				Log.d(MetaWatch.TAG,
 						"MetaWatchService.readFromDevice(): Unknown message?");

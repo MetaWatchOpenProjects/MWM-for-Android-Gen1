@@ -45,6 +45,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
@@ -310,6 +311,9 @@ public class Protocol {
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(size);
+		if( Preferences.notificationCenter ) {
+			paint.setTextAlign(Align.CENTER);	
+		}
 		Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);
 		paint.setTypeface(typeface);
 		canvas.drawColor(Color.WHITE);
@@ -325,9 +329,18 @@ public class Protocol {
 	public static Canvas breakText(Canvas canvas, String text, Paint pen,
 			int x, int y) {
 		TextPaint textPaint = new TextPaint(pen);
-		StaticLayout staticLayout = new StaticLayout(text, textPaint, 98,
+		StaticLayout staticLayout = new StaticLayout(text, textPaint, 94,
 				android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
-		canvas.translate(x, y); // position the text
+		
+		int top = 1;
+		if( Preferences.notificationCenter ) {
+			top = 48 - (staticLayout.getHeight()/2);
+			if( top<1 ) {
+				top = 1;
+			}
+		}
+		
+		canvas.translate(48, top); // position the text
 		staticLayout.draw(canvas);
 		return canvas;
 	}
@@ -545,6 +558,18 @@ public class Protocol {
 		bytes[0] = eMessageType.start;
 		bytes[1] = (byte) (bytes.length+2); // length
 		bytes[2] = eMessageType.ReadBatteryVoltageMsg.msg;
+		bytes[3] = 0;
+
+		sendQueue.add(bytes);		
+	}
+	
+	public static void readLightSensor() {
+		Log.d(MetaWatch.TAG, "Protocol.readLightSensor()");
+		byte[] bytes = new byte[4];
+
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.ReadLightSensorMsg.msg;
 		bytes[3] = 0;
 
 		sendQueue.add(bytes);		

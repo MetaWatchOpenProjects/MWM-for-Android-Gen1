@@ -32,6 +32,9 @@
 
 package org.metawatch.manager;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -43,6 +46,13 @@ import org.anddev.android.weatherforecast.weather.WeatherCurrentCondition;
 import org.anddev.android.weatherforecast.weather.WeatherForecastCondition;
 import org.anddev.android.weatherforecast.weather.WeatherSet;
 import org.anddev.android.weatherforecast.weather.WeatherUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -53,7 +63,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -75,7 +89,13 @@ public class Monitors {
 	
 	//public static int gmailCount = 0;
 	static Hashtable<String, Integer> gmailUnreadCounts = new Hashtable<String, Integer>();
-
+	
+	public static LocationManager locationManager;
+	public static String locationProvider;
+	
+	private static NetworkLocationListener networkLocationListener;
+	
+	public static Boolean useGeolocation = true;
 	
 	public static class WeatherData {
 		public static boolean received = false;
@@ -84,6 +104,13 @@ public class Monitors {
 		public static String tempLow;
 		public static String temp;
 		public static String condition;
+		public static String locationName;
+	}
+	
+	public static class LocationData {
+		public static boolean received = false;
+	    public static double latitude;
+	    public static double longitude;
 	}
 	
 	public static void updateGmailUnreadCount(String account, int count) {
@@ -116,6 +143,15 @@ public class Monitors {
 	
 	public static void start(Context context, TelephonyManager telephonyManager) {
 		// start weather updater
+		
+		if (useGeolocation) {
+			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			locationProvider = LocationManager.NETWORK_PROVIDER;
+			
+			networkLocationListener = new NetworkLocationListener(context);
+			
+			locationManager.requestLocationUpdates(locationProvider, 60000, 1000, networkLocationListener);
+		}
 		
 		// temporary one time update
 		updateWeatherData(context);
@@ -152,10 +188,13 @@ public class Monitors {
 	
 	public static void stop() {
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
+		if (useGeolocation) {
+			locationManager.removeUpdates(networkLocationListener);
+		}
 		stopAlarmTicker();		
 	}
 	
-	private static synchronized void updateWeatherDataInternal(Context context) {
+	private static synchronized void updateWeatherDataGoogle(Context context) {
 		try {
 
 			Log.d(MetaWatch.TAG,
@@ -166,6 +205,8 @@ public class Monitors {
 					+ Preferences.weatherCity;
 			url = new URL(queryString.replace(" ", "%20"));
 
+			WeatherData.locationName = Preferences.weatherCity; 
+			
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			XMLReader xr = sp.getXMLReader();
@@ -249,12 +290,98 @@ public class Monitors {
 		}
 		
 	}
+	
+	private static synchronized void updateWeatherDataWunderground(Context context) {
+		try {
+
+			Log.d(MetaWatch.TAG,
+					"Monitors.updateWeatherData(): start");
+			
+
+			if (LocationData.received && Preferences.wundergroundKey != "") {
+				
+				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
+			
+				JSONObject json = getJSONfromURL( "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast/q/"+latLng+".json" );
+				JSONObject location = json.getJSONObject("location");
+				JSONObject current = json.getJSONObject("current_observation");
+				
+				Log.d(MetaWatch.TAG, "1");
+				JSONObject forecast = json.getJSONObject("forecast");
+				Log.d(MetaWatch.TAG, "2");
+				JSONObject today = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday").getJSONObject(0);
+				
+				WeatherData.locationName = location.getString("city");			
+				WeatherData.condition = current.getString("weather");
+				
+				String cond = current.getString("icon");
+				
+				//TODO:  Need icons for "fog" and "hazy"								 	
+				
+				if (cond.equals("clear") 
+						|| cond.equals("sunny")
+						|| cond.equals("partlysunny")
+						|| cond.equals("mostlysunny"))
+					WeatherData.icon = "weather_sunny.bmp";
+				else if (cond.equals("cloudy")
+						|| cond.equals("partlycloudy")
+						|| cond.equals("mostlycloudy"))
+					WeatherData.icon = "weather_cloudy.bmp";
+				if (cond.equals("rain") 
+						|| cond.equals("chancerain"))
+					WeatherData.icon = "weather_rain.bmp";
+				if (cond.equals("tstorms") 
+						|| cond.equals("chancetstorms"))
+					WeatherData.icon = "weather_thunderstorm.bmp";
+				if (cond.equals("snow") 
+						|| cond.equals("chancesnow")
+						|| cond.equals("sleet")
+						|| cond.equals("chancesleet")
+						|| cond.equals("flurries")
+						|| cond.equals("chanceflurries"))
+					WeatherData.icon = "weather_snow.bmp";
+				else
+					WeatherData.icon = "weather_cloudy.bmp";
+				
+				if (Preferences.weatherCelsius) {
+					WeatherData.temp = current.getString("temp_c");
+					WeatherData.tempLow = today.getJSONObject("low").getString("celsius");
+					Log.d(MetaWatch.TAG, "3");
+					WeatherData.tempHigh= today.getJSONObject("high").getString("celsius");
+					Log.d(MetaWatch.TAG, "4");
+				}
+				else {
+					WeatherData.temp = current.getString("temp_f");
+					WeatherData.tempLow = today.getJSONObject("low").getString("fahrenheit");
+					WeatherData.tempHigh= today.getJSONObject("high").getString("fahrenheit");
+				}
+				WeatherData.icon = "weather_cloudy.bmp";
+				WeatherData.received = true;
+				
+				Idle.updateLcdIdle(context);
+	
+		    }
+
+			
+		} catch (Exception e) {
+			Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
+		} finally {
+			Log.d(MetaWatch.TAG,
+					"Monitors.updateWeatherData(): finish");
+		}
+	}
 
 	public static void updateWeatherData(final Context context) {
 		Thread thread = new Thread("WeatherUpdater") {
 			@Override
 			public void run() {
-				updateWeatherDataInternal(context);
+				if (useGeolocation) {
+					updateWeatherDataWunderground(context);
+				}
+				else {
+					updateWeatherDataGoogle(context);
+				}
+				
 			}
 		};
 		thread.start();
@@ -306,6 +433,86 @@ public class Monitors {
 			Log.d(MetaWatch.TAG, "call history change");
 			Idle.updateLcdIdle(context);
 		}
+	}
+	
+	private static class NetworkLocationListener implements LocationListener {
+
+		Context context;
+		
+		public NetworkLocationListener(Context context)
+		{
+			this.context = context;
+		}
+		
+		public void onLocationChanged(Location location) {
+			
+			LocationData.latitude = location.getLatitude();
+			LocationData.longitude = location.getLongitude();
+			
+			LocationData.received = true;
+						
+			Monitors.updateWeatherData(context);
+		}
+
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	//http://p-xr.com/android-tutorial-how-to-parse-read-json-data-into-a-android-listview/
+	public static JSONObject getJSONfromURL(String url){
+
+		//initialize
+		InputStream is = null;
+		String result = "";
+		JSONObject jArray = null;
+
+		//http post
+		try{
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(url);
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+
+		//convert response to string
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result=sb.toString();
+		}catch(Exception e){
+			Log.e("log_tag", "Error converting result "+e.toString());
+		}
+
+		//try parse the string to a JSON object
+		try{
+	        	jArray = new JSONObject(result);
+		}catch(JSONException e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
+
+		return jArray;
 	}
 
 	
