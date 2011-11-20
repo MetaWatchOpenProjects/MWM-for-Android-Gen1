@@ -2,6 +2,24 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	>
+	
+    <PreferenceCategory
+		android:title="@string/settings_Device"
+		>
+		<Preference
+			android:title="Select Watch"
+			android:key="Discovery"
+			android:summary="Discover and select watch"
+			/>
+        
+		<EditTextPreference
+			android:title="@string/settings_Mac"
+			android:key="MAC"
+			android:summary="Enter watch MAC address manually"
+			android:defaultValue=""
+			/>
+	</PreferenceCategory>
+    
 	<PreferenceCategory
 		android:title="@string/settings_Notifications"
 		>
@@ -160,24 +178,33 @@
 			android:key="appBlacklist"
 			android:summary="List of applications to ignore notifications from"
 			/>
+
+		<CheckBoxPreference
+			android:title="Last Notification Replay (Beta)"
+			android:key="IdleReplay"
+			android:summary="Enable replay of last notification on Idle screen"
+			android:defaultValue="false"
+			/>
+		<ListPreference 
+			android:entries="@array/settings_font_size_name" 
+			android:entryValues="@array/settings_font_size_value" 
+			android:dialogTitle="Font Size" 
+			android:key="FontSize" 
+			android:title="Font Size" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="2"
+ 			/>
+		<CheckBoxPreference
+			android:title="Center Notification Text"
+			android:key="notificationCenter"
+			android:summary="Display notification text centered"
+			android:defaultValue="false"
+			/>
+				
 	</PreferenceCategory>
 
-	<PreferenceCategory
-		android:title="@string/settings_Device"
-		>
-	<EditTextPreference
-			android:title="@string/settings_Mac"
-			android:key="MAC"
-			android:summary="Enter watch MAC address manually"
-			android:defaultValue=""
-			/>
-	<Preference
-			android:title="Select Watch"
-			android:key="Discovery"
-			android:summary="Discover and select watch"
-			/>
-	</PreferenceCategory>	
-	
+		
  	<PreferenceCategory
  		android:title="@string/settings_Analog"
  		>
@@ -199,12 +226,8 @@
 			android:numeric="integer"
 			android:defaultValue="5"
 			/>
-		<CheckBoxPreference
-			android:title="Disable Weather"
-			android:key="DisableWeather"
-			android:summary="Disable weaather on idle screen"
-			android:defaultValue="false"
-			/>
+
+
 		<CheckBoxPreference
 			android:title="Music Controls (Beta)"
 			android:key="IdleMusicControls"
@@ -219,27 +242,11 @@
 			/>
 	</PreferenceCategory>	
 	
-	
 	<PreferenceCategory
-		android:title="@string/settings_Other"
-		>
-		<CheckBoxPreference
-			android:title="Last Notification Replay (Beta)"
-			android:key="IdleReplay"
-			android:summary="Enable replay of last notification on Idle screen"
-			android:defaultValue="false"
-			/>
-		<ListPreference 
-			android:entries="@array/settings_font_size_name" 
-			android:entryValues="@array/settings_font_size_value" 
-			android:dialogTitle="Font Size" 
-			android:key="FontSize" 
-			android:title="Font Size" 
-			android:negativeButtonText="Cancel" 
- 			android:enabled="true" 
- 			android:defaultValue="2"
- 			/>
-		<EditTextPreference
+	    android:title="Weather"
+	    >
+
+	    <EditTextPreference
 			android:title="Weather Location"
 			android:key="WeatherCity"
 			android:summary="City for weather data"
@@ -251,6 +258,31 @@
 			android:summary="Display temperature in Celsius instead of Fahrenheit"
 			android:defaultValue="false"
 			/>
+		<CheckBoxPreference
+			android:title="Weather Geolocation"
+			android:key="WeatherGeolocation"
+			android:summary="Use Geolocation for weather"
+			android:defaultValue="false"
+			/>
+		<EditTextPreference
+			android:title="Weather Underground API Key"
+			android:key="WundergroundKey"
+			android:summary="Required for geolocation"
+			android:defaultValue=""
+			/>
+	    <CheckBoxPreference
+			android:title="Disable Weather"
+			android:key="DisableWeather"
+			android:summary="Disable weather on idle screen"
+			android:defaultValue="false"
+			/>	    
+	    
+	</PreferenceCategory>
+	
+	<PreferenceCategory
+		android:title="@string/settings_Other"
+		>
+		
 		<EditTextPreference
 			android:title="Packet Wait"
 			android:key="PacketWait"

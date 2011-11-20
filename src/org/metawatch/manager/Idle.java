@@ -74,7 +74,7 @@ public class Idle {
 				
 				// icon
 				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-				canvas.drawBitmap(image, 38, 37, null);
+				canvas.drawBitmap(image, 36, 37, null);
 				
 				// condition
 				canvas.save();
