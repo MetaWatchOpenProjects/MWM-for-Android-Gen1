@@ -1,5 +1,17 @@
 CHANGELOG
 
+v1.1.5:
+=======================================================================
+
+- Included benjymous's improvments to the digital watch weather display.
+
+- Added experimental support for the Motoblur clock's alarm and timer. 
+
+- Added the Motoblur alarm & timer app to the default notification blacklist.
+
+- Fixed bug on SMS receive that was generating warnings in the log.
+
+
 v1.1.4:
 =======================================================================
 
