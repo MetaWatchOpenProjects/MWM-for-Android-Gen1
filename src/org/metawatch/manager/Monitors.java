@@ -307,9 +307,7 @@ public class Monitors {
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
 				
-				Log.d(MetaWatch.TAG, "1");
 				JSONObject forecast = json.getJSONObject("forecast");
-				Log.d(MetaWatch.TAG, "2");
 				JSONObject today = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday").getJSONObject(0);
 				
 				WeatherData.locationName = location.getString("city");			
@@ -347,9 +345,7 @@ public class Monitors {
 				if (Preferences.weatherCelsius) {
 					WeatherData.temp = current.getString("temp_c");
 					WeatherData.tempLow = today.getJSONObject("low").getString("celsius");
-					Log.d(MetaWatch.TAG, "3");
 					WeatherData.tempHigh= today.getJSONObject("high").getString("celsius");
-					Log.d(MetaWatch.TAG, "4");
 				}
 				else {
 					WeatherData.temp = current.getString("temp_f");
