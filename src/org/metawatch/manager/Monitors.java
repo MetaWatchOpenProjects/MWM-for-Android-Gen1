@@ -150,11 +150,9 @@ public class Monitors {
 			
 			networkLocationListener = new NetworkLocationListener(context);
 			
-			locationManager.requestLocationUpdates(locationProvider, 60000, 1000, networkLocationListener);
+			locationManager.requestLocationUpdates(locationProvider, 0, 0, networkLocationListener);
 		}
 		
-		// temporary one time update
-		updateWeatherData(context);
 		
 		CallStateListener phoneListener = new CallStateListener(context);
 		
@@ -182,6 +180,9 @@ public class Monitors {
 			contentResolverCalls.registerContentObserver(android.provider.CallLog.Calls.CONTENT_URI, true, contentObserverCalls);
 		} catch (Exception x) {
 		}
+		
+		// temporary one time update
+		updateWeatherData(context);
 		
 		startAlarmTicker(context);
 	}
@@ -450,8 +451,12 @@ public class Monitors {
 			LocationData.longitude = location.getLongitude();
 			
 			LocationData.received = true;
-						
-			Monitors.updateWeatherData(context);
+			
+			locationManager.requestLocationUpdates(location.getProvider(), 60 * 60 * 1000, 5000, this);
+			
+			if (!WeatherData.received) {
+				Monitors.updateWeatherData(context);
+			}
 		}
 
 		public void onProviderDisabled(String provider) {

@@ -32,6 +32,9 @@
 
 package org.metawatch.manager;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
@@ -259,20 +262,20 @@ public class NotificationBuilder {
 		
 		String font = null;
 		int size = 8;
-		int realSize = 7;
+		//int realSize = 7;
 		
 		switch (Preferences.fontSize) {
 			case FontSize.SMALL:
 				font = "metawatch_8pt_5pxl_CAPS.ttf";
-				realSize = 5;
+				//realSize = 5;
 				break;
 			case FontSize.MEDIUM:
 				font = "metawatch_8pt_7pxl_CAPS.ttf";
-				realSize = 7;
+				//realSize = 7;
 				break;
 			case FontSize.LARGE:
 				font = "metawatch_16pt_11pxl.ttf";
-				realSize = 11;
+				//realSize = 11;
 				size = 16;
 				break;
 		}
@@ -313,6 +316,16 @@ public class NotificationBuilder {
 		
 		canvas.translate(1, icon.getHeight()+2); // position the text
 		staticLayout.draw(canvas);
+
+		
+		try {
+			FileOutputStream fos;
+			fos = new FileOutputStream("/sdcard/test.png");
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.close();
+		} catch (IOException e) {
+		}
+
 		
 		return bitmap;
 	}
