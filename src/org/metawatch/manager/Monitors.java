@@ -337,16 +337,16 @@ public class Monitors {
 						|| cond.equals("partlycloudy")
 						|| cond.equals("mostlycloudy"))
 					WeatherData.icon = "weather_cloudy.bmp";
-				if (cond.equals("rain") 
+				else if (cond.equals("rain") 
 						|| cond.equals("chancerain"))
 					WeatherData.icon = "weather_rain.bmp";
-				if (cond.equals("fog") 
+				else if (cond.equals("fog") 
 						|| cond.equals("hazy"))
 					WeatherData.icon = "weather_fog.bmp";
-				if (cond.equals("tstorms") 
+				else if (cond.equals("tstorms") 
 						|| cond.equals("chancetstorms"))
 					WeatherData.icon = "weather_thunderstorm.bmp";
-				if (cond.equals("snow") 
+				else if (cond.equals("snow") 
 						|| cond.equals("chancesnow")
 						|| cond.equals("sleet")
 						|| cond.equals("chancesleet")
