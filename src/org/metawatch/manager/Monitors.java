@@ -98,6 +98,7 @@ public class Monitors {
 	public static Boolean useGeolocation = true;
 	
 	public static class WeatherData {
+		public static boolean updating = false;
 		public static boolean received = false;
 		public static String icon;
 		public static String tempHigh;
@@ -144,13 +145,16 @@ public class Monitors {
 	public static void start(Context context, TelephonyManager telephonyManager) {
 		// start weather updater
 		
+		Log.d(MetaWatch.TAG,
+				"Monitors.start()");
+				
 		if (useGeolocation) {
 			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			locationProvider = LocationManager.NETWORK_PROVIDER;
 			
 			networkLocationListener = new NetworkLocationListener(context);
 			
-			locationManager.requestLocationUpdates(locationProvider, 0, 0, networkLocationListener);
+			locationManager.requestLocationUpdates(locationProvider, 30 * 1000, 0, networkLocationListener);
 		}
 		
 		
@@ -188,6 +192,10 @@ public class Monitors {
 	}
 	
 	public static void stop() {
+		
+		Log.d(MetaWatch.TAG,
+				"Monitors.stop()");
+		
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
 		if (useGeolocation) {
 			locationManager.removeUpdates(networkLocationListener);
@@ -295,6 +303,11 @@ public class Monitors {
 	private static synchronized void updateWeatherDataWunderground(Context context) {
 		try {
 
+			if (WeatherData.updating)
+				return;
+			
+			WeatherData.updating = true;
+			
 			Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): start");
 			
@@ -315,8 +328,6 @@ public class Monitors {
 				
 				String cond = current.getString("icon");
 				
-				//TODO:  Need icons for "fog" and "hazy"								 	
-				
 				if (cond.equals("clear") 
 						|| cond.equals("sunny")
 						|| cond.equals("partlysunny")
@@ -329,6 +340,9 @@ public class Monitors {
 				if (cond.equals("rain") 
 						|| cond.equals("chancerain"))
 					WeatherData.icon = "weather_rain.bmp";
+				if (cond.equals("fog") 
+						|| cond.equals("hazy"))
+					WeatherData.icon = "weather_fog.bmp";
 				if (cond.equals("tstorms") 
 						|| cond.equals("chancetstorms"))
 					WeatherData.icon = "weather_thunderstorm.bmp";
@@ -353,6 +367,7 @@ public class Monitors {
 					WeatherData.tempHigh= today.getJSONObject("high").getString("fahrenheit");
 				}
 				WeatherData.icon = "weather_cloudy.bmp";
+			
 				WeatherData.received = true;
 				
 				Idle.updateLcdIdle(context);
@@ -365,6 +380,9 @@ public class Monitors {
 		} finally {
 			Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): finish");
+			
+			WeatherData.updating = false;
+			
 		}
 	}
 
@@ -436,40 +454,37 @@ public class Monitors {
 
 		Context context;
 		
-		public NetworkLocationListener(Context context)
-		{
+		public NetworkLocationListener(Context context) {
 			this.context = context;
 		}
 		
 		public void onLocationChanged(Location location) {
-			
+					
+			locationManager.removeUpdates(this);
+
 			LocationData.latitude = location.getLatitude();
 			LocationData.longitude = location.getLongitude();
 			
-			LocationData.received = true;
-			
-			locationManager.requestLocationUpdates(location.getProvider(), 60 * 60 * 1000, 5000, this);
-			
-			if (!WeatherData.received) {
+			Log.d(MetaWatch.TAG, "location changed "+location.toString() );
+							
+			if (!LocationData.received && !WeatherData.updating) {
+				LocationData.received = true;
+				Log.d(MetaWatch.TAG, "First location - getting weather");
 				Monitors.updateWeatherData(context);
+				locationManager.requestLocationUpdates(locationProvider, 60 * 60 * 1000, 1500, networkLocationListener);
+
 			}
+			
 		}
 
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-			
 		}
-		
 	}
 	
 	//http://p-xr.com/android-tutorial-how-to-parse-read-json-data-into-a-android-listview/
