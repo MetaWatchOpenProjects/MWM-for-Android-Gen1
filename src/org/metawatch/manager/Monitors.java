@@ -366,7 +366,6 @@ public class Monitors {
 					WeatherData.tempLow = today.getJSONObject("low").getString("fahrenheit");
 					WeatherData.tempHigh= today.getJSONObject("high").getString("fahrenheit");
 				}
-				WeatherData.icon = "weather_cloudy.bmp";
 			
 				WeatherData.received = true;
 				
