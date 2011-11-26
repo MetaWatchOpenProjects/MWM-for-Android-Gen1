@@ -106,6 +106,8 @@ public class Monitors {
 		public static String temp;
 		public static String condition;
 		public static String locationName;
+		
+		public static long timeStamp = 0;
 	}
 	
 	public static class LocationData {
@@ -154,7 +156,14 @@ public class Monitors {
 			
 			networkLocationListener = new NetworkLocationListener(context);
 			
-			locationManager.requestLocationUpdates(locationProvider, 30 * 1000, 0, networkLocationListener);
+			locationManager.requestLocationUpdates(locationProvider, 30 * 60 * 1000, 500, networkLocationListener);
+			
+			Location location = locationManager.getLastKnownLocation(locationProvider);
+				
+			LocationData.latitude = location.getLatitude();
+			LocationData.longitude = location.getLongitude();
+			
+			LocationData.received = true;
 		}
 		
 		
@@ -306,12 +315,23 @@ public class Monitors {
 			if (WeatherData.updating)
 				return;
 			
+			// Prevent weather updating more frequently than every 5 mins
+			if (WeatherData.timeStamp!=0) {
+				long currentTime = System.currentTimeMillis();
+				long diff = currentTime - WeatherData.timeStamp;
+				
+				if (diff < 5 * 60*1000) {
+					Log.d(MetaWatch.TAG,
+							"Skipping weather update - updated less than 5m ago");
+					return;
+				}
+			}
+			
 			WeatherData.updating = true;
 			
 			Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): start");
 			
-
 			if (LocationData.received && Preferences.wundergroundKey != "") {
 				
 				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
@@ -381,7 +401,7 @@ public class Monitors {
 					"Monitors.updateWeatherData(): finish");
 			
 			WeatherData.updating = false;
-			
+			WeatherData.timeStamp = System.currentTimeMillis();			
 		}
 	}
 
@@ -459,21 +479,17 @@ public class Monitors {
 		
 		public void onLocationChanged(Location location) {
 					
-			locationManager.removeUpdates(this);
-
 			LocationData.latitude = location.getLatitude();
 			LocationData.longitude = location.getLongitude();
 			
 			Log.d(MetaWatch.TAG, "location changed "+location.toString() );
-							
-			if (!LocationData.received && !WeatherData.updating) {
-				LocationData.received = true;
+			
+			LocationData.received = true;
+			
+			if (!WeatherData.received && !WeatherData.updating) {
 				Log.d(MetaWatch.TAG, "First location - getting weather");
 				Monitors.updateWeatherData(context);
-				locationManager.requestLocationUpdates(locationProvider, 60 * 60 * 1000, 1500, networkLocationListener);
-
 			}
-			
 		}
 
 		public void onProviderDisabled(String provider) {

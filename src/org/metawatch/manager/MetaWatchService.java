@@ -730,15 +730,15 @@ public class MetaWatchService extends Service {
 		case WatchStates.NOTIFICATION:
 			switch (button) {
 			case Notification.NOTIFICATION_UP:
-				Notification.notifyButtonPress = Notification.NOTIFICATION_UP;
+				Notification.buttonPressed(button);
 				break;
 				
 			case Notification.NOTIFICATION_DOWN:
-				Notification.notifyButtonPress = Notification.NOTIFICATION_DOWN;
+				Notification.buttonPressed(button);
 				break;
 				
 			case Notification.NOTIFICATION_DISMISS:
-				Notification.notifyButtonPress = Notification.NOTIFICATION_DOWN;
+				Notification.buttonPressed(button);
 				break;
 			}
 			break;

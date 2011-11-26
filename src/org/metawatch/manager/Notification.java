@@ -47,7 +47,7 @@ public class Notification {
 	final static byte NOTIFICATION_DOWN = 31;
 	final static byte NOTIFICATION_DISMISS = 32;
 	
-	public static byte notifyButtonPress = 0;
+	private static byte notifyButtonPress = 0;
 	
 	private static BlockingQueue<NotificationType> notificationQueue = new LinkedBlockingQueue<NotificationType>();
 	private static volatile boolean notificationSenderRunning = false;
@@ -173,9 +173,15 @@ public class Notification {
 						Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Notification sent, waiting for dismiss " );
 						
-						while (notifyButtonPress==0) {
-							Thread.sleep(250);
+
+						try {
+							synchronized (Notification.buttonPressed) {
+								buttonPressed.wait(60 * 1000);	
+							}
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
+						
 						
 						Protocol.disableButton(2, 0, 2); // Right bottom
 						
@@ -251,6 +257,7 @@ public class Notification {
 	}
 
 	public static Object scrollRequest = new Object();
+	public static Object buttonPressed = new Object();
 
 	public static class NotificationType {
 		Bitmap bitmap;
@@ -374,6 +381,17 @@ public class Notification {
 			addToNotificationQueue(lastNotification);
 
 		}
+	}
+	
+	public static void buttonPressed(byte button) {
+		Log.d(MetaWatch.TAG,
+				"Notification:Button pressed "+button );
+
+		notifyButtonPress = button;
+		synchronized (Notification.buttonPressed) {
+			Notification.buttonPressed.notify();	
+		}
+		
 	}
 
 }
