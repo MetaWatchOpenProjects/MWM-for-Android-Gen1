@@ -40,11 +40,13 @@ import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.NotificationBuilder.FontSize;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
@@ -169,16 +171,19 @@ public class Protocol {
 		byteArrayOutputStream.write(bytes);
 		byteArrayOutputStream.write(crc(bytes));
 
-		String str = "sending: ";
-		byte[] b = byteArrayOutputStream.toByteArray();
-		for (int i = 0; i < b.length; i++) {
-			// str+= Byte.toString(b[i]) + ", ";
-			str += "0x"
-					+ Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1)
-					+ ", ";
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(MetaWatchService.context);
+		if (sharedPreferences.getBoolean("logPacketDetails", false)) {
+			String str = "sending: ";
+			byte[] b = byteArrayOutputStream.toByteArray();
+			for (int i = 0; i < b.length; i++) {
+				str += "0x"
+						+ Integer.toString((b[i] & 0xff) + 0x100, 16)
+								.substring(1) + ", ";
+			}
+			Log.d(MetaWatch.TAG, str);
 		}
-		Log.d(MetaWatch.TAG, str);
-
+		
 		if (MetaWatchService.outputStream == null)
 			throw new IOException("OutputStream is null");
 

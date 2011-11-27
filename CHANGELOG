@@ -5,11 +5,16 @@ v1.1.5:
 
 - Included benjymous's improvments to the digital watch weather display.
 
+- Fixed bug on SMS receive that was generating warnings in the log.
+
+- Added an option to log the entire contents of Bluetooth messages (default 
+  is not to -- they're not that useful for debugging most MWM problems
+  I've been running into.)
+  
 - Added experimental support for the Motoblur clock's alarm and timer. 
 
-- Added the Motoblur alarm & timer app to the default notification blacklist.
+- Experimentally added the Motoblur alarm & timer app to the default notification blacklist.
 
-- Fixed bug on SMS receive that was generating warnings in the log.
 
 
 v1.1.4:

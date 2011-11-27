@@ -270,6 +270,12 @@
 			android:summary="Connect directly to port 1"
 			android:defaultValue="false"
 			/>
+		<CheckBoxPreference
+			android:title="Log packet details"
+			android:key="logPacketDetails"
+			android:summary="Log details of Bluetooth packets"
+			android:defaultValue="false"
+			/>
 		<EditTextPreference
 			android:title="Test SMS loop interval"
 			android:key="SmsLoopInterval"
