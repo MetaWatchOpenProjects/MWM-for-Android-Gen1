@@ -44,6 +44,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 
@@ -55,13 +56,13 @@ public class Idle {
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		
-		Paint paintSmall = new Paint();
+		TextPaint paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);
 		paintSmall.setTextSize(8);
 		Typeface typefaceSmall = Typeface.createFromAsset(context.getAssets(), "metawatch_8pt_5pxl_CAPS.ttf");
 		paintSmall.setTypeface(typefaceSmall);
 		
-		Paint paintLarge = new Paint();
+		TextPaint paintLarge = new TextPaint();
 		paintLarge.setColor(Color.BLACK);
 		paintLarge.setTextSize(16);
 		Typeface typefaceLarge = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");
@@ -110,11 +111,14 @@ public class Idle {
 				canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
 				paintSmall.setTextAlign(Paint.Align.LEFT);
 
-				canvas.save();
-				layout = new StaticLayout(WeatherData.locationName, 0, WeatherData.locationName.length(), paint, 60, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0.0f, false, TruncateAt.MIDDLE, 60);
-				canvas.translate(1, 57); //position the text
-				layout.draw(canvas);
-				canvas.restore();	
+				canvas.drawText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), 1, 62, paintSmall);
+			
+				
+				//canvas.save();
+				//layout = new StaticLayout(WeatherData.locationName, 0, WeatherData.locationName.length(), paint, 60, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0.0f, false, TruncateAt.MIDDLE, 60);
+				//canvas.translate(1, 57); //position the text
+				//layout.draw(canvas);
+				//canvas.restore();	
 				
 			} else {
 				paintSmall.setTextAlign(Paint.Align.CENTER);
