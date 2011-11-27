@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -56,7 +57,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Messenger;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -81,7 +84,7 @@ public class MetaWatchService extends Service {
 	public static PowerManager powerManger;
 	public static PowerManager.WakeLock wakeLock;
 
-	static volatile int connectionState;
+	public static volatile int connectionState;
 	public static int watchType;
 	public static int watchState;
 
@@ -107,6 +110,12 @@ public class MetaWatchService extends Service {
 		static final int APPLICATION = 2;
 		static final int NOTIFICATION = 3;
 		static final int CALL = 3;
+	}
+	
+	final class Msg {
+		static final int REGISTER_CLIENT = 0;
+		static final int UNREGISTER_CLIENT = 1;
+		static final int UPDATE_STATUS = 2;
 	}
 
 	static class WatchModes {
@@ -149,7 +158,7 @@ public class MetaWatchService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		return null;
+		return mMessenger.getBinder();
 	}
 
 	public static void loadPreferences(Context context) {
@@ -279,6 +288,7 @@ public class MetaWatchService extends Service {
 			break;
 		}
 		startForeground(1, notification);
+		notifyClients();
 	}
 
 	public void removeNotification() {
@@ -395,27 +405,48 @@ public class MetaWatchService extends Service {
 
 	}
 
-	public void sendToast(String text) {
-		Message m = new Message();
-		m.what = 1;
-		m.obj = text;
-		messageHandler.sendMessage(m);
-	}
-
+    /** Keeps track of all current registered clients. */
+    static ArrayList<Messenger> mClients = new ArrayList<Messenger>();
+  
 	private Handler messageHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
+			Log.d(MetaWatch.TAG, "handleMessage "+msg);
 			switch (msg.what) {
-			case 1:
-				Toast.makeText(context, (CharSequence) msg.obj,
-						Toast.LENGTH_SHORT).show();
-				break;
+            case Msg.REGISTER_CLIENT:
+                mClients.add(msg.replyTo);
+                break;
+            case Msg.UNREGISTER_CLIENT:
+                mClients.remove(msg.replyTo);
+                break;
+                
+            default:
+                super.handleMessage(msg);
 			}
 		}
 
 	};
 
+	/**
+     * Target we publish for clients to send messages to IncomingHandler.
+     */
+    final Messenger mMessenger = new Messenger(messageHandler);
+
+    public static void notifyClients() {
+    	for (int i=mClients.size()-1; i>=0; i--) {
+            try {
+                mClients.get(i).send(Message.obtain(null,
+                        Msg.UPDATE_STATUS, 0, 0));
+            } catch (RemoteException e) {
+                // The client is dead.  Remove it from the list;
+                // we are going through the list from back to front
+                // so this is safe to do inside the loop.
+                mClients.remove(i);
+            }
+        }
+    }
+	
 	void disconnect() {
 		Protocol.stopProtocolSender();
 		Notification.stopNotificationSender();
@@ -684,6 +715,7 @@ public class MetaWatchService extends Service {
 					"org.metawatch.manager.CONNECTION_CHANGE");
 			intent.putExtra("state", connected);
 			sendBroadcast(intent);
+			notifyClients();
 			Log.d(MetaWatch.TAG,
 					"MetaWatchService.broadcastConnection(): Broadcast connection change: state='"
 							+ connected + "'");

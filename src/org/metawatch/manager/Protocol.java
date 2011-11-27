@@ -188,6 +188,9 @@ public class Protocol {
 		MetaWatchService.outputStream
 				.write(byteArrayOutputStream.toByteArray());
 		MetaWatchService.outputStream.flush();
+		
+		if (sendQueue.size() % 10 == 0)
+			MetaWatchService.notifyClients();
 	}
 
 	public static void sendAdvanceHands() {
@@ -906,6 +909,11 @@ public class Protocol {
 
 			sendQueue.add(bytes);
 		}
+	
+	}
+	
+	public static int getQueueLength() {
+		return sendQueue.size();
 	}
 
 }

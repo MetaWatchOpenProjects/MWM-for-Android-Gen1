@@ -114,6 +114,8 @@ public class Monitors {
 		public static boolean received = false;
 	    public static double latitude;
 	    public static double longitude;
+	    
+	    public static long timeStamp = 0;
 	}
 	
 	public static void updateGmailUnreadCount(String account, int count) {
@@ -162,6 +164,8 @@ public class Monitors {
 				
 			LocationData.latitude = location.getLatitude();
 			LocationData.longitude = location.getLongitude();
+			
+			LocationData.timeStamp = location.getTime();
 			
 			LocationData.received = true;
 		}
@@ -297,9 +301,11 @@ public class Monitors {
 				WeatherData.icon = "weather_cloudy.bmp";
 
 			WeatherData.received = true;
+			WeatherData.timeStamp = System.currentTimeMillis();		
 
 			Idle.updateLcdIdle(context);
-
+			MetaWatchService.notifyClients();
+			
 		} catch (Exception e) {
 			Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
 		} finally {
@@ -316,13 +322,14 @@ public class Monitors {
 				return;
 			
 			// Prevent weather updating more frequently than every 5 mins
-			if (WeatherData.timeStamp!=0) {
+			if (WeatherData.timeStamp!=0 && WeatherData.received) {
 				long currentTime = System.currentTimeMillis();
 				long diff = currentTime - WeatherData.timeStamp;
 				
 				if (diff < 5 * 60*1000) {
 					Log.d(MetaWatch.TAG,
 							"Skipping weather update - updated less than 5m ago");
+					Idle.updateLcdIdle(context);
 					return;
 				}
 			}
@@ -390,6 +397,7 @@ public class Monitors {
 				WeatherData.received = true;
 				
 				Idle.updateLcdIdle(context);
+				MetaWatchService.notifyClients();
 	
 		    }
 
@@ -482,9 +490,12 @@ public class Monitors {
 			LocationData.latitude = location.getLatitude();
 			LocationData.longitude = location.getLongitude();
 			
+			LocationData.timeStamp = location.getTime();
+			
 			Log.d(MetaWatch.TAG, "location changed "+location.toString() );
 			
 			LocationData.received = true;
+			MetaWatchService.notifyClients();
 			
 			if (!WeatherData.received && !WeatherData.updating) {
 				Log.d(MetaWatch.TAG, "First location - getting weather");
