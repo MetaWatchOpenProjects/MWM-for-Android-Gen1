@@ -3,11 +3,17 @@ CHANGELOG
 v1.1.5:
 =======================================================================
 
-- Ignore notifications to ongoing events.  This will hopefully eliminate
-  an entire category of annoying notifications.
-
 - Included benjymous's improvements to the digital watch weather display.
   Thanks, benjymous!
+
+- Ignore music track updates if the track info hasn't changed.  This fixes
+  problems where a music app repeatedly sends metadata for the same track.
+  (Google Music, I'm looking at you.)
+
+- Ignore Android status bar notifications for ongoing events.  This will 
+  eliminate an entire category of annoying notifications, such as Skype
+  status updates, DropBox uploading progress notifications (but not "upload
+  complete" notifications), and hopefully alarm & timer updates.
 
 - Fixed bug on SMS receive that was generating warnings in the log.
 

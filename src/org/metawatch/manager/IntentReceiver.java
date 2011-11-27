@@ -43,6 +43,10 @@ import android.util.Log;
 
 public class IntentReceiver extends BroadcastReceiver {
 	
+	static String lastArtist = "";
+	static String lastAlbum = "";
+	static String lastTrack = "";
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();		
@@ -194,7 +198,8 @@ public class IntentReceiver extends BroadcastReceiver {
 		else if (intent.getAction().equals("com.android.music.metachanged")
 				|| intent.getAction().equals(
 						"mobi.beyondpod.action.PLAYBACK_STATUS")
-				|| intent.getAction().equals("com.htc.music.metachanged")) {
+				|| intent.getAction().equals("com.htc.music.metachanged")
+				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
 
@@ -217,28 +222,23 @@ public class IntentReceiver extends BroadcastReceiver {
 				track = intent.getStringExtra("track");
 			if (intent.hasExtra("album"))
 				album = intent.getStringExtra("album");
-
-			NotificationBuilder.createMusic(context, artist, track, album);
-			return;
-		}
-		else if (intent.getAction().equals("com.nullsoft.winamp.metachanged"))
-		{	
-			if (!MetaWatchService.Preferences.notifyMusic)
+			
+			/* Ignore if track info hasn't changed. */
+			if (artist.equals(lastArtist) && track.equals(lastTrack) && album.equals(lastAlbum)) {
+				Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Track info hasn't changed, ignoring");
 				return;
+			} else {
+				lastArtist = artist;
+				lastTrack = track;
+				lastAlbum = album;
+			}
 			
-			String artist = "";
-			String track = "";
-			String album = "";
+			if (intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
+				NotificationBuilder.createWinamp(context, artist, track, album);				
+			} else {
+				NotificationBuilder.createMusic(context, artist, track, album);
+			}
 			
-			if (intent.hasExtra("artist"))
-				artist = intent.getStringExtra("artist");
-			if (intent.hasExtra("track"))
-				track = intent.getStringExtra("track");
-			if (intent.hasExtra("album"))
-				album = intent.getStringExtra("album");
-			
-			NotificationBuilder.createWinamp(context, artist, track, album);
-			return;
 		}
 		
 	}
