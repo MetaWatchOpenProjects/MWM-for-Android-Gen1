@@ -85,6 +85,21 @@ public class NotificationBuilder {
 		}
 	}
 	
+	
+	public static void createSmart(Context context, String title, String text) {
+		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsOtherNotificationNumberBuzzes");
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+			
+			Bitmap bitmap = smartNotify(context, "notify.bmp", title, text);
+			Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);
+			
+		} else {
+			byte[] scroll = new byte[800];
+			int len = Protocol.createOled2linesLong(context, text, scroll);
+			Notification.addOledNotification(context, Protocol.createOled1line(context, "notify.bmp", title), Protocol.createOled2lines(context, "Notification", text), scroll, len, vibratePattern);
+		}
+	}
+	
 	public static void createK9(Context context, String sender, String subject) {	
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsK9NumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {

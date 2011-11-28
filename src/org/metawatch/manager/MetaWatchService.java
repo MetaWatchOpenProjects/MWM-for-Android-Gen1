@@ -64,7 +64,6 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 public class MetaWatchService extends Service {
 
@@ -149,6 +148,7 @@ public class MetaWatchService extends Service {
 		public static boolean idleReplay = false;
 		public static boolean notificationLarger = false;
 		public static boolean disableWeather = false;
+		public static boolean autoConnect = false;
 	}
 
 	final class WatchType {
@@ -201,6 +201,8 @@ public class MetaWatchService extends Service {
 				Preferences.idleReplay);
 		Preferences.disableWeather = sharedPreferences.getBoolean(
 				"DisableWeather", Preferences.disableWeather);
+		Preferences.autoConnect = sharedPreferences.getBoolean(
+				"AutoConnect", Preferences.autoConnect);
 
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString(

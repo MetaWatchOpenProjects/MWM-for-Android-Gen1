@@ -54,6 +54,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -82,6 +83,7 @@ public class MetaWatch extends Activity {
         setContentView(R.layout.main);
         
         textView = (TextView) findViewById(R.id.textview);
+        
     }
 
 	@Override
@@ -125,7 +127,7 @@ public class MetaWatch extends Activity {
 		
 		Protocol.configureMode();
 		
-		if (isServiceRunning()) {
+		if (isServiceRunning() || Preferences.autoConnect) {
 			startService();
 		}
 	}

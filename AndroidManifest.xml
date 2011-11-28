@@ -48,6 +48,16 @@
 				<data android:mimeType="image/*" />
 			</intent-filter>
 		</activity>
+		<activity 
+			android:label="Send to Watch"
+			android:name=".SendTextReceiver"
+        	android:launchMode="singleTask">
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+       	</activity>
 		<activity
 			android:label="Device Selection"
 			android:name=".DeviceSelection"
@@ -95,10 +105,13 @@
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.nullsoft.winamp.metachanged" />
-			</intent-filter>
+			</intent-filter>			
+			<!--
 			<intent-filter>
 -                <action android:name="mobi.beyondpod.action.PLAYBACK_STATUS" />
--            </intent-filter>			
+-            </intent-filter>	
+
+			-->		
         </receiver> 
         <receiver android:name=".ApiIntentReceiver"> 
             <intent-filter>

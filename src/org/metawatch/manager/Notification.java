@@ -176,7 +176,7 @@ public class Notification {
 
 						try {
 							synchronized (Notification.buttonPressed) {
-								buttonPressed.wait(60 * 1000);	
+								buttonPressed.wait();	
 							}
 						} catch (InterruptedException e) {
 							e.printStackTrace();

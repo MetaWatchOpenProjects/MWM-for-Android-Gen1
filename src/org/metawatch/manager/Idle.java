@@ -112,14 +112,7 @@ public class Idle {
 				paintSmall.setTextAlign(Paint.Align.LEFT);
 
 				canvas.drawText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), 1, 62, paintSmall);
-			
-				
-				//canvas.save();
-				//layout = new StaticLayout(WeatherData.locationName, 0, WeatherData.locationName.length(), paint, 60, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0.0f, false, TruncateAt.MIDDLE, 60);
-				//canvas.translate(1, 57); //position the text
-				//layout.draw(canvas);
-				//canvas.restore();	
-				
+							
 			} else {
 				paintSmall.setTextAlign(Paint.Align.CENTER);
 				if (Preferences.weatherGeolocation) {
