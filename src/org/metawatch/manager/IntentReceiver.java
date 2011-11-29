@@ -151,8 +151,7 @@ public class IntentReceiver extends BroadcastReceiver {
 		else if (action.equals("com.android.alarmclock.ALARM_ALERT")
 				|| action.equals("com.htc.android.worldclock.ALARM_ALERT")
 				|| action.equals("com.android.deskclock.ALARM_ALERT")
-				|| action.equals("com.motorola.blur.alarmclock.AlarmAlert")
-				|| action.equals("com.motorola.blur.alarmclock.AlarmTimerAlert")
+				|| action.equals("com.motorola.blur.alarmclock.ALARM_ALERT")
 				|| action.equals("com.sonyericsson.alarm.ALARM_ALERT")) {
 			
 			if (!MetaWatchService.Preferences.notifyAlarm)
