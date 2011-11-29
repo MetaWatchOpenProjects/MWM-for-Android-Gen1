@@ -721,6 +721,7 @@ public class MetaWatchService extends Service {
 			Log.d(MetaWatch.TAG,
 					"MetaWatchService.broadcastConnection(): Broadcast connection change: state='"
 							+ connected + "'");
+			Protocol.resetLCDDiffBuffer();
 		}
 	}
 

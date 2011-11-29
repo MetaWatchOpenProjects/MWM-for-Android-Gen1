@@ -32,7 +32,12 @@
 
 package org.metawatch.manager;
 
+import java.util.Random;
+
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
+import org.metawatch.manager.Monitors.LocationData;
+import org.metawatch.manager.Monitors.WeatherData;
 import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
@@ -43,6 +48,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class Test extends Activity {
+	
+	final String ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae varius felis. Ut consectetur pharetra tincidunt. Suspendisse sed nisl auctor nunc pellentesque pretium et eu ipsum. Quisque ut tellus vel sem sodales dapibus. Vestibulum aliquet tempor ante nec faucibus. Curabitur sed quam nec libero tincidunt vehicula. Etiam facilisis orci in arcu ultricies porta. In id erat odio. Aliquam lacinia, velit ut fringilla pulvinar, massa risus auctor justo, eget suscipit tellus quam ac ligula.\n\nPraesent suscipit, ipsum sed tristique elementum, felis neque porttitor tellus, eu ornare tellus felis nec libero. Nam sit amet diam felis. Integer sed quam dui. Etiam id leo eu diam consequat vehicula at eu augue. Pellentesque fermentum massa in neque feugiat in venenatis nisl pulvinar. Ut eu turpis odio. Fusce nec odio commodo odio ornare cursus. Nullam mattis, elit eget feugiat dignissim, ipsum tellus dapibus dui, in hendrerit ipsum orci vel augue. Vivamus ac felis nisl. Curabitur facilisis ultricies nulla, sed dictum elit auctor eu. Pellentesque sagittis nisi eu risus blandit interdum. Nulla ipsum odio, semper a sodales at, venenatis sit amet massa. Etiam ac auctor odio. Curabitur massa quam, malesuada in pharetra vel, aliquam sit amet felis";
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,6 +66,7 @@ public class Test extends Activity {
 	        return true;
 		case R.id.notification:
 			if (MetaWatchService.watchType == WatchType.DIGITAL) {
+				//NotificationBuilder.createSmart(this, "Notification", ipsum);
 				Notification.addTextNotification(this, "Notification",
 						new VibratePattern(true, 500, 500, 3), Notification.getDefaultNotificationTimeout(this));
 			} else {
@@ -163,6 +171,25 @@ public class Test extends Activity {
 			*/
 	    }
 	        return true;
+	        
+	    case R.id.refresh_location:
+			Monitors.RefreshLocation();
+	    	return true;
+	    case R.id.refresh_weather:
+	    	WeatherData.timeStamp = 0;
+			Monitors.doWeatherUpdate(this);
+	    	return true;
+	    case R.id.random_location:
+	       	Random rnd = new Random();
+	    	LocationData.latitude = (rnd.nextDouble()*180.0)-90.0;
+	    	LocationData.longitude = (rnd.nextDouble()*360.0)-180.0;
+	    	LocationData.timeStamp = System.currentTimeMillis();	
+	    	LocationData.received = true;
+	    	WeatherData.timeStamp = 0;
+	    	Monitors.doWeatherUpdate(this);
+	    	return true;
+	    	
+	    	
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }

@@ -95,8 +95,6 @@ public class Monitors {
 	
 	private static NetworkLocationListener networkLocationListener;
 	
-	public static Boolean useGeolocation = true;
-	
 	public static class WeatherData {
 		public static boolean updating = false;
 		public static boolean received = false;
@@ -106,6 +104,7 @@ public class Monitors {
 		public static String temp;
 		public static String condition;
 		public static String locationName;
+		public static boolean celsius = false;
 		
 		public static long timeStamp = 0;
 	}
@@ -152,7 +151,7 @@ public class Monitors {
 		Log.d(MetaWatch.TAG,
 				"Monitors.start()");
 				
-		if (useGeolocation) {
+		if (Preferences.weatherGeolocation) {
 			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			locationProvider = LocationManager.NETWORK_PROVIDER;
 			
@@ -160,14 +159,7 @@ public class Monitors {
 			
 			locationManager.requestLocationUpdates(locationProvider, 30 * 60 * 1000, 500, networkLocationListener);
 			
-			Location location = locationManager.getLastKnownLocation(locationProvider);
-				
-			LocationData.latitude = location.getLatitude();
-			LocationData.longitude = location.getLongitude();
-			
-			LocationData.timeStamp = location.getTime();
-			
-			LocationData.received = true;
+			RefreshLocation();
 		}
 		
 		
@@ -204,13 +196,24 @@ public class Monitors {
 		startAlarmTicker(context);
 	}
 	
+	public static void RefreshLocation() {
+		Location location = locationManager.getLastKnownLocation(locationProvider);
+		
+		LocationData.latitude = location.getLatitude();
+		LocationData.longitude = location.getLongitude();
+		
+		LocationData.timeStamp = location.getTime();
+		
+		LocationData.received = true;
+	}
+	
 	public static void stop() {
 		
 		Log.d(MetaWatch.TAG,
 				"Monitors.stop()");
 		
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
-		if (useGeolocation) {
+		if (Preferences.weatherGeolocation) {
 			locationManager.removeUpdates(networkLocationListener);
 		}
 		stopAlarmTicker();		
@@ -220,7 +223,7 @@ public class Monitors {
 		try {
 
 			Log.d(MetaWatch.TAG,
-					"Monitors.updateWeatherData(): start");
+					"Monitors.updateWeatherDataGoogle(): start");
 			
 			URL url;
 			String queryString = "http://www.google.com/ig/api?weather="
@@ -263,6 +266,9 @@ public class Monitors {
 										.getTempMinCelsius()));
 				temp = Integer.toString(wcc.getTempFahrenheit());
 			}
+			
+			WeatherData.celsius = Preferences.weatherCelsius;
+					
 			// String place = gwh.city
 			
 			WeatherData.condition = cond;
@@ -337,13 +343,18 @@ public class Monitors {
 			WeatherData.updating = true;
 			
 			Log.d(MetaWatch.TAG,
-					"Monitors.updateWeatherData(): start");
+					"Monitors.updateWeatherDataWunderground(): start");
 			
 			if (LocationData.received && Preferences.wundergroundKey != "") {
 				
 				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
-			
-				JSONObject json = getJSONfromURL( "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast/q/"+latLng+".json" );
+
+				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast/q/"+latLng+".json";
+				
+				Log.d(MetaWatch.TAG,
+						"Request: "+requestUrl);
+				
+				JSONObject json = getJSONfromURL( requestUrl );
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
 				
@@ -394,6 +405,8 @@ public class Monitors {
 					WeatherData.tempHigh= today.getJSONObject("high").getString("fahrenheit");
 				}
 			
+				WeatherData.celsius = Preferences.weatherCelsius;
+				
 				WeatherData.received = true;
 				
 				Idle.updateLcdIdle(context);
@@ -417,16 +430,20 @@ public class Monitors {
 		Thread thread = new Thread("WeatherUpdater") {
 			@Override
 			public void run() {
-				if (useGeolocation) {
-					updateWeatherDataWunderground(context);
-				}
-				else {
-					updateWeatherDataGoogle(context);
-				}
-				
+				doWeatherUpdate(context);				
 			}
 		};
 		thread.start();
+	}
+	
+	public static void doWeatherUpdate(final Context context)
+	{
+		if (Preferences.weatherGeolocation) {
+			updateWeatherDataWunderground(context);
+		}
+		else {
+			updateWeatherDataGoogle(context);
+		}
 	}
 	
 	static void startAlarmTicker(Context context) {		

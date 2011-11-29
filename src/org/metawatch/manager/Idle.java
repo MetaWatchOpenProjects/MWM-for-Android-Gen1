@@ -87,7 +87,7 @@ public class Idle {
 				canvas.restore();								
 			
 				// temperatures
-				if (Preferences.weatherCelsius) {
+				if (WeatherData.celsius) {
 					paintLarge.setTextAlign(Paint.Align.RIGHT);
 					canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
 					//RM: since the degree symbol draws wrong...

@@ -31,6 +31,7 @@ package org.metawatch.manager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
@@ -56,6 +57,13 @@ public class Protocol {
 	public static final byte REPLAY = 30;
 
 	private static volatile BlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
+	
+	private static byte[][][] LCDDiffBuffer = new byte[3][48][30];
+	
+	public static void resetLCDDiffBuffer() {
+		LCDDiffBuffer = new byte[3][48][30];
+	}
+	
 	private static volatile boolean protocolSenderRunning = false;
 	private static Runnable protocolSender = new Runnable() {
 		public void run() {
@@ -141,6 +149,7 @@ public class Protocol {
 		if (bufferType == MetaWatchService.WatchBuffers.IDLE)
 			i = 30;
 
+		int sentLines = 0;
 		for (; i < 96; i += 2) {
 			byte[] bytes = new byte[30];
 
@@ -156,9 +165,16 @@ public class Protocol {
 			bytes[4 + 13] = (byte) (i + 1); // row B
 			for (int j = 0; j < 12; j++)
 				bytes[j + 5 + 13] = buffer[i * 12 + j + 12];
-
-			sendQueue.add(bytes);
+			
+			// Only send the row packet if the data's changed since the
+			// last time we sent it
+			if( !Arrays.equals(LCDDiffBuffer[bufferType][i/2], bytes) ) {
+				sendQueue.add(bytes);
+				LCDDiffBuffer[bufferType][i/2] = bytes;
+				sentLines += 2;
+			}
 		}
+		Log.d(MetaWatch.TAG, "Sent "+sentLines+ "/96");
 
 	}
 

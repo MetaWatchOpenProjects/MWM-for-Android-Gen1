@@ -319,7 +319,7 @@ public class NotificationBuilder {
 		canvas.drawBitmap(icon, 0, 0, paint);
 		canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
 		
-		canvas.drawLine(0, icon.getHeight(), 88, icon.getHeight(), paint);
+		canvas.drawLine(1, icon.getHeight(), 88, icon.getHeight(), paint);
 		canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
 		
 		canvas.drawText("X", 90, 93, paint);
@@ -333,13 +333,13 @@ public class NotificationBuilder {
 		staticLayout.draw(canvas);
 
 		
-		try {
-			FileOutputStream fos;
-			fos = new FileOutputStream("/sdcard/test.png");
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-			fos.close();
-		} catch (IOException e) {
-		}
+		//try {
+		//	FileOutputStream fos;
+		//	fos = new FileOutputStream("/sdcard/test.png");
+		//	bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+		//	fos.close();
+		//} catch (IOException e) {
+		//}
 
 		
 		return bitmap;
