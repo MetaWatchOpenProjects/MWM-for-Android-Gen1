@@ -6,6 +6,10 @@ TO DO
 WISH LIST
 =======================================================================
 
+- Fix bug where turning on music controls seems to kill the LED button,
+  even after turning off the controls again.  It looks like 
+  Protocol.disableMediaButtons() is never getting called.
+
 - Log the receipt of an SMS notification?  (This might help some users
   debug their SMS wierdness.)
 
