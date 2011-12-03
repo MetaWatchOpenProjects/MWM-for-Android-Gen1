@@ -177,7 +177,7 @@ public class Test extends Activity {
 	    	return true;
 	    case R.id.refresh_weather:
 	    	WeatherData.timeStamp = 0;
-			Monitors.doWeatherUpdate(this);
+			Monitors.updateWeatherData(this);
 	    	return true;
 	    case R.id.random_location:
 	       	Random rnd = new Random();
@@ -186,7 +186,7 @@ public class Test extends Activity {
 	    	LocationData.timeStamp = System.currentTimeMillis();	
 	    	LocationData.received = true;
 	    	WeatherData.timeStamp = 0;
-	    	Monitors.doWeatherUpdate(this);
+	    	Monitors.updateWeatherData(this);
 	    	return true;
 	    	
 	    	

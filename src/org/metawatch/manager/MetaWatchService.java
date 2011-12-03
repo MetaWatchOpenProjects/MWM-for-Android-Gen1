@@ -300,9 +300,19 @@ public class MetaWatchService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Log.d(MetaWatch.TAG,
+				"MetaWatchService.onCreate()");
 
 		context = this;
+
+		initialize();
+
+	}
+	
+	private void initialize() {
 		createNotification();
+		
+		FontCache.Initialize(this);
 
 		connectionState = ConnectionState.CONNECTING;
 		watchState = WatchStates.OFF;
@@ -319,13 +329,29 @@ public class MetaWatchService extends Service {
 		Monitors.start(this, telephonyManager);
 
 		start();
-
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+	    //handleCommand(intent);
+	    // We want this service to continue running until it is explicitly
+	    // stopped, so return sticky.
+		
+		Log.d(MetaWatch.TAG,
+				"MetaWatchService.onStartCommand()");
+		
+		if (connectionState == ConnectionState.DISCONNECTED)
+			initialize();
+		
+	    return START_REDELIVER_INTENT;
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectExit();
 		super.onDestroy();
+		Log.d(MetaWatch.TAG,
+				"MetaWatchService.onDestroy()");
 
 		Monitors.stop();
 		removeNotification();
@@ -697,7 +723,7 @@ public class MetaWatchService extends Service {
 			
 			} else {
 				Log.d(MetaWatch.TAG,
-						"MetaWatchService.readFromDevice(): Unknown message?");
+						"MetaWatchService.readFromDevice(): Unknown message : "+Integer.toString((bytes[2] & 0xff) + 0x100, 16).substring(1) + ", ");
 			}
 
 		} catch (IOException e) {
@@ -794,5 +820,13 @@ public class MetaWatchService extends Service {
 		}
 		sendBroadcast(intent);
 	}
+	
+	@Override
+	public void onLowMemory() {
+		Log.d(MetaWatch.TAG,
+				"MetaWatchService.onLowMemory()");	
+		super.onLowMemory();
+	}
+	
 
 }

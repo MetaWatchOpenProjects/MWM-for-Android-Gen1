@@ -35,6 +35,7 @@ package org.metawatch.manager;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.metawatch.manager.FontCache.FontInfo;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
@@ -52,11 +53,6 @@ import android.text.TextPaint;
 
 public class NotificationBuilder {
 	
-	public static final class FontSize {
-		public static final int SMALL = 1;
-		public static final int MEDIUM = 2;
-		public static final int LARGE = 3;
-	}
 	
 	public static final String DEFAULT_NUMBER_OF_BUZZES = "3";
 	
@@ -226,33 +222,14 @@ public class NotificationBuilder {
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {
 		
-		String font = null;
-		int size = 8;
-		int realSize = 7;
-		
-		switch (Preferences.fontSize) {
-			case FontSize.SMALL:
-				font = "metawatch_8pt_5pxl_CAPS.ttf";
-				realSize = 5;
-				break;
-			case FontSize.MEDIUM:
-				font = "metawatch_8pt_7pxl_CAPS.ttf";
-				realSize = 7;
-				break;
-			case FontSize.LARGE:
-				font = "metawatch_16pt_11pxl.ttf";
-				realSize = 11;
-				size = 16;
-				break;
-		}
-		
+		FontInfo font = FontCache.Get();
+			
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);		
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);		
-		paint.setTextSize(size);
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);		
-		paint.setTypeface(typeface);
+		paint.setTextSize(font.size);
+		paint.setTypeface(font.face);
 		canvas.drawColor(Color.WHITE);
 		
 		Bitmap icon = Utils.loadBitmapFromAssets(context, iconPath);
@@ -265,7 +242,7 @@ public class NotificationBuilder {
 			int x = (int)(96/2-paint.measureText(lines[i])/2);
 			if (x < 0)
 				x = 0;
-			int y = spaceForItem * (i + 1) + spaceForItem/2 + realSize/2 ;
+			int y = spaceForItem * (i + 1) + spaceForItem/2 + font.realSize/2 ;
 			canvas.drawText(lines[i], x, y, paint);
 		}
 		
@@ -275,40 +252,20 @@ public class NotificationBuilder {
 	
 	static Bitmap smartNotify(Context context, String iconPath, String header, String body) {
 		
-		String font = null;
-		int size = 8;
-		//int realSize = 7;
-		
-		switch (Preferences.fontSize) {
-			case FontSize.SMALL:
-				font = "metawatch_8pt_5pxl_CAPS.ttf";
-				//realSize = 5;
-				break;
-			case FontSize.MEDIUM:
-				font = "metawatch_8pt_7pxl_CAPS.ttf";
-				//realSize = 7;
-				break;
-			case FontSize.LARGE:
-				font = "metawatch_16pt_11pxl.ttf";
-				//realSize = 11;
-				size = 16;
-				break;
-		}
+		FontInfo font = FontCache.Get();		
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);		
 		
 		Paint paintHead = new Paint();
 		paintHead.setColor(Color.BLACK);		
-		paintHead.setTextSize(16);
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");		
-		paintHead.setTypeface(typeface);
+		paintHead.setTextSize(FontCache.Large.size);
+		paintHead.setTypeface(FontCache.Large.face);
 		
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);		
-		paint.setTextSize(size);
-		typeface = Typeface.createFromAsset(context.getAssets(), font);		
-		paint.setTypeface(typeface);
+		paint.setTextSize(font.size);	
+		paint.setTypeface(font.face);
 		
 		
 		canvas.drawColor(Color.WHITE);

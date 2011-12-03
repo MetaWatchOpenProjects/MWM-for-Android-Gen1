@@ -38,7 +38,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
-import org.metawatch.manager.NotificationBuilder.FontSize;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -311,32 +310,17 @@ public class Protocol {
 
 	public static Bitmap createTextBitmap(Context context, String text) {
 
-		String font = null;
-		int size = 8;
-
-		switch (Preferences.fontSize) {
-		case FontSize.SMALL:
-			font = "metawatch_8pt_5pxl_CAPS.ttf";
-			break;
-		case FontSize.MEDIUM:
-			font = "metawatch_8pt_7pxl_CAPS.ttf";
-			break;
-		case FontSize.LARGE:
-			font = "metawatch_16pt_11pxl.ttf";
-			size = 16;
-			break;
-		}
-
+		FontCache.FontInfo font = FontCache.Get();
+		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(size);
+		paint.setTextSize(font.size);
 		if( Preferences.notificationCenter ) {
 			paint.setTextAlign(Align.CENTER);	
 		}
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);
-		paint.setTypeface(typeface);
+		paint.setTypeface(font.face);
 		canvas.drawColor(Color.WHITE);
 		canvas = breakText(canvas, text, paint, 0, 0);
 		/*
@@ -665,10 +649,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(16);
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(),
-				"metawatch_16pt_11pxl.ttf");
-		paint.setTypeface(typeface);
+		paint.setTextSize(FontCache.Large.size);
+		paint.setTypeface(FontCache.Large.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line, offset, 14, paint);
 
@@ -721,10 +703,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(8);
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(),
-				"metawatch_8pt_5pxl_CAPS.ttf");
-		paint.setTypeface(typeface);
+		paint.setTextSize(FontCache.Small.size);
+		paint.setTypeface(FontCache.Small.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line1, offset, 7, paint);
 		canvas.drawText(line2, offset, 15, paint);
@@ -781,10 +761,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(8);
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(),
-				"metawatch_8pt_5pxl_CAPS.ttf");
-		paint.setTypeface(typeface);
+		paint.setTextSize(FontCache.Small.size);
+		paint.setTypeface(FontCache.Small.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line, offset, 7, paint);
 

@@ -159,7 +159,7 @@ public class MetaWatch extends Activity {
 	}
     
 	void startService() {
-		//startService(new Intent(this, MetaWatchService.class));
+		startService(new Intent(this, MetaWatchService.class));
 		
         bindService(new Intent(MetaWatch.this, 
                 MetaWatchService.class), mConnection, Context.BIND_AUTO_CREATE);
@@ -170,7 +170,6 @@ public class MetaWatch extends Activity {
 	}
 	
     void stopService() {
-    	//stopService(new Intent(this, MetaWatchService.class));
     	
     	if (mService != null) {
             try {
@@ -182,6 +181,8 @@ public class MetaWatch extends Activity {
                 // There is nothing special we need to do if the service
                 // has crashed.
             }
+            
+            stopService(new Intent(this, MetaWatchService.class));
             
             buttonStart.setEnabled(true);
             buttonStop.setEnabled(false);

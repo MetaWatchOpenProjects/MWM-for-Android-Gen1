@@ -58,15 +58,13 @@ public class Idle {
 		
 		TextPaint paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);
-		paintSmall.setTextSize(8);
-		Typeface typefaceSmall = Typeface.createFromAsset(context.getAssets(), "metawatch_8pt_5pxl_CAPS.ttf");
-		paintSmall.setTypeface(typefaceSmall);
+		paintSmall.setTextSize(FontCache.Small.size);
+		paintSmall.setTypeface(FontCache.Small.face);
 		
 		TextPaint paintLarge = new TextPaint();
 		paintLarge.setColor(Color.BLACK);
-		paintLarge.setTextSize(16);
-		Typeface typefaceLarge = Typeface.createFromAsset(context.getAssets(), "metawatch_16pt_11pxl.ttf");
-		paintLarge.setTypeface(typefaceLarge);
+		paintLarge.setTextSize(FontCache.Large.size);
+		paintLarge.setTypeface(FontCache.Large.face);
 		
 		canvas.drawColor(Color.WHITE);
 		

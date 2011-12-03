@@ -152,6 +152,9 @@ public class Monitors {
 				"Monitors.start()");
 				
 		if (Preferences.weatherGeolocation) {
+			Log.d(MetaWatch.TAG,
+					"Initialising Geolocation");
+			
 			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			locationProvider = LocationManager.NETWORK_PROVIDER;
 			
@@ -161,7 +164,10 @@ public class Monitors {
 			
 			RefreshLocation();
 		}
-		
+		else {
+			Log.d(MetaWatch.TAG,
+					"Geolocation disabled");
+		}
 		
 		CallStateListener phoneListener = new CallStateListener(context);
 		
@@ -430,23 +436,19 @@ public class Monitors {
 		Thread thread = new Thread("WeatherUpdater") {
 			@Override
 			public void run() {
-				doWeatherUpdate(context);				
+				if (Preferences.weatherGeolocation) {
+					updateWeatherDataWunderground(context);
+				}
+				else {
+					updateWeatherDataGoogle(context);
+				}				
 			}
 		};
 		thread.start();
 	}
 	
-	public static void doWeatherUpdate(final Context context)
-	{
-		if (Preferences.weatherGeolocation) {
-			updateWeatherDataWunderground(context);
-		}
-		else {
-			updateWeatherDataGoogle(context);
-		}
-	}
-	
 	static void startAlarmTicker(Context context) {		
+		Log.d(MetaWatch.TAG, "startAlarmTicker()");
 		alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		intent = new Intent(context, AlarmReceiver.class);
 		intent.putExtra("action_update", "update");
@@ -547,7 +549,7 @@ public class Monitors {
 			is = entity.getContent();
 
 		}catch(Exception e){
-			Log.e("log_tag", "Error in http connection "+e.toString());
+			Log.e(MetaWatch.TAG, "Error in http connection "+e.toString());
 		}
 
 		//convert response to string
@@ -561,14 +563,14 @@ public class Monitors {
 			is.close();
 			result=sb.toString();
 		}catch(Exception e){
-			Log.e("log_tag", "Error converting result "+e.toString());
+			Log.e(MetaWatch.TAG, "Error converting result "+e.toString());
 		}
 
 		//try parse the string to a JSON object
 		try{
 	        	jArray = new JSONObject(result);
 		}catch(JSONException e){
-			Log.e("log_tag", "Error parsing data "+e.toString());
+			Log.e(MetaWatch.TAG, "Error parsing data "+e.toString());
 		}
 
 		return jArray;
