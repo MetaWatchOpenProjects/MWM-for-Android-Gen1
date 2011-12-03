@@ -82,7 +82,8 @@
             	<action android:name="com.htc.android.worldclock.ALARM_ALERT" />
             	<action android:name="com.android.deskclock.ALARM_ALERT" />
             	<action android:name="com.sonyericsson.alarm.ALARM_ALERT" />
-            	
+            	<action android:name="com.motorola.blur.alarmclock.ALARM_ALERT" />
+            	<action android:name="com.motorola.blur.alarmclock.COUNT_DOWN" />
             </intent-filter>
             <intent-filter>
 	            <action android:name="android.intent.action.EVENT_REMINDER" />

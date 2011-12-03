@@ -67,7 +67,9 @@ import android.widget.RemoteViews;
 
 public class MetaWatchService extends Service {
 
-	Context context;
+	/* TODO: Making this static will break if we want multiple MWMs running. */
+	static volatile Context context;
+	
 	public static BluetoothAdapter bluetoothAdapter;
 	// BluetoothServerSocket bluetoothServerSocket;
 	BluetoothSocket bluetoothSocket;

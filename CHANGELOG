@@ -1,5 +1,6 @@
 CHANGELOG
 
+<<<<<<< HEAD
 v1.1.4.RM2
 =======================================================================
 
@@ -23,6 +24,39 @@ v1.1.4.RM1
 =======================================================================
 
 - Fixed weather layout on digital watches.
+=======
+v1.1.6:
+=======================================================================
+
+- Hopefully fixed support for Motorola MotoBlur alarm clock and timer.
+
+v1.1.5:
+=======================================================================
+
+- Included benjymous's improvements to the digital watch weather display.
+  Thanks, benjymous!
+
+- Ignore music track updates if the track info hasn't changed.  This fixes
+  problems where a music app repeatedly sends metadata for the same track.
+  (Google Music, I'm looking at you.)
+
+- Ignore Android status bar notifications for ongoing events.  This will 
+  eliminate an entire category of annoying notifications, such as Skype
+  status updates, DropBox uploading progress notifications (but not "upload
+  complete" notifications), and hopefully alarm & timer updates.
+
+- Fixed bug on SMS receive that was generating warnings in the log.
+
+- Added an option to log the entire contents of Bluetooth messages (default 
+  is not to -- they're not that useful for debugging most MWM problems
+  I've been running into.)
+  
+- Added experimental support for the Motoblur clock's alarm and timer. 
+
+- Experimentally added the Motoblur alarm & timer app to the default notification blacklist.
+
+
+>>>>>>> upstream/master
 
 v1.1.4:
 =======================================================================
