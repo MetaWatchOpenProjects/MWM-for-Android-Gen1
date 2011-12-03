@@ -32,6 +32,7 @@
 
 package org.metawatch.manager;
 
+import java.io.IOException;
 import java.util.Random;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
@@ -42,6 +43,7 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -188,8 +190,16 @@ public class Test extends Activity {
 	    	WeatherData.timeStamp = 0;
 	    	Monitors.updateWeatherData(this);
 	    	return true;
-	    	
-	    	
+	    
+	    case R.id.dump_hprof:
+	    	try {
+				Debug.dumpHprofData("/sdcard/metawatch.hprof");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return true;
+	    	    	
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }

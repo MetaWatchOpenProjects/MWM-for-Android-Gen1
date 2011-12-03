@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -725,7 +727,7 @@ public class MetaWatchService extends Service {
 			
 			} else {
 				Log.d(MetaWatch.TAG,
-						"MetaWatchService.readFromDevice(): Unknown message : "+Integer.toString((bytes[2] & 0xff) + 0x100, 16).substring(1) + ", ");
+						"MetaWatchService.readFromDevice(): Unknown message : 0x"+Integer.toString((bytes[2] & 0xff) + 0x100, 16).substring(1) + ", ");
 			}
 
 		} catch (IOException e) {
@@ -827,6 +829,15 @@ public class MetaWatchService extends Service {
 	public void onLowMemory() {
 		Log.d(MetaWatch.TAG,
 				"MetaWatchService.onLowMemory()");	
+		
+		MemoryInfo mi = new MemoryInfo();
+		ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		activityManager.getMemoryInfo(mi);
+		long availableMegs = mi.availMem / 1048576L;
+
+		Log.d(MetaWatch.TAG,
+				availableMegs + "Mb free");	
+		
 		super.onLowMemory();
 	}
 	
