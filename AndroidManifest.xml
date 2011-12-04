@@ -73,7 +73,6 @@
         <receiver android:name=".IntentReceiver" android:exported="true">
             <intent-filter>
             	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
-            	<action android:name="android.intent.action.BOOT_COMPLETED"/>
             	<action android:name="android.intent.action.BATTERY_LOW"/>
             	<action android:name="com.android.music.metachanged" />
             	<action android:name="android.intent.action.TIME_SET"/>
@@ -114,6 +113,12 @@
 
 			-->		
         </receiver> 
+        <receiver android:name=".BootCompletedReceiver" android:exported="true">
+            <intent-filter>
+            	<action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+            	
         <receiver android:name=".ApiIntentReceiver"> 
             <intent-filter>
             	<action android:name="org.metawatch.manager.APPLICATION_UPDATE" />  
