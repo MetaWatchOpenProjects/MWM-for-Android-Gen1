@@ -65,7 +65,6 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 public class MetaWatchService extends Service {
 
@@ -81,7 +80,7 @@ public class MetaWatchService extends Service {
 	TelephonyManager telephonyManager;
 	AudioManager audioManager;
 	NotificationManager notificationManager;
-	RemoteViews remoteViews;
+	//RemoteViews remoteViews;
 	android.app.Notification notification;
 
 	public static PowerManager powerManger;
@@ -230,7 +229,7 @@ public class MetaWatchService extends Service {
 		editor.putString("MAC", mac);
 		editor.commit();
 	}
-
+	
 	public void createNotification() {
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
@@ -241,18 +240,11 @@ public class MetaWatchService extends Service {
 						+ hideNotificationIcon);
 		int notificationIcon = (hideNotificationIcon ? R.drawable.transparent_square
 				: R.drawable.disconnected);
-		notification = new android.app.Notification(notificationIcon, null,
+		notification = new android.app.Notification(notificationIcon, "MetaWatch Manager",
 				System.currentTimeMillis());
 		notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
 
-		remoteViews = new RemoteViews(getPackageName(), R.layout.notification);
-		remoteViews.setTextViewText(R.id.notification_title,
-				getString(R.string.app_name));
-		remoteViews.setImageViewResource(R.id.notification_button,
-				R.drawable.connected_large);
-
-		notification.contentView = remoteViews;
-		notification.contentIntent = createNotificationPendingIntent();
+		notification.setLatestEventInfo(this, "MetaWatch Manager", "Idle", createNotificationPendingIntent());
 
 		startForeground(1, notification);
 	}
@@ -274,25 +266,23 @@ public class MetaWatchService extends Service {
 		case ConnectionState.CONNECTING:
 			notification.icon = (hideNotificationIcon ? R.drawable.transparent_square
 					: R.drawable.disconnected);
-			remoteViews.setTextViewText(R.id.notification_subtitle,
-					"Connecting");
+			notification.setLatestEventInfo(this, "MetaWatch Manager", "Connecting", createNotificationPendingIntent());
 			broadcastConnection(false);
 			break;
 		case ConnectionState.CONNECTED:
 			notification.icon = (hideNotificationIcon ? R.drawable.transparent_square
 					: R.drawable.connected);
-			remoteViews
-					.setTextViewText(R.id.notification_subtitle, "Connected");
+			notification.setLatestEventInfo(this, "MetaWatch Manager", "Connected", createNotificationPendingIntent());
 			broadcastConnection(true);
 			break;
 		default:
 			notification.icon = (hideNotificationIcon ? R.drawable.transparent_square
 					: R.drawable.disconnected);
-			remoteViews.setTextViewText(R.id.notification_subtitle,
-					"Disconnected");
+			notification.setLatestEventInfo(this, "MetaWatch Manager", "Disconnected", createNotificationPendingIntent());
 			broadcastConnection(false);
 			break;
 		}
+		
 		startForeground(1, notification);
 		notifyClients();
 	}
@@ -359,6 +349,7 @@ public class MetaWatchService extends Service {
 
 		Monitors.stop();
 		removeNotification();
+		notifyClients();
 	}
 
 	void connect(Context context) {
