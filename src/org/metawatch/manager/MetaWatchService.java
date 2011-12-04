@@ -817,17 +817,14 @@ public class MetaWatchService extends Service {
 	}
 	
 	@Override
-	public void onLowMemory() {
-		Log.d(MetaWatch.TAG,
-				"MetaWatchService.onLowMemory()");	
-		
+	public void onLowMemory() {		
 		MemoryInfo mi = new MemoryInfo();
 		ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		activityManager.getMemoryInfo(mi);
 		long availableMegs = mi.availMem / 1048576L;
-
+		
 		Log.d(MetaWatch.TAG,
-				availableMegs + "Mb free");	
+				"MetaWatchService.onLowMemory(): " + availableMegs + "Mb free");	
 		
 		super.onLowMemory();
 	}
