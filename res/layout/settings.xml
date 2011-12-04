@@ -265,9 +265,9 @@
 			android:defaultValue="false"
 			/>
 		<EditTextPreference
-			android:title="Weather Underground API Key"
+			android:title="API Key"
 			android:key="WundergroundKey"
-			android:summary="Required for geolocation"
+			android:summary="API Key for Weather Underground - Required for geolocation"
 			android:defaultValue=""
 			/>
 	    <CheckBoxPreference
