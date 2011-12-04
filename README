@@ -1,15 +1,11 @@
-This is benjymous' fork of the MetaWatch Manager, based on MetaWatch OpenSource, AkiraYasha, Chris Sewell, and PurpleGuitars modifications
-with some extra modifications of my own
+This is benjymous' fork of the MetaWatch Manager, based on MetaWatch OpenSource, AkiraYasha, Chris Sewell, and PurpleGuitar's modifications with some extra modifications of my own
 
 It's based on the official MetaWatch manager (see README.orig)
 
-Disclaimer: This is development code; it may contain bugs, cause your
-phone / watch to reset, or any other of a host of unpleasant things.
-You use it AT YOUR OWN RISK, and I offer NO WARRANTY for anything it
-may do to you, your phone, your watch, or anything else.
+Disclaimer: This is development code; it may contain bugs, cause your phone / watch to reset, or any other of a host of unpleasant things. You use it AT YOUR OWN RISK, and I offer NO WARRANTY for anything it may do to you, your phone, your watch, or anything else.
 
-binary download:
-http://dl.dropbox.com/u/12389792/metawatch/MetaWatch_rm.apk
+Latest binary download can be found on the "downloads" page on my github:
+https://github.com/benjymous/MWM-for-Android/downloads/
 
 https://github.com/AkiraYasha/MetaWatch
 https://github.com/PurpleGuitar/MWM-for-Android
