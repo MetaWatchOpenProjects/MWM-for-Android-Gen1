@@ -35,7 +35,6 @@ package org.metawatch.manager;
 import java.io.IOException;
 import java.util.Random;
 
-import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;

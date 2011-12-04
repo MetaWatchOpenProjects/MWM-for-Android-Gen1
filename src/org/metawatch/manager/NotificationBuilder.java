@@ -32,11 +32,7 @@
 
 package org.metawatch.manager;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import org.metawatch.manager.FontCache.FontInfo;
-import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
 
@@ -46,7 +42,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.text.StaticLayout;
 import android.text.TextPaint;
