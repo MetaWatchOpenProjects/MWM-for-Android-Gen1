@@ -31,4 +31,5 @@
     <item android:id="@+id/refresh_location" android:title="Refresh Location"></item>    
     <item android:id="@+id/refresh_weather" android:title="Refresh Weather"></item>
     <item android:id="@+id/random_location" android:title="Set Random Location"></item>
+    <item android:id="@+id/dump_hprof" android:title="Dump Hprof data"></item>
 </menu>
