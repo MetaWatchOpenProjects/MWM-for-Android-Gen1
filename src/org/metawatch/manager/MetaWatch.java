@@ -62,6 +62,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bugsense.trace.BugSenseHandler;
+
 public class MetaWatch extends Activity {
 
 	public static final String TAG = "MetaWatch";
@@ -81,6 +83,8 @@ public class MetaWatch extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        BugSenseHandler.setup(this, "49eba7ee");
+             
         textView = (TextView) findViewById(R.id.textview);
         
     }
