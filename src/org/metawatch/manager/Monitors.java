@@ -205,12 +205,14 @@ public class Monitors {
 	public static void RefreshLocation() {
 		Location location = locationManager.getLastKnownLocation(locationProvider);
 		
-		LocationData.latitude = location.getLatitude();
-		LocationData.longitude = location.getLongitude();
-		
-		LocationData.timeStamp = location.getTime();
-		
-		LocationData.received = true;
+		if (location!=null) {
+			LocationData.latitude = location.getLatitude();
+			LocationData.longitude = location.getLongitude();
+			
+			LocationData.timeStamp = location.getTime();
+			
+			LocationData.received = true;
+		}
 	}
 	
 	public static void stop() {
@@ -219,7 +221,7 @@ public class Monitors {
 				"Monitors.stop()");
 		
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
-		if (Preferences.weatherGeolocation) {
+		if (Preferences.weatherGeolocation & locationManager!=null) {
 			locationManager.removeUpdates(networkLocationListener);
 		}
 		stopAlarmTicker();		
