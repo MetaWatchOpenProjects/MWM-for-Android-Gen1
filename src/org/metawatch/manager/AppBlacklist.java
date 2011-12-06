@@ -152,22 +152,27 @@ public class AppBlacklist extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		StringBuilder sb = new StringBuilder();
-		for (AppInfo appInfo : appInfos) {
-			if (appInfo.isBlacklisted) {
-				if (sb.length() > 0) {
-					sb.append(",");
+		try {
+			StringBuilder sb = new StringBuilder();
+			for (AppInfo appInfo : appInfos) {
+				if (appInfo.isBlacklisted) {
+					if (sb.length() > 0) {
+						sb.append(",");
+					}
+					sb.append(appInfo.packageInfo.packageName);
 				}
-				sb.append(appInfo.packageInfo.packageName);
 			}
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			SharedPreferences.Editor editor = sharedPreferences.edit();
+			String blacklist = sb.toString();
+			editor.putString("appBlacklist", blacklist);
+			editor.commit();		
+			Log.d(MetaWatch.TAG, "App blacklist: " + blacklist);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		SharedPreferences.Editor editor = sharedPreferences.edit();
-		String blacklist = sb.toString();
-		editor.putString("appBlacklist", blacklist);
-		editor.commit();		
-		Log.d(MetaWatch.TAG, "App blacklist: " + blacklist);
 	}
 
 }
