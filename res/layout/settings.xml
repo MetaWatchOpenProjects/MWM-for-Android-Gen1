@@ -278,6 +278,17 @@
 			/>	    
 	    
 	</PreferenceCategory>
+
+	<PreferenceCategory
+	    android:title="Widgets"
+	    >
+	   	<CheckBoxPreference
+			android:title="Show K-9 Unread Counts"
+			android:key="ShowK9Unread"
+			android:summary="Display unread mail count from K-9 mail, instead of gmail"
+			android:defaultValue="false"
+			/>	
+	</PreferenceCategory>
 	
 	<PreferenceCategory
 		android:title="@string/settings_Other"

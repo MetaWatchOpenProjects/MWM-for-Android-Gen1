@@ -32,6 +32,8 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -139,13 +141,16 @@ public class IntentReceiver extends BroadcastReceiver {
 		}
 		else if (action.equals("com.fsck.k9.intent.action.EMAIL_RECEIVED")) {
 			
-			if (!MetaWatchService.Preferences.notifyK9)
-				return;
-			
-			Bundle bundle = intent.getExtras();				
-			String subject = bundle.getString("com.fsck.k9.intent.extra.SUBJECT");
-			String sender = bundle.getString("com.fsck.k9.intent.extra.FROM");
-			NotificationBuilder.createK9(context, sender, subject);
+			if (MetaWatchService.Preferences.notifyK9) {				
+				Bundle bundle = intent.getExtras();				
+				String subject = bundle.getString("com.fsck.k9.intent.extra.SUBJECT");
+				String sender = bundle.getString("com.fsck.k9.intent.extra.FROM");
+				NotificationBuilder.createK9(context, sender, subject);
+			}
+			if( MetaWatchService.Preferences.showK9Unread) {
+				Utils.refreshUnreadK9Count(context);
+				Idle.updateLcdIdle(context);
+			}
 			return;
 		}	
 		else if (action.equals("com.android.alarmclock.ALARM_ALERT")

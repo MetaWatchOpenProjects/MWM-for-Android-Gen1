@@ -169,6 +169,56 @@ public class Utils {
 		return "";
 	}
 	
+	static final Uri k9Uri = Uri.parse("content://com.fsck.k9.messageprovider/inbox_messages/");
+	//static final Uri k9Uri = Uri.parse("content://com.fsck.k9.messageprovider/account_unread/");
+	
+	static String[] messages_projection = new String[] {
+	       "_id",
+	       //"_count",
+	       //"date",
+	       //"sender",
+	       //"subject",
+	       //"preview",
+	       //"account",
+	       //"uri",
+	       //"delUri",
+	       "unread",
+	     };
+	
+	private static int k9UnreadCount = 0;	
+	private static long k9LastRefresh = 0;
+	public static int getUnreadK9Count(Context context) {
+		long time = System.currentTimeMillis();
+		if(time - k9LastRefresh > 1*60*1000)
+			refreshUnreadK9Count(context);
+		
+		return k9UnreadCount;
+	}
+	
+	public static void refreshUnreadK9Count(Context context) {
+		//TODO: Work out why this query returns *all* mails, not just the unread ones
+		Cursor cur = context.getContentResolver().query(k9Uri, messages_projection, "unread='true'", null, null);
+	    if (cur!=null) {
+	    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " rows returned");
+	    	//int unread = cur.getCount();
+	    	cur.moveToFirst();
+	    	int unread = 0;
+	    	int unreadIndex = cur.getColumnIndex("unread");
+	    	do {
+	    		String unreadStr = cur.getString(unreadIndex);
+	    		if(unreadStr.equalsIgnoreCase("true")) {
+	    			unread++;
+	    		}
+	    	} while (cur.moveToNext());
+		    cur.close();
+		    k9UnreadCount = unread;
+		    k9LastRefresh = System.currentTimeMillis();
+	    }
+	    else {
+	    	Log.d(MetaWatch.TAG, "Failed to query k9 contentprovider.");
+	    }
+	}
+	
 	public static Bitmap loadBitmapFromAssets(Context context, String path) {
 		try {
 			InputStream inputStream = context.getAssets().open(path);

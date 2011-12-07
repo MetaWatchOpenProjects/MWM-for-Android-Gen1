@@ -152,6 +152,7 @@ public class MetaWatchService extends Service {
 		public static boolean notificationLarger = false;
 		public static boolean disableWeather = false;
 		public static boolean autoConnect = false;
+		public static boolean showK9Unread = false;
 	}
 
 	final class WatchType {
@@ -205,7 +206,9 @@ public class MetaWatchService extends Service {
 		Preferences.disableWeather = sharedPreferences.getBoolean(
 				"DisableWeather", Preferences.disableWeather);
 		Preferences.autoConnect = sharedPreferences.getBoolean(
-				"AutoConnect", Preferences.autoConnect);
+				"AutoConnect", Preferences.autoConnect);		
+		Preferences.showK9Unread = sharedPreferences.getBoolean(
+				"ShowK9Unread", Preferences.showK9Unread);
 
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString(
