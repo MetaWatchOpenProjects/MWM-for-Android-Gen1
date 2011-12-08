@@ -294,6 +294,12 @@
  			android:enabled="true" 
  			android:defaultValue="0"
  			/>					
+        <CheckBoxPreference
+            android:title="Notify Watch on Connect"
+            android:key="NotifyWatchOnConnect"
+            android:summary="Send a notification to the watch after connecting to it"
+            android:defaultValue="false"
+            />
 			
 	</PreferenceCategory>	
 
