@@ -203,6 +203,8 @@ public class Monitors {
 	}
 	
 	public static void RefreshLocation() {
+		if (locationManager==null)
+			return;
 		Location location = locationManager.getLastKnownLocation(locationProvider);
 		
 		if (location!=null) {
