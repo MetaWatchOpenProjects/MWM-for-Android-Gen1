@@ -185,16 +185,20 @@ public class MetaWatch extends Activity {
                 // has crashed.
             }
             
-            stopService(new Intent(this, MetaWatchService.class));
-            
-            buttonStart.setEnabled(true);
-            buttonStop.setEnabled(false);
+            try {
+            	stopService(new Intent(this, MetaWatchService.class));
+                // Detach our existing connection.
+                unbindService(mConnection);
+                mIsBound = false;
+            }
+            catch(IllegalArgumentException e) {
+            	// The service wasn't running
+            }
         }
-
-        // Detach our existing connection.
-        unbindService(mConnection);
-        mIsBound = false;
-        
+    	
+    	buttonStart.setEnabled(true);
+    	buttonStop.setEnabled(false);
+   
         displayStatus();
     }
     
