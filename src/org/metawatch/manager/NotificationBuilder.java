@@ -217,7 +217,7 @@ public class NotificationBuilder {
 	
 	static Bitmap smartLines(Context context, String iconPath, String[] lines) {
 		
-		FontInfo font = FontCache.Get();
+		FontInfo font = FontCache.instance(context).Get();
 			
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);		
@@ -247,15 +247,15 @@ public class NotificationBuilder {
 	
 	static Bitmap smartNotify(Context context, String iconPath, String header, String body) {
 		
-		FontInfo font = FontCache.Get();		
+		FontInfo font = FontCache.instance(context).Get();		
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);		
 		
 		Paint paintHead = new Paint();
 		paintHead.setColor(Color.BLACK);		
-		paintHead.setTextSize(FontCache.Large.size);
-		paintHead.setTypeface(FontCache.Large.face);
+		paintHead.setTextSize(FontCache.instance(context).Large.size);
+		paintHead.setTypeface(FontCache.instance(context).Large.face);
 		
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);		

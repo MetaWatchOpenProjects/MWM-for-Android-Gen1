@@ -312,7 +312,7 @@ public class Protocol {
 
 	public static Bitmap createTextBitmap(Context context, String text) {
 
-		FontCache.FontInfo font = FontCache.Get();
+		FontCache.FontInfo font = FontCache.instance(context).Get();
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
@@ -651,8 +651,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(FontCache.Large.size);
-		paint.setTypeface(FontCache.Large.face);
+		paint.setTextSize(FontCache.instance(context).Large.size);
+		paint.setTypeface(FontCache.instance(context).Large.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line, offset, 14, paint);
 
@@ -705,8 +705,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(FontCache.Small.size);
-		paint.setTypeface(FontCache.Small.face);
+		paint.setTextSize(FontCache.instance(context).Small.size);
+		paint.setTypeface(FontCache.instance(context).Small.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line1, offset, 7, paint);
 		canvas.drawText(line2, offset, 15, paint);
@@ -763,8 +763,8 @@ public class Protocol {
 		Canvas canvas = new Canvas(image);
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
-		paint.setTextSize(FontCache.Small.size);
-		paint.setTypeface(FontCache.Small.face);
+		paint.setTextSize(FontCache.instance(context).Small.size);
+		paint.setTypeface(FontCache.instance(context).Small.face);
 		canvas.drawColor(Color.WHITE);
 		canvas.drawText(line, offset, 7, paint);
 

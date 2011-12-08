@@ -201,6 +201,9 @@ public class Utils {
 	    if (cur!=null) {
 	    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " rows returned");
 	    	//int unread = cur.getCount();
+	    	
+	    	//Workaround to manually count the unread entries
+	    	//as the where statement doesn't appear to work :-/
 	    	cur.moveToFirst();
 	    	int unread = 0;
 	    	int unreadIndex = cur.getColumnIndex("unread");

@@ -7,6 +7,19 @@ import android.graphics.Typeface;
 
 public class FontCache {
 	
+	private FontCache(Context context) {
+		Small = new FontInfo(context, "metawatch_8pt_5pxl_CAPS.ttf", 8, 5);
+		Medium = new FontInfo(context, "metawatch_8pt_7pxl_CAPS.ttf", 8, 7);
+		Large = new FontInfo(context,  "metawatch_16pt_11pxl.ttf", 16, 11);
+	}
+	private static FontCache instance = null;
+	
+	public static FontCache instance(Context context) {
+		if (instance==null)
+			instance=new FontCache(context);
+		return instance;
+	}
+	
 	public class FontInfo {
 		
 		public FontInfo(Context context, String assetPath, int size, int realSize) {
@@ -26,19 +39,11 @@ public class FontCache {
 		LARGE 
 	}
 	
-	public static FontInfo Small = null;
-	public static FontInfo Medium = null;
-	public static FontInfo Large = null;
+	FontInfo Small = null;
+	FontInfo Medium = null;
+	FontInfo Large = null;
 	
-	private static FontCache instance = new FontCache();
-	
-	public static void Initialize(Context context) {
-		Small = instance.new FontInfo(context, "metawatch_8pt_5pxl_CAPS.ttf", 8, 5);
-		Medium = instance.new FontInfo(context, "metawatch_8pt_7pxl_CAPS.ttf", 8, 7);
-		Large = instance.new FontInfo(context,  "metawatch_16pt_11pxl.ttf", 16, 11);
-	}
-	
-	public static FontInfo Get(FontSize size) {
+	public FontInfo Get(FontSize size) {
 		switch(size) {
 		case SMALL:
 			return Small;
@@ -53,7 +58,7 @@ public class FontCache {
 		return null;
 	}
 	
-	public static FontInfo Get(int size) {
+	public FontInfo Get(int size) {
 		switch(size) {
 		case 1:
 			return Small;
@@ -68,7 +73,7 @@ public class FontCache {
 		return null;
 	}
 	
-	public static FontInfo Get() {
+	public FontInfo Get() {
 		return Get(Preferences.fontSize);
 	}
 	

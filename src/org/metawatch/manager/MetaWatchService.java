@@ -308,8 +308,6 @@ public class MetaWatchService extends Service {
 	
 	private void initialize() {
 		createNotification();
-		
-		FontCache.Initialize(this);
 
 		connectionState = ConnectionState.CONNECTING;
 		watchState = WatchStates.OFF;

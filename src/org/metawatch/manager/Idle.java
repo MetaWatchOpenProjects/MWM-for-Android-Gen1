@@ -57,13 +57,13 @@ public class Idle {
 		
 		TextPaint paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);
-		paintSmall.setTextSize(FontCache.Small.size);
-		paintSmall.setTypeface(FontCache.Small.face);
+		paintSmall.setTextSize(FontCache.instance(context).Small.size);
+		paintSmall.setTypeface(FontCache.instance(context).Small.face);
 		
 		TextPaint paintLarge = new TextPaint();
 		paintLarge.setColor(Color.BLACK);
-		paintLarge.setTextSize(FontCache.Large.size);
-		paintLarge.setTypeface(FontCache.Large.face);
+		paintLarge.setTextSize(FontCache.instance(context).Large.size);
+		paintLarge.setTypeface(FontCache.instance(context).Large.face);
 		
 		canvas.drawColor(Color.WHITE);
 		
