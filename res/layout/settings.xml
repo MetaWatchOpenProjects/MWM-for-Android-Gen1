@@ -298,7 +298,7 @@
             android:title="Notify Watch on Connect"
             android:key="NotifyWatchOnConnect"
             android:summary="Send a notification to the watch after connecting to it"
-            android:defaultValue="true"
+            android:defaultValue="false"
             />
 			
 	</PreferenceCategory>	
