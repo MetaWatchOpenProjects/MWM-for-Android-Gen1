@@ -411,6 +411,15 @@ public class MetaWatchService extends Service {
 				Protocol.enableReplayButton();
 			else
 				Protocol.disableReplayButton();
+			
+			/* Notify watch on connection if requested. */
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			boolean notifyOnConnect = sharedPreferences.getBoolean("NotifyWatchOnConnect", false);
+			Log.d(MetaWatch.TAG, "MetaWatchService.connect(): notifyOnConnect=" + notifyOnConnect);
+			if (notifyOnConnect) {
+				NotificationBuilder.createOtherNotification(context, "MetaWatch", "Connected");
+			}
 
 		} catch (IOException ioexception) {
 			Log.d(MetaWatch.TAG, ioexception.toString());

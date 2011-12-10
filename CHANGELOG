@@ -28,7 +28,9 @@ v1.1.4.RM1
 v1.1.6:
 =======================================================================
 
-- Hopefully fixed support for Motorola MotoBlur alarm clock and timer.
+- Fixed support for Motorola MotoBlur alarm clock and timer.
+
+- Optionally send a notification to the watch when the MWM connects.
 
 v1.1.5:
 =======================================================================
