@@ -169,24 +169,12 @@ public class Utils {
 		return "";
 	}
 	
-	static final Uri k9Uri = Uri.parse("content://com.fsck.k9.messageprovider/inbox_messages/");
-	//static final Uri k9Uri = Uri.parse("content://com.fsck.k9.messageprovider/account_unread/");
-	
-	static String[] messages_projection = new String[] {
-	       "_id",
-	       //"_count",
-	       //"date",
-	       //"sender",
-	       //"subject",
-	       //"preview",
-	       //"account",
-	       //"uri",
-	       //"delUri",
-	       "unread",
-	     };
+	static final Uri k9AccountsUri = Uri.parse("content://com.fsck.k9.messageprovider/accounts/");
+	static final String k9UnreadUri = "content://com.fsck.k9.messageprovider/account_unread/";
 	
 	private static int k9UnreadCount = 0;	
 	private static long k9LastRefresh = 0;
+	
 	public static int getUnreadK9Count(Context context) {
 		long time = System.currentTimeMillis();
 		if(time - k9LastRefresh > 1*60*1000)
@@ -195,31 +183,70 @@ public class Utils {
 		return k9UnreadCount;
 	}
 	
-	public static void refreshUnreadK9Count(Context context) {
-		//TODO: Work out why this query returns *all* mails, not just the unread ones
-		Cursor cur = context.getContentResolver().query(k9Uri, messages_projection, "unread='true'", null, null);
-	    if (cur!=null) {
-	    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " rows returned");
-	    	//int unread = cur.getCount();
-	    	
-	    	//Workaround to manually count the unread entries
-	    	//as the where statement doesn't appear to work :-/
-	    	cur.moveToFirst();
-	    	int unread = 0;
-	    	int unreadIndex = cur.getColumnIndex("unread");
-	    	do {
-	    		String unreadStr = cur.getString(unreadIndex);
-	    		if(unreadStr.equalsIgnoreCase("true")) {
-	    			unread++;
-	    		}
-	    	} while (cur.moveToNext());
-		    cur.close();
-		    k9UnreadCount = unread;
-		    k9LastRefresh = System.currentTimeMillis();
-	    }
-	    else {
-	    	Log.d(MetaWatch.TAG, "Failed to query k9 contentprovider.");
-	    }
+	private static int getUnreadK9Count(Context context, int accountNumber) {
+		try {
+			Cursor cur = context.getContentResolver().query(Uri.parse(k9UnreadUri+"/"+accountNumber+"/"), null, null, null, null);
+		    if (cur!=null) {
+		    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " unread rows returned");
+		    			    	
+		    	if (cur.getCount()>0) {
+			    	cur.moveToFirst();
+			    	int unread = 0;
+			    	int nameIndex = cur.getColumnIndex("accountName");
+			    	int unreadIndex = cur.getColumnIndex("unread");
+			    	do {
+			    		String acct = cur.getString(nameIndex);
+			    		int unreadForAcct = cur.getInt(unreadIndex);
+			    		Log.d(MetaWatch.TAG, "k9: "+acct+" - "+unreadForAcct+" unread");
+			    		unread += unreadForAcct;
+			    	} while (cur.moveToNext());
+				    cur.close();
+				    return unread;
+		    	}
+		    }
+		    else {
+		    	Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
+		    }
+		}
+		catch (IllegalStateException e) {
+			Log.d(MetaWatch.TAG, "k-9 unread uri unknown.");
+		}
+		return 0;
+	}
+	
+	public static void refreshUnreadK9Count(Context context) {		
+		int accounts = getK9AccountCount(context);
+		if (accounts>0) {
+			int count = 0;
+			for (int acct=0; acct<accounts; ++acct) {
+				count += getUnreadK9Count(context, acct);
+			}
+			k9UnreadCount = count;
+			k9LastRefresh = System.currentTimeMillis();
+		}	
+	}
+	
+	public static int getK9AccountCount(Context context) {
+		try {
+			Cursor cur = context.getContentResolver().query(k9AccountsUri, null, null, null, null);
+		    if (cur!=null) {
+		    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " account rows returned");
+
+		    	int count = cur.getCount();
+		    	
+		    	cur.close();
+		    	
+		    	return count;
+		    }
+		    else {
+		    	Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
+		    }
+		}
+		catch (IllegalStateException e) {
+			Log.d(MetaWatch.TAG, "k-9 accounts uri unknown.");
+		}
+		return 0;
+
 	}
 	
 	public static Bitmap loadBitmapFromAssets(Context context, String path) {
