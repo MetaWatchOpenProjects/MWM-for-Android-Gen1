@@ -128,6 +128,8 @@ public class MetaWatchService extends Service {
 	}
 
 	static class Preferences {
+		public static boolean loaded = false;
+		
 		public static boolean notifyCall = true;
 		public static boolean notifySMS = true;
 		public static boolean notifyGmail = true;
@@ -307,6 +309,9 @@ public class MetaWatchService extends Service {
 	}
 	
 	private void initialize() {
+		if (!Preferences.loaded)
+			loadPreferences(context);
+		
 		createNotification();
 
 		connectionState = ConnectionState.CONNECTING;
@@ -359,7 +364,7 @@ public class MetaWatchService extends Service {
 
 			Log.d(MetaWatch.TAG, "Remote device address: "
 					+ Preferences.watchMacAddress);
-			if (Preferences.watchMacAddress.equals(""))
+			if (!Preferences.loaded)
 				loadPreferences(context);
 			BluetoothDevice bluetoothDevice = bluetoothAdapter
 					.getRemoteDevice(Preferences.watchMacAddress);
