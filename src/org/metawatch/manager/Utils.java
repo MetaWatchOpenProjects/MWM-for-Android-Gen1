@@ -294,5 +294,14 @@ public class Utils {
 		return false;
 	}
 	
+	public static String ReadInputStream(InputStream in) throws IOException {
+		StringBuffer stream = new StringBuffer();
+		byte[] b = new byte[4096];
+		for (int n; (n = in.read(b)) != -1;) {
+		stream.append(new String(b, 0, n));
+		}
+		return stream.toString();
+		}
+	
 
 }
