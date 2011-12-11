@@ -47,7 +47,7 @@ public class Notification {
 	final static byte NOTIFICATION_DOWN = 31;
 	final static byte NOTIFICATION_DISMISS = 32;
 	
-	private static byte notifyButtonPress = 0;
+	//private static byte notifyButtonPress = 0;
 	
 	private static BlockingQueue<NotificationType> notificationQueue = new LinkedBlockingQueue<NotificationType>();
 	private static volatile boolean notificationSenderRunning = false;
@@ -167,7 +167,7 @@ public class Notification {
 					/* Give some space between notifications. */
 					
 					if (notification.timeout < 0) {
-						notifyButtonPress = 0;
+						//notifyButtonPress = 0;
 						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom
 
 						Log.d(MetaWatch.TAG,
@@ -387,7 +387,7 @@ public class Notification {
 		Log.d(MetaWatch.TAG,
 				"Notification:Button pressed "+button );
 
-		notifyButtonPress = button;
+		//notifyButtonPress = button;
 		synchronized (Notification.buttonPressed) {
 			Notification.buttonPressed.notify();	
 		}

@@ -33,6 +33,10 @@
 package org.metawatch.manager;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -68,6 +72,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -366,6 +371,7 @@ public class Monitors {
 						"Request: "+requestUrl);
 				
 				JSONObject json = getJSONfromURL( requestUrl );
+				
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
 				
@@ -575,6 +581,23 @@ public class Monitors {
 			Log.e(MetaWatch.TAG, "Error converting result "+e.toString());
 		}
 
+		//dump to sdcard for debugging
+		File sdCard = Environment.getExternalStorageDirectory();
+		File file = new File(sdCard, "weather.json");
+
+		try {
+			FileWriter writer = new FileWriter(file);
+	        writer.append(result);
+	        writer.flush();
+	        writer.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 		//try parse the string to a JSON object
 		try{
 	        	jArray = new JSONObject(result);

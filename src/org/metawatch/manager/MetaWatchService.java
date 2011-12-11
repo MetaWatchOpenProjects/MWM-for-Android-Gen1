@@ -343,7 +343,7 @@ public class MetaWatchService extends Service {
 		if (connectionState == ConnectionState.DISCONNECTED)
 			initialize();
 		
-	    return START_REDELIVER_INTENT;
+	    return START_STICKY;
 	}
 
 	@Override

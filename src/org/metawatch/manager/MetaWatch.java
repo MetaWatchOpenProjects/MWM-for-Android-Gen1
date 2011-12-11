@@ -89,8 +89,7 @@ public class MetaWatch extends Activity {
         // If you want to use BugSense for your fork, register with them
         // and place your API key in /assets/bugsense.txt
         // (This prevents me receiving reports of crashes from forked versions
-        // which is somewhat confusing!)
-        
+        // which is somewhat confusing!)      
         try {
 			InputStream inputStream = getAssets().open("bugsense.txt");
 			String key = Utils.ReadInputStream(inputStream);
