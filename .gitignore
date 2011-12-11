@@ -3,6 +3,7 @@
 ###################
 bin/*
 gen/*
+assets/bugsense.txt
 
 ##############
 # Swap files #
