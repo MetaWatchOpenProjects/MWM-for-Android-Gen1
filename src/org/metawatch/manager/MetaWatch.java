@@ -32,6 +32,8 @@
 
 package org.metawatch.manager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -54,6 +56,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -83,8 +86,21 @@ public class MetaWatch extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        BugSenseHandler.setup(this, "49eba7ee");
-             
+        // If you want to use BugSense for your fork, register with them
+        // and place your API key in /assets/bugsense.txt
+        // (This prevents me receiving reports of crashes from forked versions
+        // which is somewhat confusing!)
+        
+        try {
+			InputStream inputStream = getAssets().open("bugsense.txt");
+			String key = Utils.ReadInputStream(inputStream);
+			key=key.trim();
+			Log.d(MetaWatch.TAG, "Using bugsense key '"+key+"'");
+			BugSenseHandler.setup(this, key);
+		} catch (IOException e) {
+			Log.d(MetaWatch.TAG, "No bugsense keyfile found");
+		}
+                   
         textView = (TextView) findViewById(R.id.textview);
         
     }
