@@ -143,6 +143,7 @@ public class MetaWatchService extends Service {
 		public static boolean skipSDP = false;
 		public static boolean invertLCD = false;
 		public static boolean notificationCenter = false;
+		public static boolean notifyLight = false;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
 		public static boolean weatherGeolocation = false;
@@ -193,6 +194,8 @@ public class MetaWatchService extends Service {
 				Preferences.invertLCD);
 		Preferences.notificationCenter = sharedPreferences.getBoolean(
 				"notificationCenter", Preferences.notificationCenter);
+		Preferences.notifyLight = sharedPreferences.getBoolean("notifyLight",
+				Preferences.notifyLight);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity",
 				Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean(

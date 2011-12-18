@@ -198,7 +198,15 @@ public class Test extends Activity {
 				e.printStackTrace();
 			}
 	    	return true;
-	    	    	
+	    	
+	    case R.id.led_on:
+	    	Protocol.ledChange(true);
+	    	return true;
+
+	    case R.id.led_off:
+	    	Protocol.ledChange(false);
+	    	return true;
+	    	
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }

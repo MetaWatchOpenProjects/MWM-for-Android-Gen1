@@ -31,6 +31,7 @@ package org.metawatch.manager;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 
 import android.content.Context;
@@ -90,6 +91,9 @@ public class Notification {
 							Protocol.vibrate(notification.vibratePattern.on,
 									notification.vibratePattern.off,
 									notification.vibratePattern.cycles);
+						
+						if (Preferences.notifyLight)
+							Protocol.ledChange(true);
 
 						Log.d(MetaWatch.TAG, "notif bitmap sent from thread");
 

@@ -627,6 +627,18 @@ public class Protocol {
 
 		sendQueue.add(bytes);
 	}
+	
+	public static void ledChange(Boolean ledOn) {
+		Log.d(MetaWatch.TAG, "Protocol.ledChange()");
+		byte[] bytes = new byte[4];
+
+		bytes[0] = eMessageType.start;
+		bytes[1] = (byte) (bytes.length+2); // length
+		bytes[2] = eMessageType.LedChange.msg;
+		bytes[3] = ledOn ? (byte)0x01 : (byte)0x00;
+
+		sendQueue.add(bytes);		
+	}	
 
 	public static void test(Context context) {
 		sendOledDisplay(createOled1line(context, null, "test abc 123"), true,
