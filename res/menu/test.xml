@@ -32,4 +32,6 @@
     <item android:id="@+id/refresh_weather" android:title="Refresh Weather"></item>
     <item android:id="@+id/random_location" android:title="Set Random Location"></item>
     <item android:id="@+id/dump_hprof" android:title="Dump Hprof data"></item>
+    <item android:id="@+id/led_on" android:title="LED On (LCD)"></item>
+    <item android:id="@+id/led_off" android:title="LED Off (LCD)"></item>
 </menu>

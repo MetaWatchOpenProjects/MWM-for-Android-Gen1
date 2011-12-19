@@ -201,6 +201,13 @@
 			android:summary="Display notification text centered"
 			android:defaultValue="false"
 			/>
+			
+		<CheckBoxPreference
+			android:title="Auto light on notify"
+			android:key="notifyLight"
+			android:summary="Enable the light when a notification is displayed"
+			android:defaultValue="false"
+			/>
 				
 	</PreferenceCategory>
 
