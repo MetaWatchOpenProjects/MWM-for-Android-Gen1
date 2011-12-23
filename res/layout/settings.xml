@@ -205,8 +205,15 @@
 		<CheckBoxPreference
 			android:title="Auto light on notify"
 			android:key="notifyLight"
-			android:summary="Enable the light when a notification is displayed"
+			android:summary="Enable the light when a notification or incoming call is displayed"
 			android:defaultValue="false"
+			/>
+			
+		<CheckBoxPreference
+			android:title="Sticky Notifications"
+			android:key="stickyNotifications"
+			android:summary="Use sticky notifications (that stay on screen until manually dismissed)"
+			android:defaultValue="true"
 			/>
 				
 	</PreferenceCategory>

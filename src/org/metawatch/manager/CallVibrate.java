@@ -32,6 +32,7 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 
 public class CallVibrate implements Runnable {
@@ -40,6 +41,8 @@ public class CallVibrate implements Runnable {
 		
 		while (Call.isRinging) {
 			Protocol.vibrate(1000, 0, 1);
+			if (Preferences.notifyLight)
+				Protocol.ledChange(true);
 			if (MetaWatchService.watchType == WatchType.DIGITAL)
 				Protocol.updateDisplay(2);
 			else
