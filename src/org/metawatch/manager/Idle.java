@@ -200,7 +200,7 @@ public class Idle {
 			String count = "";
 			switch (i) {
 				case 0:
-					count = Integer.toString(Utils.getMissedCallsCount(context));					
+					count = Integer.toString(Utils.getMissedCallsCount(context));	
 					break;
 				case 1:
 					count = Integer.toString(Utils.getUnreadSmsCount(context));
@@ -221,9 +221,9 @@ public class Idle {
 					}
 					break;				
 			}
-			
+					
 			int slotSpace = 96/rows;
-			int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2);
+			int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2)+1;
 			int countX = slotSpace*i + slotX;
 			
 			canvas.drawText(count, countX, !Preferences.disableWeather ? 92 : 62, paintSmall);
