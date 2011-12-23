@@ -51,6 +51,32 @@ public class Idle {
 	
 	public static byte[] overridenButtons = null;
 
+	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint) {
+		canvas.save();
+		StaticLayout layout = new StaticLayout(text, paint, width, android.text.Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+		canvas.translate(x, y); //position the text
+		layout.draw(canvas);
+		canvas.restore();	
+	}
+	
+	static void drawOutlinedText(String text, Canvas canvas, int x, int y, TextPaint col, TextPaint outline) {
+		canvas.drawText(text, x+1, y, outline);
+		canvas.drawText(text, x-1, y, outline);
+		canvas.drawText(text, x, y+1, outline);
+		canvas.drawText(text, x, y-1, outline);
+	
+		canvas.drawText(text, x, y, col);
+	}
+	
+	static void drawWrappedOutlinedText(String text, Canvas canvas, int x, int y, int width, TextPaint col, TextPaint outline) {
+		drawWrappedText(text, canvas, x-1, y, width, outline);
+		drawWrappedText(text, canvas, x+1, y, width, outline);
+		drawWrappedText(text, canvas, x, y-1, width, outline);
+		drawWrappedText(text, canvas, x, y+1, width, outline);
+		
+		drawWrappedText(text, canvas, x, y, width, col);
+	}
+
 	static Bitmap createLcdIdle(Context context) {
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
@@ -59,6 +85,11 @@ public class Idle {
 		paintSmall.setColor(Color.BLACK);
 		paintSmall.setTextSize(FontCache.instance(context).Small.size);
 		paintSmall.setTypeface(FontCache.instance(context).Small.face);
+		
+		TextPaint paintSmallOutline = new TextPaint();
+		paintSmallOutline.setColor(Color.WHITE);
+		paintSmallOutline.setTextSize(FontCache.instance(context).Small.size);
+		paintSmallOutline.setTypeface(FontCache.instance(context).Small.face);
 		
 		TextPaint paintLarge = new TextPaint();
 		paintLarge.setColor(Color.BLACK);
@@ -71,18 +102,18 @@ public class Idle {
 		if(!Preferences.disableWeather) {
 			if (WeatherData.received) {
 				
+				//WeatherData.icon = "weather_sunny.bmp";
+				//WeatherData.locationName = "a really long place name";
+				//WeatherData.condition = "cloudy with a chance of meatballs";
+				
 				// icon
 				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
 				canvas.drawBitmap(image, 36, 37, null);
 				
 				// condition
-				canvas.save();
-				TextPaint paint = new TextPaint(paintSmall);
-				StaticLayout layout = new StaticLayout(WeatherData.condition, paint, 60, android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
-				canvas.translate(1, 35); //position the text
-				layout.draw(canvas);
-				canvas.restore();								
-			
+				drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline);
+				
+				
 				// temperatures
 				if (WeatherData.celsius) {
 					paintLarge.setTextAlign(Paint.Align.RIGHT);
@@ -108,20 +139,20 @@ public class Idle {
 				canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
 				paintSmall.setTextAlign(Paint.Align.LEFT);
 
-				canvas.drawText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), 1, 62, paintSmall);
+				drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 62, paintSmall, paintSmallOutline);
 							
 			} else {
 				paintSmall.setTextAlign(Paint.Align.CENTER);
 				if (Preferences.weatherGeolocation) {
 					if( !LocationData.received ) {
-						canvas.drawText("awaiting location", 48, 50, paintSmall);
+						canvas.drawText("Awaiting location", 48, 50, paintSmall);
 					}
 					else {
-						canvas.drawText("awaiting weather", 48, 50, paintSmall);
+						canvas.drawText("Awaiting weather", 48, 50, paintSmall);
 					}
 				}
 				else {
-					canvas.drawText("no data", 48, 50, paintSmall);
+					canvas.drawText("No data", 48, 50, paintSmall);
 				}
 				paintSmall.setTextAlign(Paint.Align.LEFT);
 			}
