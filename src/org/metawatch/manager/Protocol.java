@@ -110,6 +110,9 @@ public class Protocol {
 	}
 
 	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {
+		if (bitmap==null) 
+			return;
+		
 		Log.d(MetaWatch.TAG, "Protocol.sendLcdBitmap()");
 		int pixelArray[] = new int[96 * 96];
 		bitmap.getPixels(pixelArray, 0, 96, 0, 0, 96, 96);
