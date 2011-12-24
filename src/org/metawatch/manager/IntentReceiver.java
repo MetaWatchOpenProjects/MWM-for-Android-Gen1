@@ -177,6 +177,7 @@ public class IntentReceiver extends BroadcastReceiver {
 			Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received time set intent.");
 			
 			/* The time has changed, so notify the watch. */
+			//Protocol.setNvalTime(context);
 			Protocol.sendRtcNow(context);
 			return;
 		}		

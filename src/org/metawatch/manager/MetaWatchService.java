@@ -414,6 +414,7 @@ public class MetaWatchService extends Service {
 			updateNotification();
 
 			Protocol.startProtocolSender();
+			//Protocol.setNvalTime(context);
 			Protocol.sendRtcNow(context);
 			Protocol.getDeviceType();
 
