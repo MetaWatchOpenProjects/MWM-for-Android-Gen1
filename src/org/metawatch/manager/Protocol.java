@@ -292,6 +292,16 @@ public class Protocol {
 
 		} catch (Exception x) {
 		}
+		
+		// Set the watch to 12h or 24h mode, depending on watch setting
+		if (DateFormat.is24HourFormat(context)) {
+			Protocol.setNvalTime(true);
+			Log.d(MetaWatch.TAG, "Setting watch to 24h format");
+		}
+		else {
+			Protocol.setNvalTime(false);
+			Log.d(MetaWatch.TAG, "Setting watch to 12h format");
+		}
 	}
 
 	public static byte[] crc(byte[] bytes) {
