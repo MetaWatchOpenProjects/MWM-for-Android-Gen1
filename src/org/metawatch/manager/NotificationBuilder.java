@@ -35,6 +35,7 @@ package org.metawatch.manager;
 import java.util.Calendar;
 
 import org.metawatch.manager.FontCache.FontInfo;
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
 
@@ -65,13 +66,15 @@ public class NotificationBuilder {
 		String name = Utils.getContactNameFromNumber(context, number);
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsSMSNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			//Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
-			//Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
-			//Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
-			
-			Bitmap bitmap = smartNotify(context, "message.bmp", name, text);
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);
-			
+			if (Preferences.stickyNotifications) {
+				Bitmap bitmap = smartNotify(context, "message.bmp", name, text);
+				Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);				
+			}
+			else {
+				Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
+				Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
+				Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));				
+			}
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -284,7 +287,7 @@ public class NotificationBuilder {
 		
 		TextPaint textPaint = new TextPaint(paint);
 		StaticLayout staticLayout = new StaticLayout(body, textPaint, 86,
-				android.text.Layout.Alignment.ALIGN_NORMAL, 1.3f, 0, false);
+				android.text.Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
 		
 		canvas.translate(1, icon.getHeight()+2); // position the text
 		staticLayout.draw(canvas);

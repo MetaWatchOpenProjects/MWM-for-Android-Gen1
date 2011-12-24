@@ -64,6 +64,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 public class MetaWatchService extends Service {
@@ -144,6 +145,7 @@ public class MetaWatchService extends Service {
 		public static boolean invertLCD = false;
 		public static boolean notificationCenter = false;
 		public static boolean notifyLight = false;
+		public static boolean stickyNotifications = true;
 		public static String weatherCity = "Dallas,US";
 		public static boolean weatherCelsius = false;
 		public static boolean weatherGeolocation = false;
@@ -196,6 +198,8 @@ public class MetaWatchService extends Service {
 				"notificationCenter", Preferences.notificationCenter);
 		Preferences.notifyLight = sharedPreferences.getBoolean("notifyLight",
 				Preferences.notifyLight);
+		Preferences.stickyNotifications = sharedPreferences.getBoolean(
+				"stickyNotifications", Preferences.stickyNotifications);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity",
 				Preferences.weatherCity);
 		Preferences.weatherCelsius = sharedPreferences.getBoolean(
