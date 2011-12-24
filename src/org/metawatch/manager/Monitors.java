@@ -292,15 +292,17 @@ public class Monitors {
 
 			cond = cond.toLowerCase();
 
-			if (cond.equals("clear") || cond.equals("mostly sunny")
-					|| cond.equals("partly sunny")
+			if (cond.equals("clear")
 					|| cond.equals("sunny"))
 				WeatherData.icon = "weather_sunny.bmp";
 			else if (cond.equals("cloudy")
-					|| cond.equals("mostly cloudy")
-					|| cond.equals("overcast")
-					|| cond.equals("partly cloudy"))
+					|| cond.equals("overcast") )
 				WeatherData.icon = "weather_cloudy.bmp";
+			else if (cond.equals("mostly cloudy")
+					|| cond.equals("partly cloudy")
+					|| cond.equals("mostly sunny")
+					|| cond.equals("partly sunny"))
+				WeatherData.icon = "weather_partlycloudy.bmp";
 			else if (cond.equals("light rain") || cond.equals("rain")
 					|| cond.equals("rain showers")
 					|| cond.equals("showers")
@@ -384,14 +386,15 @@ public class Monitors {
 				String cond = current.getString("icon");
 				
 				if (cond.equals("clear") 
-						|| cond.equals("sunny")
+						|| cond.equals("sunny"))
+					WeatherData.icon = "weather_sunny.bmp";
+				else if (cond.equals("cloudy"))
+					WeatherData.icon = "weather_cloudy.bmp";
+				else if (cond.equals("partlycloudy")
+						|| cond.equals("mostlycloudy")
 						|| cond.equals("partlysunny")
 						|| cond.equals("mostlysunny"))
-					WeatherData.icon = "weather_sunny.bmp";
-				else if (cond.equals("cloudy")
-						|| cond.equals("partlycloudy")
-						|| cond.equals("mostlycloudy"))
-					WeatherData.icon = "weather_cloudy.bmp";
+					WeatherData.icon = "weather_partlycloudy.bmp";
 				else if (cond.equals("rain") 
 						|| cond.equals("chancerain"))
 					WeatherData.icon = "weather_rain.bmp";
