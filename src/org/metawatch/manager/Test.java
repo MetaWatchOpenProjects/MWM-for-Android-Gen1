@@ -221,6 +221,7 @@ public class Test extends Activity {
 	}
 	
 	void stopSmsTestLoop() {
-		MetaWatchService.testSmsLoop.stop();
+		if (MetaWatchService.testSmsLoop != null)
+			MetaWatchService.testSmsLoop.stop();
 	}
 }
