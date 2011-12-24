@@ -245,6 +245,9 @@ public class Utils {
 		catch (IllegalStateException e) {
 			Log.d(MetaWatch.TAG, "k-9 accounts uri unknown.");
 		}
+		catch (java.lang.SecurityException e) {
+			Log.d(MetaWatch.TAG, "Permissions failure accessing k-9 databases");
+		}
 		return 0;
 
 	}
