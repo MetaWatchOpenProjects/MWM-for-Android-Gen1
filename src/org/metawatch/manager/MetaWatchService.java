@@ -64,7 +64,6 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 public class MetaWatchService extends Service {
@@ -794,6 +793,11 @@ public class MetaWatchService extends Service {
 				break;
 			case Protocol.REPLAY:
 				Notification.replay(this);
+				break;
+				
+			case Idle.IDLE_NEXT_PAGE:
+				Idle.NextPage();
+				Idle.updateLcdIdle(this);
 				break;
 			}
 			/*

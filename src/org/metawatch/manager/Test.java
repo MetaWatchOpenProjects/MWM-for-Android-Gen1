@@ -99,13 +99,13 @@ public class Test extends Activity {
 	    		Application.stopAppMode(this);
 	        return true;
 	    case R.id.sms:	   
-	    	NotificationBuilder.createSMS(this, "555-123-456", "Rights groups report systematic state violence is being unleashed on Bahrain's opposition movement.");
+	    	NotificationBuilder.createSMS(this, "555-123-456", ipsum);
 	        return true;
 	    case R.id.testShortMessage:	   
 	    	NotificationBuilder.createSMS(this, "555-123-456", "Hi.");
 	        return true;
 	    case R.id.k9:	   
-	    	NotificationBuilder.createK9(this, "doctor@gallifrey.net", "Would you like a jelly baby?");
+	    	NotificationBuilder.createK9(this, "The Doctor <doctor@gallifrey.net>", "Now drop your weapons, or I'll kill him with this deadly jelly baby!", "tardis:INBOX");
 	        return true;
 	    case R.id.gmail_short:	   
 	    	NotificationBuilder.createGmailBlank(this, "me@gmail.com", 513);

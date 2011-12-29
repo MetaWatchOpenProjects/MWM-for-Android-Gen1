@@ -143,7 +143,9 @@ public class IntentReceiver extends BroadcastReceiver {
 				Bundle bundle = intent.getExtras();				
 				String subject = bundle.getString("com.fsck.k9.intent.extra.SUBJECT");
 				String sender = bundle.getString("com.fsck.k9.intent.extra.FROM");
-				NotificationBuilder.createK9(context, sender, subject);
+				String account = bundle.getString("com.fsck.k9.intent.extra.ACCOUNT");
+				String folder = bundle.getString("com.fsck.k9.intent.extra.FOLDER");
+				NotificationBuilder.createK9(context, sender, subject, account+":"+folder);
 			}
 			if( MetaWatchService.Preferences.showK9Unread) {
 				Utils.refreshUnreadK9Count(context);

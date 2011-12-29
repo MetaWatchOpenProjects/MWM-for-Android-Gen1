@@ -35,6 +35,7 @@ public class FontCache {
 	}
 	
 	public enum FontSize {
+		AUTO,
 		SMALL,
 		MEDIUM,
 		LARGE 
@@ -46,6 +47,9 @@ public class FontCache {
 	
 	public FontInfo Get(FontSize size) {
 		switch(size) {
+		case AUTO:
+			return Get();
+		
 		case SMALL:
 			return Small;
 			

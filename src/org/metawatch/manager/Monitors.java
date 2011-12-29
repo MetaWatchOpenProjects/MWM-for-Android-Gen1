@@ -431,7 +431,7 @@ public class Monitors {
 				
 				Idle.updateLcdIdle(context);
 				MetaWatchService.notifyClients();
-	
+				WeatherData.timeStamp = System.currentTimeMillis();		
 		    }
 
 			
@@ -441,8 +441,7 @@ public class Monitors {
 			Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): finish");
 			
-			WeatherData.updating = false;
-			WeatherData.timeStamp = System.currentTimeMillis();			
+			WeatherData.updating = false;			
 		}
 	}
 

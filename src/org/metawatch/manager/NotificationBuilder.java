@@ -32,7 +32,9 @@
 
 package org.metawatch.manager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.metawatch.manager.FontCache.FontInfo;
 import org.metawatch.manager.MetaWatchService.Preferences;
@@ -52,7 +54,6 @@ import android.text.format.DateFormat;
 
 public class NotificationBuilder {
 	
-	
 	public static final String DEFAULT_NUMBER_OF_BUZZES = "3";
 	
 	private static VibratePattern createVibratePatternFromPreference(Context context, String preferenceName) {
@@ -67,11 +68,11 @@ public class NotificationBuilder {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsSMSNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			if (Preferences.stickyNotifications) {
-				Bitmap bitmap = smartNotify(context, "message.bmp", name, text);
-				Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);				
+				Bitmap[] bitmaps = smartNotify(context, "message.bmp", name, text);
+				Notification.addBitmapNotification(context, bitmaps, vibratePattern, -1);				
 			}
 			else {
-				Bitmap bitmap = smartLines(context, "message.bmp", new String[] {"SMS from", name});		
+				Bitmap bitmap = smartLines(context, "message.bmp", "SMS from", new String[] {name});		
 				Notification.addBitmapNotification(context, bitmap, vibratePattern, 4000);
 				Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));				
 			}
@@ -82,14 +83,11 @@ public class NotificationBuilder {
 		}
 	}
 	
-	
 	public static void createSmart(Context context, String title, String text) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsOtherNotificationNumberBuzzes");
-		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			
-			Bitmap bitmap = smartNotify(context, "notify.bmp", title, text);
-			Notification.addBitmapNotification(context, bitmap, vibratePattern, -1);
-			
+		if (MetaWatchService.watchType == WatchType.DIGITAL) {		
+			Bitmap[] bitmaps = smartNotify(context, "notify.bmp", title, text);
+			Notification.addBitmapNotification(context, bitmaps, vibratePattern, -1);
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -97,10 +95,10 @@ public class NotificationBuilder {
 		}
 	}
 	
-	public static void createK9(Context context, String sender, String subject) {	
+	public static void createK9(Context context, String sender, String subject, String folder) {	
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsK9NumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"K9 mail from", sender, subject});
+			Bitmap bitmap = smartLines(context, "email.bmp", "K9 mail", new String[] {sender, subject, folder});
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
@@ -112,7 +110,7 @@ public class NotificationBuilder {
 	public static void createGmail(Context context, String sender, String email, String subject, String snippet) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail from", sender, email, subject});
+			Bitmap bitmap = smartLines(context, "email.bmp", "Gmail", new String[] { sender, email, subject});
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
 			Notification.addTextNotification(context, snippet, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
@@ -125,7 +123,7 @@ public class NotificationBuilder {
 	public static void createGmailBlank(Context context, String recipient, int count) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsGmailNumberBuzzes");		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "email.bmp", new String[] {"Gmail for", recipient});	
+			Bitmap bitmap = smartLines(context, "email.bmp", "Gmail for", new String[] {recipient});	
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
@@ -138,9 +136,9 @@ public class NotificationBuilder {
 	public static void createCalendar(Context context, String text) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsCalendarNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "calendar.bmp", new String[] {"Calendar Event", text});	
+			Bitmap bitmap = smartLines(context, "calendar.bmp", "Calendar", new String[] {text});	
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
-			Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
+//			Notification.addTextNotification(context, text, Notification.VibratePattern.NO_VIBRATE, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
 			int len = Protocol.createOled2linesLong(context, text, scroll);
@@ -153,7 +151,7 @@ public class NotificationBuilder {
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 		    final Calendar t = Calendar.getInstance();
 		    final String currentTime = DateFormat.getTimeFormat(context).format(t.getTime());
-			Bitmap bitmap = smartLines(context, "timer.bmp", new String[] {"Alarm Clock", currentTime});		
+			Bitmap bitmap = smartLines(context, "timer.bmp", "Alarm", new String[] {currentTime}, FontCache.FontSize.LARGE);		
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, "timer.bmp", "Alarm"), Protocol.createOled1line(context, null, "Alarm"), null, 0, vibratePattern);
@@ -163,7 +161,7 @@ public class NotificationBuilder {
 	public static void createMusic(Context context, String artist, String track, String album) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "play.bmp", new String[] { track, album, artist});
+			Bitmap bitmap = smartLines(context, "play.bmp", "Music", new String[] { track, album, artist});
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
@@ -175,7 +173,7 @@ public class NotificationBuilder {
 	public static void createTimezonechange(Context context) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsTimezoneNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "timezone.bmp", new String[] {"Timezone Changed"});		
+			Bitmap bitmap = smartLines(context, "timezone.bmp", "Timezone", new String[] {"Timezone Changed"});		
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			Notification.addOledNotification(context, Protocol.createOled1line(
@@ -195,10 +193,11 @@ public class NotificationBuilder {
 			Notification.addOledNotification(context, Protocol.createOled1line(context, null, appName), Protocol.createOled2lines(context, "Notification", notificationText), scroll, len, vibratePattern);
 		}
 	}
+	
 	public static void createWinamp(Context context, String artist, String track, String album) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "winamp.bmp", new String[] { track, album, artist});
+			Bitmap bitmap = smartLines(context, "winamp.bmp", "Winamp", new String[] { track, album, artist});
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));
 		} else {
 			byte[] scroll = new byte[800];
@@ -212,7 +211,7 @@ public class NotificationBuilder {
 				context, "settingsBatteryNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Bitmap bitmap = smartLines(context, "batterylow.bmp",
-					new String[] { "Phone Battery Low" });
+					"Battery", new String[] { "Phone Battery Low" });
 			Notification.addBitmapNotification(context, bitmap, vibratePattern,
 					Notification.getDefaultNotificationTimeout(context));
 		} else {
@@ -223,39 +222,12 @@ public class NotificationBuilder {
 		}
 	}	
 	
-	static Bitmap smartLines(Context context, String iconPath, String[] lines) {
-		
-		FontInfo font = FontCache.instance(context).Get();
-			
-		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
-		Canvas canvas = new Canvas(bitmap);		
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);		
-		paint.setTextSize(font.size);
-		paint.setTypeface(font.face);
-		canvas.drawColor(Color.WHITE);
-		
-		Bitmap icon = Utils.loadBitmapFromAssets(context, iconPath);
-		
-		int spaceForItem = 96 / (1 + lines.length);
-		
-		canvas.drawBitmap(icon, 96/2-icon.getWidth()/2, spaceForItem/2-icon.getHeight()/2, paint);
-		
-		for (int i = 0; i < lines.length; i++) {
-			int x = (int)(96/2-paint.measureText(lines[i])/2);
-			if (x < 0)
-				x = 0;
-			int y = spaceForItem * (i + 1) + spaceForItem/2 + font.realSize/2 ;
-			canvas.drawText(lines[i], x, y, paint);
-		}
-		
-		return bitmap;
+	static Bitmap smartLines(Context context, String iconPath, String header, String[] lines) {
+		return smartLines(context, iconPath, header, lines, FontCache.FontSize.AUTO);
 	}
 	
-	
-	static Bitmap smartNotify(Context context, String iconPath, String header, String body) {
-		
-		FontInfo font = FontCache.instance(context).Get();		
+	static Bitmap smartLines(Context context, String iconPath, String header, String[] lines, FontCache.FontSize size) {
+		FontInfo font = FontCache.instance(context).Get(size);	
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);		
@@ -269,41 +241,100 @@ public class NotificationBuilder {
 		paint.setColor(Color.BLACK);		
 		paint.setTextSize(font.size);	
 		paint.setTypeface(font.face);
-		
-		
+				
 		canvas.drawColor(Color.WHITE);
 		
 		Bitmap icon = Utils.loadBitmapFromAssets(context, iconPath);
-		
-		
+				
 		canvas.drawBitmap(icon, 0, 0, paint);
 		canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
 		
-		canvas.drawLine(1, icon.getHeight(), 88, icon.getHeight(), paint);
-		canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
+		canvas.drawLine(1, icon.getHeight(), 95, icon.getHeight(), paint);
 		
-		canvas.drawText("X", 90, 93, paint);
+		String body = "";		
+		for (String line : lines) {
+			if (body.length() > 0)
+				body += "\n\n";
+			body += line;
+		}
 		
+		TextPaint textPaint = new TextPaint(paint);
+		StaticLayout staticLayout = new StaticLayout(body, textPaint, 94,
+				android.text.Layout.Alignment.ALIGN_CENTER, 1.3f, 0, false);
+		
+		int textHeight = staticLayout.getHeight();
+		int headerHeight = icon.getHeight()+2;
+		int textY = (56) - (textHeight/2);
+		if (textY < headerHeight)
+			textY = headerHeight;
+		
+		canvas.translate(1, textY); // position the text
+		staticLayout.draw(canvas);
+
+		return bitmap;
+	}
+		
+	static Bitmap[] smartNotify(Context context, String iconPath, String header, String body) {	
+		FontInfo font = FontCache.instance(context).Get();		
+		
+		List<Bitmap> bitmaps = new ArrayList<Bitmap>();	
+		
+		Paint paintHead = new Paint();
+		paintHead.setColor(Color.BLACK);		
+		paintHead.setTextSize(FontCache.instance(context).Large.size);
+		paintHead.setTypeface(FontCache.instance(context).Large.face);
+		
+		Paint paint = new Paint();
+		paint.setColor(Color.BLACK);		
+		paint.setTextSize(font.size);	
+		paint.setTypeface(font.face);
+		
+		Paint whitePaint = new Paint();
+		whitePaint.setColor(Color.WHITE);
+		
+		Bitmap icon = Utils.loadBitmapFromAssets(context, iconPath);		
 		
 		TextPaint textPaint = new TextPaint(paint);
 		StaticLayout staticLayout = new StaticLayout(body, textPaint, 86,
 				android.text.Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
-		
-		canvas.translate(1, icon.getHeight()+2); // position the text
-		staticLayout.draw(canvas);
 
+		int h = staticLayout.getHeight();
+		int y = 0;
+		int displayHeight = 96 - icon.getHeight()+2;
 		
-		//try {
-		//	FileOutputStream fos;
-		//	fos = new FileOutputStream("/sdcard/test.png");
-		//	bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-		//	fos.close();
-		//} catch (IOException e) {
-		//}
-
 		
-		return bitmap;
+		while(h-y>displayHeight) {	
+			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
+			Canvas canvas = new Canvas(bitmap);	
+			
+			canvas.drawColor(Color.WHITE);
+			
+			canvas.save();
+			canvas.translate(1, icon.getHeight()+2 - y); // position the text
+			staticLayout.draw(canvas);
+			canvas.restore();
+			
+			// Draw header
+			canvas.drawRect(new android.graphics.Rect(0,0,96,icon.getHeight()), whitePaint);
+			canvas.drawBitmap(icon, 0, 0, paint);
+			canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
+			
+			canvas.drawLine(1, icon.getHeight(), 88, icon.getHeight(), paint);
+			canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
+			
+			if (y>0)
+				canvas.drawText("*", 90, 10, paint);
+			
+			canvas.drawText("X", 90, 93, paint);
+		
+			y += 80;
+			
+			bitmaps.add(bitmap);
+		}
+		
+		Bitmap[] bitmapArray = new Bitmap[bitmaps.size()];
+		bitmaps.toArray(bitmapArray);
+		return bitmapArray;
 	}
-	
-	
+		
 }

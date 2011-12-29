@@ -108,6 +108,10 @@ public class Protocol {
 			protocolSenderThread = null;
 		}
 	}
+	
+	public static void enqueue(byte[] bytes) {
+		sendQueue.add(bytes);
+	}
 
 	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {
 		if (bitmap==null) 
@@ -172,7 +176,7 @@ public class Protocol {
 			// Only send the row packet if the data's changed since the
 			// last time we sent it
 			if( !Arrays.equals(LCDDiffBuffer[bufferType][i/2], bytes) ) {
-				sendQueue.add(bytes);
+				enqueue(bytes);
 				LCDDiffBuffer[bufferType][i/2] = bytes;
 				sentLines += 2;
 			}
@@ -287,7 +291,7 @@ public class Protocol {
 				bytes[13] = (byte) 1; // dd/mm
 
 			//send(bytes);
-			sendQueue.add(bytes);
+			enqueue(bytes);
 			//processSendQueue();
 
 		} catch (Exception x) {
@@ -368,7 +372,7 @@ public class Protocol {
 
 		bytes[4] = (byte) 0; // write all "0"
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void activateBuffer(int mode) {
@@ -380,7 +384,7 @@ public class Protocol {
 		bytes[2] = eMessageType.ConfigureIdleBufferSize.msg; // activate buffer
 		bytes[3] = (byte) mode;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void updateDisplay(int bufferType) {
@@ -392,7 +396,7 @@ public class Protocol {
 		bytes[2] = eMessageType.UpdateDisplay.msg; // update display
 		bytes[3] = (byte) (bufferType + 16);
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void vibrate(int on, int off, int cycles) {
@@ -411,7 +415,7 @@ public class Protocol {
 		bytes[8] = (byte) (off / 256);
 		bytes[9] = (byte) cycles;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void writeBuffer() {
@@ -442,7 +446,7 @@ public class Protocol {
 			bytes[15] = 15;
 			bytes[16] = 15;
 	
-			sendQueue.add(bytes);
+			enqueue(bytes);
 			//processSendQueue();
 		//}
 	}
@@ -466,7 +470,7 @@ public class Protocol {
 		bytes[7] = 0x34;
 		bytes[8] = (byte) code;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void disableButton(int button, int type) {
@@ -486,7 +490,7 @@ public class Protocol {
 		bytes[5] = (byte) button;
 		bytes[6] = (byte) type; // immediate
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void enableReplayButton() {
@@ -541,7 +545,7 @@ public class Protocol {
 		bytes[7] = 0x34;
 		bytes[8] = 0;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void configureMode() {
@@ -556,7 +560,7 @@ public class Protocol {
 		bytes[4] = 10;
 		bytes[5] = (byte) (MetaWatchService.Preferences.invertLCD ? 1 : 0); // invert
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void getDeviceType() {
@@ -568,7 +572,7 @@ public class Protocol {
 		bytes[2] = eMessageType.GetDeviceType.msg;
 		bytes[3] = 0;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 	
 	public static void readBatteryVoltage() {

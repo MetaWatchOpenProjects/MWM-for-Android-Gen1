@@ -51,9 +51,9 @@ public class Call {
 		String name = Utils.getContactNameFromNumber(context, number);
 		
 		if (name.equals(number))		
-			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", new String[] { number});
+			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", "Phone", new String[] { number });
 		else 
-			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", new String[] { number, name });
+			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", "Phone", new String[] { number, name });
 		
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
 			Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.NOTIFICATION);		
