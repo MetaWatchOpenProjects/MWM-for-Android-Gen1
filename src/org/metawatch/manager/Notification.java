@@ -179,8 +179,8 @@ public class Notification {
 					
 					if (notification.timeout < 0) {
 						//notifyButtonPress = 0;
-						Protocol.enableButton(2, 0, NOTIFICATION_UP, 0); // Right top
-						Protocol.enableButton(2, 0, NOTIFICATION_DOWN, 1); // Right middle
+						Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top
+						Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle
 						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom
 
 						Log.d(MetaWatch.TAG,
@@ -205,12 +205,16 @@ public class Notification {
 								Protocol.sendLcdBitmap(notification.bitmaps[currentNotificationPage],
 										MetaWatchService.WatchBuffers.NOTIFICATION);
 							}
+							
+							Log.d(MetaWatch.TAG,
+									"Displaying page " + currentNotificationPage +" / "+ notification.bitmaps.length );
+							
 							Protocol.updateDisplay(2);
 						} while (notifyButtonPress != NOTIFICATION_DISMISS);
 						
 						
-						Protocol.disableButton(2, 0, 0); // Right top
-						Protocol.disableButton(2, 0, 1); // Right middle
+						Protocol.disableButton(0, 0, 2); // Right top
+						Protocol.disableButton(1, 0, 2); // Right middle
 						Protocol.disableButton(2, 0, 2); // Right bottom
 						
 						Log.d(MetaWatch.TAG,

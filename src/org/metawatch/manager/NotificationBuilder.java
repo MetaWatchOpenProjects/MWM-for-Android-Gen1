@@ -302,8 +302,9 @@ public class NotificationBuilder {
 		int y = 0;
 		int displayHeight = 96 - icon.getHeight()+2;
 		
+		int scroll = 72;
 		
-		while(h-y>displayHeight) {	
+		while((h-y)>(96-scroll)) {	
 			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 			Canvas canvas = new Canvas(bitmap);	
 			
@@ -319,15 +320,21 @@ public class NotificationBuilder {
 			canvas.drawBitmap(icon, 0, 0, paint);
 			canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
 			
+			//canvas.drawText(""+(h-y), icon.getWidth()+1, icon.getHeight()-2, paintHead);
+			
 			canvas.drawLine(1, icon.getHeight(), 88, icon.getHeight(), paint);
 			canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
 			
 			if (y>0)
-				canvas.drawText("*", 90, 10, paint);
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "arrow_up.bmp"), 90, 17, null);
 			
-			canvas.drawText("X", 90, 93, paint);
-		
-			y += 80;
+			if((h-y)>(scroll))
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "arrow_down.bmp"), 90, 56, null);
+						
+			
+			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "close.bmp"), 90, 89, null);
+			
+			y += 72;
 			
 			bitmaps.add(bitmap);
 		}

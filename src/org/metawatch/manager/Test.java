@@ -50,7 +50,7 @@ import android.view.MenuItem;
 
 public class Test extends Activity {
 	
-	final String ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae varius felis. Ut consectetur pharetra tincidunt. Suspendisse sed nisl auctor nunc pellentesque pretium et eu ipsum. Quisque ut tellus vel sem sodales dapibus. Vestibulum aliquet tempor ante nec faucibus. Curabitur sed quam nec libero tincidunt vehicula. Etiam facilisis orci in arcu ultricies porta. In id erat odio. Aliquam lacinia, velit ut fringilla pulvinar, massa risus auctor justo, eget suscipit tellus quam ac ligula.\n\nPraesent suscipit, ipsum sed tristique elementum, felis neque porttitor tellus, eu ornare tellus felis nec libero. Nam sit amet diam felis. Integer sed quam dui. Etiam id leo eu diam consequat vehicula at eu augue. Pellentesque fermentum massa in neque feugiat in venenatis nisl pulvinar. Ut eu turpis odio. Fusce nec odio commodo odio ornare cursus. Nullam mattis, elit eget feugiat dignissim, ipsum tellus dapibus dui, in hendrerit ipsum orci vel augue. Vivamus ac felis nisl. Curabitur facilisis ultricies nulla, sed dictum elit auctor eu. Pellentesque sagittis nisi eu risus blandit interdum. Nulla ipsum odio, semper a sodales at, venenatis sit amet massa. Etiam ac auctor odio. Curabitur massa quam, malesuada in pharetra vel, aliquam sit amet felis";
+	final String smsText = "To be, or not to be: that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take arms against a sea of troubles, And by opposing end them? To die: to sleep; No more; and by a sleep to say we end The heart-ache and the thousand natural shocks That flesh is heir to, 'tis a consummation Devoutly to be wish'd. To die, to sleep; To sleep: perchance to dream: ay, there's the rub; For in that sleep of death what dreams may come When we have shuffled off this mortal coil, Must give us pause: there's the respect That makes calamity of so long life; For who would bear the whips and scorns of time, The oppressor's wrong, the proud man's contumely, The pangs of despised love, the law's delay,";
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,7 +99,7 @@ public class Test extends Activity {
 	    		Application.stopAppMode(this);
 	        return true;
 	    case R.id.sms:	   
-	    	NotificationBuilder.createSMS(this, "555-123-456", ipsum);
+	    	NotificationBuilder.createSMS(this, "555-123-456", smsText);
 	        return true;
 	    case R.id.testShortMessage:	   
 	    	NotificationBuilder.createSMS(this, "555-123-456", "Hi.");
