@@ -50,7 +50,16 @@ import android.util.Log;
 public class Idle {
 	
 	public static byte[] overridenButtons = null;
+	
+	final static byte IDLE_NEXT_PAGE = 60;
 
+	final static int NUM_PAGES = 1;
+	static int currentPage = 0;
+	
+	public static void NextPage() {
+		currentPage = (currentPage+1) % NUM_PAGES;
+	}
+	
 	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint) {
 		canvas.save();
 		StaticLayout layout = new StaticLayout(text, paint, width, android.text.Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
@@ -99,71 +108,79 @@ public class Idle {
 		canvas.drawColor(Color.WHITE);
 		
 		canvas = drawLine(canvas, 32);		
-		if(!Preferences.disableWeather) {
-			if (WeatherData.received) {
-				
-				//WeatherData.icon = "weather_sunny.bmp";
-				//WeatherData.locationName = "a really long place name";
-				//WeatherData.condition = "cloudy with a chance of meatballs";
-				
-				// icon
-				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-				canvas.drawBitmap(image, 36, 37, null);
-				
-				// condition
-				drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline);
-				
-				
-				// temperatures
-				if (WeatherData.celsius) {
-					paintLarge.setTextAlign(Paint.Align.RIGHT);
-					canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
-					//RM: since the degree symbol draws wrong...
-					canvas.drawText("O", 82, 40, paintSmall);
-					canvas.drawText("C", 95, 46, paintLarge);
-				}
-				else {
-					paintLarge.setTextAlign(Paint.Align.RIGHT);
-					canvas.drawText(WeatherData.temp, 83, 46, paintLarge);
-					//RM: since the degree symbol draws wrong...
-					canvas.drawText("O", 83, 40, paintSmall);
-					canvas.drawText("F", 95, 46, paintLarge);
-				}
-				paintLarge.setTextAlign(Paint.Align.LEFT);
-							
-				canvas.drawText("High", 64, 54, paintSmall);
-				canvas.drawText("Low", 64, 62, paintSmall);
-				
-				paintSmall.setTextAlign(Paint.Align.RIGHT);
-				canvas.drawText(WeatherData.tempHigh, 95, 54, paintSmall);
-				canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
-				paintSmall.setTextAlign(Paint.Align.LEFT);
-
-				drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 62, paintSmall, paintSmallOutline);
-							
-			} else {
-				paintSmall.setTextAlign(Paint.Align.CENTER);
-				if (Preferences.weatherGeolocation) {
-					if( !LocationData.received ) {
-						canvas.drawText("Awaiting location", 48, 50, paintSmall);
+		
+		if( currentPage == 0 ) {
+		
+			if(!Preferences.disableWeather) {
+				if (WeatherData.received) {
+					
+					//WeatherData.icon = "weather_sunny.bmp";
+					//WeatherData.locationName = "a really long place name";
+					//WeatherData.condition = "cloudy with a chance of meatballs";
+					
+					// icon
+					Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
+					canvas.drawBitmap(image, 36, 37, null);
+					
+					// condition
+					drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline);
+					
+					
+					// temperatures
+					if (WeatherData.celsius) {
+						paintLarge.setTextAlign(Paint.Align.RIGHT);
+						canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
+						//RM: since the degree symbol draws wrong...
+						canvas.drawText("O", 82, 40, paintSmall);
+						canvas.drawText("C", 95, 46, paintLarge);
 					}
 					else {
-						canvas.drawText("Awaiting weather", 48, 50, paintSmall);
+						paintLarge.setTextAlign(Paint.Align.RIGHT);
+						canvas.drawText(WeatherData.temp, 83, 46, paintLarge);
+						//RM: since the degree symbol draws wrong...
+						canvas.drawText("O", 83, 40, paintSmall);
+						canvas.drawText("F", 95, 46, paintLarge);
 					}
+					paintLarge.setTextAlign(Paint.Align.LEFT);
+								
+					canvas.drawText("High", 64, 54, paintSmall);
+					canvas.drawText("Low", 64, 62, paintSmall);
+					
+					paintSmall.setTextAlign(Paint.Align.RIGHT);
+					canvas.drawText(WeatherData.tempHigh, 95, 54, paintSmall);
+					canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
+					paintSmall.setTextAlign(Paint.Align.LEFT);
+	
+					drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 62, paintSmall, paintSmallOutline);
+								
+				} else {
+					paintSmall.setTextAlign(Paint.Align.CENTER);
+					if (Preferences.weatherGeolocation) {
+						if( !LocationData.received ) {
+							canvas.drawText("Awaiting location", 48, 50, paintSmall);
+						}
+						else {
+							canvas.drawText("Awaiting weather", 48, 50, paintSmall);
+						}
+					}
+					else {
+						canvas.drawText("No data", 48, 50, paintSmall);
+					}
+					paintSmall.setTextAlign(Paint.Align.LEFT);
 				}
-				else {
-					canvas.drawText("No data", 48, 50, paintSmall);
-				}
-				paintSmall.setTextAlign(Paint.Align.LEFT);
+							
+				// Debug current time
+				//String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
+				//String currentTimeString = new SimpleDateFormat("HH:mm").format(new Date());
+				//canvas.drawText(currentTimeString, 0, 56, paintSmall);
+				
+				canvas = drawLine(canvas, 64);
 			}
-						
-			// Debug current time
-			//String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-			//String currentTimeString = new SimpleDateFormat("HH:mm").format(new Date());
-			//canvas.drawText(currentTimeString, 0, 56, paintSmall);
 			
-			canvas = drawLine(canvas, 64);
-		}
+		}	
+		//else if (currentPage == 1) {
+		//	canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test.bmp"), 0, 32, null);
+		//}
 		
 		// icons row
 		//Bitmap imageI = Utils.loadBitmapFromAssets(context, "idle_icons_row.bmp");
@@ -272,6 +289,10 @@ public class Idle {
 			sendLcdIdle(context);
 			//Protocol.updateDisplay(0);
 		}
+		
+		if (NUM_PAGES>1)
+			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 0); // Right top
+
 		
 		return true;
 	}
