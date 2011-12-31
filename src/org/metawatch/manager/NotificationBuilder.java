@@ -303,8 +303,10 @@ public class NotificationBuilder {
 		int displayHeight = 96 - icon.getHeight()+2;
 		
 		int scroll = 72;
+		boolean more = true;
 		
-		do {	
+		while (more) {	
+			more = false;
 			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 			Canvas canvas = new Canvas(bitmap);	
 			
@@ -320,7 +322,7 @@ public class NotificationBuilder {
 			canvas.drawBitmap(icon, 0, 0, paint);
 			canvas.drawText(header, icon.getWidth()+1, icon.getHeight()-2, paintHead);
 			
-			//canvas.drawText(""+(h-y), icon.getWidth()+1, icon.getHeight()-2, paintHead);
+			//canvas.drawText(""+(h-y)+" "+displayHeight, icon.getWidth()+1, icon.getHeight()-2, paintHead);
 			
 			canvas.drawLine(1, icon.getHeight(), 88, icon.getHeight(), paint);
 			canvas.drawLine(88, icon.getHeight(), 88, 95, paint);
@@ -328,17 +330,16 @@ public class NotificationBuilder {
 			if (y>0)
 				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "arrow_up.bmp"), 90, 17, null);
 			
-			if((h-y)>(scroll))
+			if((h-y)>(displayHeight)) {
+				more = true;
 				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "arrow_down.bmp"), 90, 56, null);
+			}
 						
-			
 			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "close.bmp"), 90, 89, null);
 			
-			y += 72;
-			
+			y += scroll;
 			bitmaps.add(bitmap);
-			
-		} while((h-y)>(96-scroll));
+		} 
 		
 		Bitmap[] bitmapArray = new Bitmap[bitmaps.size()];
 		bitmaps.toArray(bitmapArray);
