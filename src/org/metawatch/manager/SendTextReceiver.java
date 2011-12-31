@@ -29,7 +29,8 @@ public class SendTextReceiver extends Activity {
 			
 			if (bundle.containsKey(Intent.EXTRA_TITLE)) {
 		          
-	        	title = bundle.getString(Intent.EXTRA_TEXT);
+	        	title = bundle.getString(Intent.EXTRA_TITLE);
+	        	title = title.replaceAll("\\p{Cntrl}", "");
 			}
 			
 	        if (bundle.containsKey(Intent.EXTRA_TEXT)) {
