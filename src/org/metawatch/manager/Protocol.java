@@ -58,6 +58,10 @@ public class Protocol {
 
 	private static volatile BlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
 	
+	private static long lastSentTime = 0;
+	private static boolean queueStalled = false;
+	private static Object lastSentTimeLock = new Object();
+	
 	private static byte[][][] LCDDiffBuffer = new byte[3][48][30];
 	
 	public static void resetLCDDiffBuffer() {
@@ -107,10 +111,6 @@ public class Protocol {
 			/* Thread is dead, we can mark it for garbage collection. */
 			protocolSenderThread = null;
 		}
-	}
-	
-	public static void enqueue(byte[] bytes) {
-		sendQueue.add(bytes);
 	}
 
 	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {
@@ -185,6 +185,28 @@ public class Protocol {
 
 	}
 
+	public static void enqueue(byte[] bytes) {
+		
+		if (sendQueue.size() > 0 && queueStalled==false) {
+			long currentTime = System.currentTimeMillis();
+			long timeSinceSent;
+			synchronized (lastSentTimeLock) {
+				timeSinceSent = currentTime - lastSentTime;
+			
+				if (timeSinceSent>5*1000) {
+					queueStalled = true;
+					Log.e(MetaWatch.TAG, "bt comms stalled?");
+					MetaWatchService.notifyClients();
+				}
+			}
+		}
+		
+		sendQueue.add(bytes);
+		
+		if (sendQueue.size() % 10 == 0)
+			MetaWatchService.notifyClients();
+	}
+	
 	public static void send(byte[] bytes) throws IOException {
 		if (bytes == null)
 			return;
@@ -212,6 +234,11 @@ public class Protocol {
 		MetaWatchService.outputStream
 				.write(byteArrayOutputStream.toByteArray());
 		MetaWatchService.outputStream.flush();
+		
+		synchronized (lastSentTimeLock) {
+			lastSentTime = System.currentTimeMillis();
+			queueStalled = false;
+		}
 		
 		if (sendQueue.size() % 10 == 0)
 			MetaWatchService.notifyClients();
@@ -584,7 +611,7 @@ public class Protocol {
 		bytes[2] = eMessageType.ReadBatteryVoltageMsg.msg;
 		bytes[3] = 0;
 
-		sendQueue.add(bytes);		
+		enqueue(bytes);		
 	}
 	
 	public static void readLightSensor() {
@@ -596,7 +623,7 @@ public class Protocol {
 		bytes[2] = eMessageType.ReadLightSensorMsg.msg;
 		bytes[3] = 0;
 
-		sendQueue.add(bytes);		
+		enqueue(bytes);		
 	}
 
 	public static void queryNvalTime() {
@@ -612,7 +639,7 @@ public class Protocol {
 		bytes[5] = 0x20;
 		bytes[6] = 0x01; // size
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void setNvalTime(Context context) {
@@ -644,7 +671,7 @@ public class Protocol {
 		else
 			bytes[7] = 0x00; // 12 hour mode
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 	
 	public static void ledChange(Boolean ledOn) {
@@ -656,7 +683,7 @@ public class Protocol {
 		bytes[2] = eMessageType.LedChange.msg;
 		bytes[3] = ledOn ? (byte)0x01 : (byte)0x00;
 
-		sendQueue.add(bytes);		
+		enqueue(bytes);		
 	}	
 
 	public static void test(Context context) {
@@ -853,7 +880,7 @@ public class Protocol {
 
 				System.arraycopy(display, a, bytes, 7, 20);
 
-				sendQueue.add(bytes);
+				enqueue(bytes);
 			}
 
 			updateOledNotification(top, scroll);
@@ -882,7 +909,7 @@ public class Protocol {
 		bytes[5] = 0x00; // row
 		bytes[6] = 0x00; // size
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void updateOledsNotification() {
@@ -905,7 +932,7 @@ public class Protocol {
 		for (int i = 0; i < 20; i++)
 			bytes[5 + i] = (byte) 0xAA;
 
-		sendQueue.add(bytes);
+		enqueue(bytes);
 	}
 
 	public static void sendOledBufferPart(byte[] display, int start,
@@ -934,13 +961,19 @@ public class Protocol {
 			for (int i = 0; i < 20; i++)
 				bytes[5 + i] = display[j + i];
 
-			sendQueue.add(bytes);
+			enqueue(bytes);
 		}
 	
 	}
 	
 	public static int getQueueLength() {
 		return sendQueue.size();
+	}
+	
+	public static boolean isStalled() {
+		synchronized (lastSentTimeLock) {
+			return queueStalled;
+		}
 	}
 
 }

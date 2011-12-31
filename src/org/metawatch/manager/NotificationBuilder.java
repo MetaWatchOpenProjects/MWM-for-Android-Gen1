@@ -304,7 +304,7 @@ public class NotificationBuilder {
 		
 		int scroll = 72;
 		
-		while((h-y)>(96-scroll)) {	
+		do {	
 			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 			Canvas canvas = new Canvas(bitmap);	
 			
@@ -337,7 +337,8 @@ public class NotificationBuilder {
 			y += 72;
 			
 			bitmaps.add(bitmap);
-		}
+			
+		} while((h-y)>(96-scroll));
 		
 		Bitmap[] bitmapArray = new Bitmap[bitmaps.size()];
 		bitmaps.toArray(bitmapArray);

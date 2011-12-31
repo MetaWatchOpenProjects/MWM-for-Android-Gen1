@@ -311,7 +311,9 @@ public class MetaWatch extends Activity {
     	}
     	
     	textView.append("\nMessage Queue Length " + Protocol.getQueueLength() + "\n");
-    	
+    	if (Protocol.isStalled()) {
+    		textView.append("\n**CONNECTION STALLED**\n");
+    	}
     	
     }
     

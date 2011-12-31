@@ -76,7 +76,7 @@ public class Notification {
 
 					if (MetaWatchService.watchType == WatchType.DIGITAL) {
 
-						if (notification.bitmaps != null) {
+						if (notification.bitmaps != null && notification.bitmaps.length>0) {
 							Protocol.sendLcdBitmap(notification.bitmaps[0],
 									MetaWatchService.WatchBuffers.NOTIFICATION);
 							currentNotificationPage = 0;
@@ -91,6 +91,9 @@ public class Notification {
 						else if (notification.buffer != null)
 							Protocol.sendLcdBuffer(notification.buffer,
 									MetaWatchService.WatchBuffers.NOTIFICATION);
+						else {
+							continue;
+						}
 
 						Protocol.updateDisplay(2);
 
@@ -179,8 +182,10 @@ public class Notification {
 					
 					if (notification.timeout < 0) {
 						//notifyButtonPress = 0;
-						Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top
-						Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle
+						if (notification.bitmaps!=null & notification.bitmaps.length>1) {
+							Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top
+							Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle
+						}
 						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom
 
 						Log.d(MetaWatch.TAG,
@@ -216,7 +221,7 @@ public class Notification {
 						Protocol.disableButton(0, 0, 2); // Right top
 						Protocol.disableButton(1, 0, 2); // Right middle
 						Protocol.disableButton(2, 0, 2); // Right bottom
-						
+					
 						Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Done sleeping.");
 						
@@ -233,12 +238,17 @@ public class Notification {
 					if (MetaWatchService.WatchModes.CALL == false) {
 						exitNotification(context);
 					}
+					Thread.sleep(2000);
 
 				} catch (InterruptedException ie) {
 					/* If we've been interrupted, exit gracefully. */
 					Log.d(MetaWatch.TAG,
 							"NotificationSender was interrupted waiting for next notification, exiting.");
 					break;
+				}
+				catch (Exception e)
+				{
+					Log.e(MetaWatch.TAG, "Exception in NotificationSender: "+e.toString());
 				}
 			}
 		}
@@ -342,6 +352,11 @@ public class Notification {
 
 	public static void addBitmapNotification(Context context, Bitmap[] bitmaps,
 			VibratePattern vibratePattern, int timeout) {
+		
+		if (bitmaps!=null) {
+			Log.d(MetaWatch.TAG, "Notification comprised of "+bitmaps.length+" bitmaps");
+		}
+		
 		NotificationType notification = new NotificationType();
 		notification.bitmaps = bitmaps;
 		notification.timeout = timeout;
