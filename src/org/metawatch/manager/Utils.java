@@ -60,6 +60,9 @@ public class Utils {
 		Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
 		Cursor c = context.getContentResolver().query(contactUri, projection, null, null, null);
 		
+		if (c==null)
+			return number;
+		
 		if (c.moveToFirst()) {
 			String name = c.getString(c.getColumnIndex(PhoneLookup.DISPLAY_NAME));
 
@@ -69,6 +72,7 @@ public class Utils {
 				return number;
 		}
 		
+		c.close();
 		return number;		 
 	}
 	
