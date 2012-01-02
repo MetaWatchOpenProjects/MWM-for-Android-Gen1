@@ -35,6 +35,8 @@ package org.metawatch.manager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.SystemClock;
+import android.view.KeyEvent;
 
 public class MediaControl {
 	
@@ -45,15 +47,15 @@ public class MediaControl {
 	final static byte TOGGLE = 20;
 	
 	public static void next(Context context) {
-		context.sendBroadcast(new Intent("com.android.music.musicservicecommand.next"));
+		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
 	}
 	
 	public static void previous(Context context) {
-		context.sendBroadcast(new Intent("com.android.music.musicservicecommand.previous"));
+		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
 	}
 	
 	public static void togglePause(Context context) {
-		context.sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
+		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
 	}
 	
 	public static void volumeDown(AudioManager audioManager) {
@@ -62,5 +64,18 @@ public class MediaControl {
 	
 	public static void volumeUp(AudioManager audioManager) {
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+	}
+	
+	private static void sendMediaButtonEvent(Context context, int keyCode)
+	{
+		long time = SystemClock.uptimeMillis();
+		Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+		KeyEvent downEvent = new KeyEvent(time, time, KeyEvent.ACTION_DOWN, keyCode, 0);
+		downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+		context.sendOrderedBroadcast(downIntent, null);
+		Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+		KeyEvent upEvent = new KeyEvent(time, time, KeyEvent.ACTION_UP, keyCode, 0);
+		upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+		context.sendOrderedBroadcast(upIntent, null);
 	}
 }

@@ -42,8 +42,11 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Debug;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -159,7 +162,7 @@ public class Test extends Activity {
 	    case R.id.test: {
 	    	//Protocol.test(this);
 	    	//NotificationBuilder.createSMS(this, "555-123-4567", "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20.");
-	    	Protocol.setNvalTime(true);
+	    	//Protocol.setNvalTime(true);
 	    	//Protocol.configureMode();
 	    	//Protocol.readButtonConfiguration();
 	    	//Protocol.enableMediaButtons();
@@ -170,6 +173,13 @@ public class Test extends Activity {
 			Protocol.sendLcdBitmap(Protocol.createTextBitmap(this, "abc"), true);
 			Protocol.updateDisplay(2);
 			*/
+
+	    	//Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+	    	//KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
+	    	//intent.putExtra(Intent.EXTRA_KEY_EVENT, event);
+	    	//sendOrderedBroadcast(intent, null);
+
+	    	
 	    }
 	        return true;
 	        
@@ -207,6 +217,11 @@ public class Test extends Activity {
 	    	Protocol.ledChange(false);
 	    	return true;
 	    	
+	    case R.id.time_24hr:
+	    	Protocol.setNvalTime(true);
+	    	NotificationBuilder.createOtherNotification(this, "", "You'll need to reset your watch for this to take effect.");
+	    	return true;
+	    		    	
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
@@ -224,4 +239,6 @@ public class Test extends Activity {
 		if (MetaWatchService.testSmsLoop != null)
 			MetaWatchService.testSmsLoop.stop();
 	}
+	
+
 }

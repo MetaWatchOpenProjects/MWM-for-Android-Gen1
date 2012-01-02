@@ -315,6 +315,9 @@ public class MetaWatch extends Activity {
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
     	if (Protocol.isStalled()) {
     		textView.append("\n**CONNECTION STALLED**\n");
+    		stopService();
+    		startService();
+    		NotificationBuilder.createSmart(this, "Info", "Restarted stalled service");
     	}
     	
     }
