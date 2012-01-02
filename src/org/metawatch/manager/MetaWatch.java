@@ -56,6 +56,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -310,7 +311,8 @@ public class MetaWatch extends Activity {
     		}
     	}
     	
-    	textView.append("\nMessage Queue Length " + Protocol.getQueueLength() + "\n");
+    	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
+    	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
     	if (Protocol.isStalled()) {
     		textView.append("\n**CONNECTION STALLED**\n");
     	}
@@ -321,7 +323,7 @@ public class MetaWatch extends Activity {
     	final Calendar cal = Calendar.getInstance();
     	cal.setTimeInMillis(ticks);
     	Date date = cal.getTime();
-    	textView.append(date.toLocaleString());
+    	textView.append(DateFormat.getDateFormat(this).format(date)+" "+DateFormat.getTimeFormat(this).format(date));
     	textView.append("\n");
     }
     

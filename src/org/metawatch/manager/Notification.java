@@ -56,6 +56,7 @@ public class Notification {
 	private static void addToNotificationQueue(NotificationType notification) {
 		if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
 			notificationQueue.add(notification);
+			MetaWatchService.notifyClients();
 		}
 	}
 
@@ -442,8 +443,11 @@ public class Notification {
 		notifyButtonPress = button;
 		synchronized (Notification.buttonPressed) {
 			Notification.buttonPressed.notify();	
-		}
-		
+		}		
+	}
+	
+	public static int getQueueLength() {
+		return notificationQueue.size();
 	}
 
 }
