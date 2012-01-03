@@ -187,7 +187,7 @@ public class Protocol {
 
 	public static void enqueue(byte[] bytes) {
 		
-		if (sendQueue.size() > 0 && queueStalled==false) {
+		if ( (sendQueue.size() > 0 /*|| Notification.getQueueLength() > 0*/) && queueStalled==false) {
 			long currentTime = System.currentTimeMillis();
 			long timeSinceSent;
 			synchronized (lastSentTimeLock) {
@@ -973,6 +973,12 @@ public class Protocol {
 	public static boolean isStalled() {
 		synchronized (lastSentTimeLock) {
 			return queueStalled;
+		}
+	}
+	
+	public static void resetStalledFlag() {
+		synchronized (lastSentTimeLock) {
+			queueStalled=false;
 		}
 	}
 

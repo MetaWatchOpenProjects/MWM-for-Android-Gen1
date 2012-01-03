@@ -65,6 +65,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -314,12 +315,15 @@ public class MetaWatch extends Activity {
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
     	if (Protocol.isStalled()) {
-    		textView.append("\n**CONNECTION STALLED**\n");
-    		stopService();
-    		startService();
-    		NotificationBuilder.createSmart(this, "Info", "Restarted stalled service");
-    	}
-    	
+    		if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
+	    		textView.append("\n**CONNECTION STALLED**\n");
+	    		Toast.makeText(this, "Restarting stalled connection", Toast.LENGTH_SHORT);
+	    		Protocol.resetStalledFlag();
+	    		stopService();
+	    		startService();
+	    		Log.d(MetaWatch.TAG, "Restarted stalled service");
+    		}
+    	}	
     }
     
     private void printDate(long ticks) {
@@ -356,21 +360,9 @@ public class MetaWatch extends Activity {
                         MetaWatchService.Msg.REGISTER_CLIENT);
                 msg.replyTo = mMessenger;
                 mService.send(msg);
-
-                //// Give it some value as an example.
-                //msg = Message.obtain(null,
-                //        MessengerService.MSG_SET_VALUE, this.hashCode(), 0);
-                //mService.send(msg);
             } catch (RemoteException e) {
-                // In this case the service has crashed before we could even
-                // do anything with it; we can count on soon being
-                // disconnected (and then reconnected if it can be restarted)
-                // so there is no need to do anything here.
-            }
 
-            // As part of the sample, tell the user what happened.
-            //Toast.makeText(Binding.this, R.string.remote_service_connected,
-            //        Toast.LENGTH_SHORT).show();
+            }
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -378,10 +370,6 @@ public class MetaWatch extends Activity {
             // unexpectedly disconnected -- that is, its process crashed.
             mService = null;
             textView.append("Disconnected from service\n");
-
-            //// As part of the sample, tell the user what happened.
-            //Toast.makeText(Binding.this, R.string.remote_service_disconnected,
-            //        Toast.LENGTH_SHORT).show();
         }
     };
 

@@ -42,19 +42,14 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Debug;
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class Test extends Activity {
 	
-	final String smsText = "To be, or not to be: that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take arms against a sea of troubles, And by opposing end them? To die: to sleep; No more; and by a sleep to say we end The heart-ache and the thousand natural shocks That flesh is heir to, 'tis a consummation Devoutly to be wish'd. To die, to sleep; To sleep: perchance to dream: ay, there's the rub; For in that sleep of death what dreams may come When we have shuffled off this mortal coil, Must give us pause: there's the respect That makes calamity of so long life; For who would bear the whips and scorns of time, The oppressor's wrong, the proud man's contumely, The pangs of despised love, the law's delay,";
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -102,6 +97,10 @@ public class Test extends Activity {
 	    		Application.stopAppMode(this);
 	        return true;
 	    case R.id.sms:	   
+	    	String smsText = "";
+	    	for(int i=0;i<20;++i) {
+	    		smsText += "SMS Line "+i+"\n";
+	    	}
 	    	NotificationBuilder.createSMS(this, "555-123-456", smsText);
 	        return true;
 	    case R.id.testShortMessage:	   
@@ -178,6 +177,8 @@ public class Test extends Activity {
 	    	//KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
 	    	//intent.putExtra(Intent.EXTRA_KEY_EVENT, event);
 	    	//sendOrderedBroadcast(intent, null);
+	    	
+	    	Protocol.stopProtocolSender();
 
 	    	
 	    }
