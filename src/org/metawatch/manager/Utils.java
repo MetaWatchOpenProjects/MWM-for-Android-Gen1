@@ -79,21 +79,25 @@ public class Utils {
 	public static int getUnreadSmsCount(Context context) {
 
 		int count = 0;
-
-		Cursor cursor = context.getContentResolver().query(
-				Uri.withAppendedPath(Uri.parse("content://sms"), "inbox"), 
-				new String[] { "_id" }, 
-				"read=0", 
-				null, 
-				null
-			);
-		
-		if (cursor != null) {
-			try {
-				count = cursor.getCount();
-			} finally {
-				cursor.close();
+		try {
+			Cursor cursor = context.getContentResolver().query(
+					Uri.withAppendedPath(Uri.parse("content://sms"), "inbox"), 
+					new String[] { "_id" }, 
+					"read=0", 
+					null, 
+					null
+				);
+			
+			if (cursor != null) {
+				try {
+					count = cursor.getCount();
+				} finally {
+					cursor.close();
+				}
 			}
+		}
+		catch (java.lang.IllegalStateException e) {
+			Log.d(MetaWatch.TAG, "Failed to query SMS content provider");
 		}
 		return count;
 	}
