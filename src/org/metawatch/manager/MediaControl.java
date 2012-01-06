@@ -57,6 +57,19 @@ public class MediaControl {
 	public static void togglePause(Context context) {
 		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
 	}
+
+	public static void AnswerCall(Context context) {
+		sendMediaButtonEvent(context, KeyEvent.KEYCODE_HEADSETHOOK, "android.permission.CALL_PRIVILEGED");
+	}
+
+	public static void DismissCall(Context context) {
+		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+	}
+
+	public static void ToggleSpeakerphone(AudioManager audioManager) {
+		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
+	}
+
 	
 	public static void volumeDown(AudioManager audioManager) {
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
@@ -66,16 +79,22 @@ public class MediaControl {
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
 	}
 	
+
 	private static void sendMediaButtonEvent(Context context, int keyCode)
+	{
+		sendMediaButtonEvent(context, keyCode, null);
+	}
+	
+	private static void sendMediaButtonEvent(Context context, int keyCode, String permission)
 	{
 		long time = SystemClock.uptimeMillis();
 		Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
 		KeyEvent downEvent = new KeyEvent(time, time, KeyEvent.ACTION_DOWN, keyCode, 0);
 		downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
-		context.sendOrderedBroadcast(downIntent, null);
+		context.sendOrderedBroadcast(downIntent, permission);
 		Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
 		KeyEvent upEvent = new KeyEvent(time, time, KeyEvent.ACTION_UP, keyCode, 0);
 		upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
-		context.sendOrderedBroadcast(upIntent, null);
+		context.sendOrderedBroadcast(upIntent, permission);
 	}
 }

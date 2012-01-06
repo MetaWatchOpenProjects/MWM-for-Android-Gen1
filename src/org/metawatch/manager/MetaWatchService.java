@@ -799,6 +799,19 @@ public class MetaWatchService extends Service {
 				Idle.NextPage();
 				Idle.updateLcdIdle(this);
 				break;
+				
+			case Call.CALL_SPEAKER:
+				MediaControl.ToggleSpeakerphone(audioManager);
+				break;
+				
+			case Call.CALL_ANSWER:
+				MediaControl.AnswerCall(context);
+				break;
+				
+			case Call.CALL_DISMISS:
+				MediaControl.DismissCall(context);
+				break;
+		
 			}
 			/*
 			 * if (Idle.isIdleButtonOverriden(button)) { Log.d(MetaWatch.TAG,
