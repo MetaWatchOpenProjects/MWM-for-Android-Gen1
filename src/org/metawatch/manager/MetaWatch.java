@@ -240,7 +240,7 @@ public class MetaWatch extends Activity {
 						"<h1>MetaWatch</h1>" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
 						"<p>Modified by Dobie Wollert, Chris Sewell, Prash D, Craig Oliver and Richard Munn.</p>" +
-						"<p>© Copyright 2011 Meta Watch Ltd.</p>" +
+						"<p>© Copyright 2011-2012 Meta Watch Ltd.</p>" +
 						"</body></html>";
         webView.loadData(html, "text/html", "utf-8");
         
@@ -317,11 +317,13 @@ public class MetaWatch extends Activity {
     	if (Protocol.isStalled()) {
     		if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
 	    		textView.append("\n**CONNECTION STALLED**\n");
-	    		Toast.makeText(this, "Restarting stalled connection", Toast.LENGTH_SHORT);
-	    		Protocol.resetStalledFlag();
-	    		stopService();
-	    		startService();
-	    		Log.d(MetaWatch.TAG, "Restarted stalled service");
+	    		if (Preferences.autoRestart) {
+		    		Toast.makeText(this, "Restarting stalled connection", Toast.LENGTH_SHORT);
+		    		Protocol.resetStalledFlag();
+		    		stopService();
+		    		startService();
+		    		Log.d(MetaWatch.TAG, "Restarted stalled service");
+	    		}
     		}
     	}	
     }
