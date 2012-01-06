@@ -152,6 +152,7 @@ public class MetaWatchService extends Service {
 		public static int fontSize = 2;
 		public static int smsLoopInterval = 15;
 		public static boolean idleMusicControls = false;
+		public static int idleMusicControlMethod = MediaControl.MEDIACONTROL_MUSICSERVICECOMMAND;
 		public static boolean idleReplay = false;
 		public static boolean notificationLarger = false;
 		public static boolean disableWeather = false;
@@ -209,6 +210,9 @@ public class MetaWatchService extends Service {
 				"WundergroundKey", Preferences.wundergroundKey);
 		Preferences.idleMusicControls = sharedPreferences.getBoolean(
 				"IdleMusicControls", Preferences.idleMusicControls);
+		Preferences.idleMusicControlMethod = Integer.parseInt(
+				sharedPreferences.getString("IdleMusicControlMethod", 
+				Integer.toString(Preferences.idleMusicControlMethod)));
 		Preferences.idleReplay = sharedPreferences.getBoolean("IdleReplay",
 				Preferences.idleReplay);
 		Preferences.disableWeather = sharedPreferences.getBoolean(

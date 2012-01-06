@@ -222,6 +222,18 @@ public class Test extends Activity {
 	    	Protocol.setNvalTime(true);
 	    	NotificationBuilder.createOtherNotification(this, "", "You'll need to reset your watch for this to take effect.");
 	    	return true;
+	    	
+	    case R.id.media_next:
+	    	MediaControl.next(this);
+	    	return true;
+	    	
+	    case R.id.media_previous:
+	    	MediaControl.previous(this);
+	    	return true;
+	    	
+	    case R.id.media_togglepause:
+	    	MediaControl.togglePause(this);
+	    	return true;
 	    		    	
 	    default:
 	        return super.onOptionsItemSelected(item);

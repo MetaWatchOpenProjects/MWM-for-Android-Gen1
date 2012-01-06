@@ -248,6 +248,16 @@
 			android:summary="Enable music controls on Idle screen"
 			android:defaultValue="false"
 			/>
+		<ListPreference 
+			android:entries="@array/settings_media_control_method_names" 
+			android:entryValues="@array/settings_media_control_method_values" 
+			android:dialogTitle="Media Control Method" 
+			android:key="IdleMusicControlMethod" 
+			android:title="Media Control Method" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="0"
+ 			/>	
 		<CheckBoxPreference
 			android:title="Invert LCD"
 			android:key="InvertLCD"

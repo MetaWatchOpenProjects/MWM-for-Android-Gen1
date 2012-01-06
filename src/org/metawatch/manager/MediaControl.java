@@ -32,6 +32,8 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -40,6 +42,9 @@ import android.view.KeyEvent;
 
 public class MediaControl {
 	
+	final static int MEDIACONTROL_MUSICSERVICECOMMAND = 0;
+	final static int MEDIACONTROL_EMULATE_HEADSET = 1;
+	
 	final static byte VOLUME_UP = 10;
 	final static byte VOLUME_DOWN = 11;
 	final static byte NEXT = 15;
@@ -47,15 +52,30 @@ public class MediaControl {
 	final static byte TOGGLE = 20;
 	
 	public static void next(Context context) {
-		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
+		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.next"));
+		}
+		else {
+			sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
+		}
 	}
 	
 	public static void previous(Context context) {
-		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.previous"));
+		}
+		else {
+			sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+		}
 	}
 	
 	public static void togglePause(Context context) {
-		sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
+		}
+		else {
+			sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+		}
 	}
 
 	public static void AnswerCall(Context context) {
@@ -70,7 +90,6 @@ public class MediaControl {
 		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
 	}
 
-	
 	public static void volumeDown(AudioManager audioManager) {
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
 	}

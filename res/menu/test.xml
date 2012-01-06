@@ -34,4 +34,10 @@
     <item android:id="@+id/dump_hprof" android:title="Dump Hprof data"></item>
     <item android:id="@+id/led_on" android:title="LED On (LCD)"></item>
     <item android:id="@+id/led_off" android:title="LED Off (LCD)"></item>
+    <item android:id="@+id/time_24hr" android:title="Set to 24hr mode (LCD)"></item>
+    <item android:id="@+id/media_next" android:title="Media Control: Next"></item>
+    <item android:id="@+id/media_previous" android:title="Media Control: Previous"></item>
+    <item android:id="@+id/media_togglepause" android:title="Media Control: Toggle Play/Pause"></item>
+    
+    
 </menu>
