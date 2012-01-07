@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.metawatch.manager"
       android:versionCode="1"
-      android:installLocation="internalOnly" android:versionName="0.2.4.rm8">
+      android:installLocation="internalOnly" android:versionName="0.2.4.rm8a">
     <uses-sdk android:minSdkVersion="7" />
     <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
     
@@ -83,6 +83,7 @@
             	<action android:name="com.htc.android.worldclock.ALARM_ALERT" />
             	<action android:name="com.android.deskclock.ALARM_ALERT" />
             	<action android:name="com.sonyericsson.alarm.ALARM_ALERT" />
+            	<action android:name="com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED" />
             	<action android:name="com.motorola.blur.alarmclock.ALARM_ALERT" />
             	<action android:name="com.motorola.blur.alarmclock.COUNT_DOWN" />
             </intent-filter>

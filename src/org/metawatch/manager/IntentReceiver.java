@@ -205,7 +205,8 @@ public class IntentReceiver extends BroadcastReceiver {
 				|| intent.getAction().equals(
 						"mobi.beyondpod.action.PLAYBACK_STATUS")
 				|| intent.getAction().equals("com.htc.music.metachanged")
-				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
+				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")
+				|| intent.getAction().equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED")) {
 			if (!MetaWatchService.Preferences.notifyMusic)
 				return;
 
@@ -224,10 +225,16 @@ public class IntentReceiver extends BroadcastReceiver {
 
 			if (intent.hasExtra("artist"))
 				artist = intent.getStringExtra("artist");
+			else if (intent.hasExtra("ARTIST_NAME"))
+				artist = intent.getStringExtra("ARTIST_NAME");
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
+			else if (intent.hasExtra("TRACK_NAME"))
+				track = intent.getStringExtra("TRACK_NAME");
 			if (intent.hasExtra("album"))
 				album = intent.getStringExtra("album");
+			else if (intent.hasExtra("ALBUM_NAME"))
+				album = intent.getStringExtra("ALBUM_NAME");
 			
 			/* Ignore if track info hasn't changed. */
 			if (artist.equals(lastArtist) && track.equals(lastTrack) && album.equals(lastAlbum)) {
