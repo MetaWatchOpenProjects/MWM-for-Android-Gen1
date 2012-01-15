@@ -148,7 +148,7 @@ public class Test extends Activity {
 	        return true;
 	    case R.id.activate_buffer:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)
-	    		Protocol.activateBuffer(0);
+	    		//Protocol.activateBuffer(0);
 	        return true;
 	    case R.id.update_display:
 	    	if (MetaWatchService.watchType == WatchType.DIGITAL)

@@ -62,6 +62,8 @@ public class Protocol {
 	private static boolean queueStalled = false;
 	private static Object lastSentTimeLock = new Object();
 	
+	private static boolean idleShowClock = true;
+	
 	private static byte[][][] LCDDiffBuffer = new byte[3][48][30];
 	
 	public static void resetLCDDiffBuffer() {
@@ -153,7 +155,7 @@ public class Protocol {
 			return;
 
 		int i = 0;
-		if (bufferType == MetaWatchService.WatchBuffers.IDLE)
+		if (bufferType == MetaWatchService.WatchBuffers.IDLE && idleShowClock)
 			i = 30;
 
 		int sentLines = 0;
@@ -183,6 +185,11 @@ public class Protocol {
 		}
 		Log.d(MetaWatch.TAG, "Sent "+sentLines+ "/96");
 
+	}
+	
+	public static void idleShowClock(boolean show) {
+		idleShowClock = show;
+		
 	}
 
 	public static void enqueue(byte[] bytes) {
@@ -402,18 +409,6 @@ public class Protocol {
 		enqueue(bytes);
 	}
 
-	public static void activateBuffer(int mode) {
-		Log.d(MetaWatch.TAG, "Protocol.activateBuffer(): mode="+mode);
-		byte[] bytes = new byte[4];
-
-		bytes[0] = eMessageType.start;
-		bytes[1] = (byte) (bytes.length+2); // length
-		bytes[2] = eMessageType.ConfigureIdleBufferSize.msg; // activate buffer
-		bytes[3] = (byte) mode;
-
-		enqueue(bytes);
-	}
-
 	public static void updateDisplay(int bufferType) {
 		Log.d(MetaWatch.TAG, "Protocol.updateDisplay(): bufferType="+bufferType);
 		byte[] bytes = new byte[4];
@@ -477,10 +472,6 @@ public class Protocol {
 			//processSendQueue();
 		//}
 	}
-
-	public static void enableButton(int button, int type, int code) {
-		enableButton(button,type,code,0);
-	}
 	
 	public static void enableButton(int button, int type, int code, int mode) {
 		Log.d(MetaWatch.TAG, "Protocol.enableButton(): button="+button+" type="+type+" code=" + code);
@@ -498,10 +489,6 @@ public class Protocol {
 		bytes[8] = (byte) code;
 
 		enqueue(bytes);
-	}
-
-	public static void disableButton(int button, int type) {
-		disableButton(button,type,0);
 	}
 	
 	public static void disableButton(int button, int type, int mode) {
@@ -521,40 +508,41 @@ public class Protocol {
 	}
 
 	public static void enableReplayButton() {
-		enableButton(1, 0, REPLAY);
+		enableButton(1, 0, REPLAY, 0);
 	}
 
 	public static void disableReplayButton() {
-		disableButton(1, 0);
+		disableButton(1, 0, 0);
 	}
 
 	public static void enableMediaButtons() {
-		// enableMediaButton(0); // right top
-		// enableMediaButton(1); // right middle
-		// enableMediaButton(2); // right bottom
+		Log.d(MetaWatch.TAG, "enableMediaButtons()");
 
-		enableButton(3, 0, 0); // left bottom
-		enableButton(3, 1, MediaControl.VOLUME_DOWN); // left bottom
-		enableButton(3, 2, MediaControl.PREVIOUS); // left bottom
+		enableButton(1, 0, MediaControl.TOGGLE, 0); // right middle - immediate
 
-		// enableMediaButton(5, 0, 0); // left middle
-		enableButton(5, 0, MediaControl.TOGGLE); // left middle
-
-		enableButton(6, 0, 0); // left top
-		enableButton(6, 1, MediaControl.VOLUME_UP); // left top
-		enableButton(6, 2, MediaControl.NEXT); // left top
+		enableButton(5, 0, MediaControl.VOLUME_DOWN, 0); // left middle - press
+		enableButton(5, 2, MediaControl.PREVIOUS, 0); // left middle - hold
+		enableButton(5, 3, MediaControl.PREVIOUS, 0); // left middle - long hold
+		
+		enableButton(6, 0, MediaControl.VOLUME_UP, 0); // left top - press
+		enableButton(6, 2, MediaControl.NEXT, 0); // left top - hold
+		enableButton(6, 3, MediaControl.NEXT, 0); // left top - long hold
 	}
 
 	public static void disableMediaButtons() {
-		disableButton(3, 0);
-		disableButton(3, 1);
-		disableButton(3, 2);
+		Log.d(MetaWatch.TAG, "disableMediaButtons()");
+		
+		disableButton(1, 0, 0);
+	
+		disableButton(5, 0, 0);
+		disableButton(5, 1, 0);
+		disableButton(5, 2, 0);
+		disableButton(5, 3, 0);
 
-		disableButton(5, 0);
-
-		disableButton(6, 0);
-		disableButton(6, 1);
-		disableButton(6, 2);
+		disableButton(6, 0, 0);
+		disableButton(6, 1, 0);
+		disableButton(6, 2, 0);
+		disableButton(6, 3, 0);
 	}
 
 	public static void readButtonConfiguration() {
@@ -590,6 +578,24 @@ public class Protocol {
 		enqueue(bytes);
 	}
 
+	public static void configureIdleBufferSize(boolean showClock) {
+		Log.d(MetaWatch.TAG, "Protocol.configureIdleBufferSize("+showClock+")");
+		
+		//if(idleShowClock !=showClock) {
+			idleShowClock = showClock;
+			
+			byte[] bytes = new byte[5];
+	
+			bytes[0] = eMessageType.start;
+			bytes[1] = (byte) (bytes.length+2); // length
+			bytes[2] = eMessageType.ConfigureIdleBufferSize.msg; 
+			bytes[3] = 0;
+			bytes[4] = (byte) (idleShowClock ? 0 : 1);
+			
+			enqueue(bytes);
+		//}
+	}
+	
 	public static void getDeviceType() {
 		Log.d(MetaWatch.TAG, "Protocol.getDeviceType()");
 		byte[] bytes = new byte[4];

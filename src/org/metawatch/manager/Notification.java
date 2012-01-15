@@ -184,10 +184,10 @@ public class Notification {
 					if (notification.timeout < 0) {
 						//notifyButtonPress = 0;
 						if (notification.bitmaps!=null & notification.bitmaps.length>1) {
-							Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top
-							Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle
+							Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top immediate
+							Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle immediate
 						}
-						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom
+						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom immediate
 
 						Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Notification sent, waiting for dismiss " );

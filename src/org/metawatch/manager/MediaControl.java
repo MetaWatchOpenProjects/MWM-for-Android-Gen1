@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.KeyEvent;
 
 public class MediaControl {
@@ -51,7 +52,14 @@ public class MediaControl {
 	final static byte PREVIOUS = 16;
 	final static byte TOGGLE = 20;
 	
+	static String lastArtist = "";
+	static String lastAlbum = "";
+	static String lastTrack = "";
+	
+	static boolean mediaPlayerActive = false;
+	
 	public static void next(Context context) {
+		Log.d(MetaWatch.TAG, "MediaControl.next()");
 		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.next"));
 		}
@@ -61,6 +69,7 @@ public class MediaControl {
 	}
 	
 	public static void previous(Context context) {
+		Log.d(MetaWatch.TAG, "MediaControl.previous()");
 		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.previous"));
 		}
@@ -70,6 +79,7 @@ public class MediaControl {
 	}
 	
 	public static void togglePause(Context context) {
+		Log.d(MetaWatch.TAG, "MediaControl.togglePause()");
 		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
 		}
@@ -91,10 +101,12 @@ public class MediaControl {
 	}
 
 	public static void volumeDown(AudioManager audioManager) {
+		Log.d(MetaWatch.TAG, "MediaControl.volumeDown()");
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
 	}
 	
 	public static void volumeUp(AudioManager audioManager) {
+		Log.d(MetaWatch.TAG, "MediaControl.volumeUp()");
 		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
 	}
 	

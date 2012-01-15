@@ -56,7 +56,7 @@ public class NotificationBuilder {
 	
 	public static final String DEFAULT_NUMBER_OF_BUZZES = "3";
 	
-	private static VibratePattern createVibratePatternFromPreference(Context context, String preferenceName) {
+	public static VibratePattern createVibratePatternFromPreference(Context context, String preferenceName) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String buzzPref = sharedPreferences.getString(preferenceName, DEFAULT_NUMBER_OF_BUZZES); 
 		int numberOfBuzzes = Integer.parseInt(buzzPref);

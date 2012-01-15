@@ -124,8 +124,8 @@ public class MetaWatch extends Activity {
 			startActivity(new Intent(getApplicationContext(), DeviceSelection.class));
 		}
 		
-		if (Preferences.idleMusicControls)
-			Protocol.enableMediaButtons();
+		//if (Preferences.idleMusicControls)
+		//	Protocol.enableMediaButtons();
 		//else 
 			//Protocol.disableMediaButtons();
 		

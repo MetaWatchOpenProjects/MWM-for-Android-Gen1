@@ -670,8 +670,8 @@ public class MetaWatchService extends Service {
 					Log.d(MetaWatch.TAG,
 							"MetaWatchService.readFromDevice(): device type response; digital watch");
 
-					if (Preferences.idleMusicControls)
-						Protocol.enableMediaButtons();
+					//if (Preferences.idleMusicControls)
+					//	Protocol.enableMediaButtons();
 					// else
 					// Protocol.disableMediaButtons();
 

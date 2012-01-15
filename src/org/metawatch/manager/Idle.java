@@ -41,6 +41,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -53,16 +54,29 @@ public class Idle {
 	
 	final static byte IDLE_NEXT_PAGE = 60;
 
-	final static int NUM_PAGES = 1;
+	final static int NUM_PAGES = 2;
 	static int currentPage = 0;
 	
 	public static void NextPage() {
+		
+		if(currentPage==1) {
+			Protocol.disableMediaButtons();
+			Log.d(MetaWatch.TAG, "Leaving media mode");
+			MediaControl.mediaPlayerActive = false;
+		}
+		
 		currentPage = (currentPage+1) % NUM_PAGES;
+		
+		if(currentPage==1) {
+			Protocol.enableMediaButtons();
+			Log.d(MetaWatch.TAG, "Entering media mode");
+			MediaControl.mediaPlayerActive = true;
+		}
 	}
 	
-	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint) {
+	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint, android.text.Layout.Alignment align) {
 		canvas.save();
-		StaticLayout layout = new StaticLayout(text, paint, width, android.text.Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+		StaticLayout layout = new StaticLayout(text, paint, width, align, 1.0f, 0, false);
 		canvas.translate(x, y); //position the text
 		layout.draw(canvas);
 		canvas.restore();	
@@ -77,13 +91,13 @@ public class Idle {
 		canvas.drawText(text, x, y, col);
 	}
 	
-	static void drawWrappedOutlinedText(String text, Canvas canvas, int x, int y, int width, TextPaint col, TextPaint outline) {
-		drawWrappedText(text, canvas, x-1, y, width, outline);
-		drawWrappedText(text, canvas, x+1, y, width, outline);
-		drawWrappedText(text, canvas, x, y-1, width, outline);
-		drawWrappedText(text, canvas, x, y+1, width, outline);
+	static void drawWrappedOutlinedText(String text, Canvas canvas, int x, int y, int width, TextPaint col, TextPaint outline, android.text.Layout.Alignment align) {
+		drawWrappedText(text, canvas, x-1, y, width, outline, align);
+		drawWrappedText(text, canvas, x+1, y, width, outline, align);
+		drawWrappedText(text, canvas, x, y-1, width, outline, align);
+		drawWrappedText(text, canvas, x, y+1, width, outline, align);
 		
-		drawWrappedText(text, canvas, x, y, width, col);
+		drawWrappedText(text, canvas, x, y, width, col, align);
 	}
 
 	static Bitmap createLcdIdle(Context context) {
@@ -105,12 +119,19 @@ public class Idle {
 		paintLarge.setTextSize(FontCache.instance(context).Large.size);
 		paintLarge.setTypeface(FontCache.instance(context).Large.face);
 		
+		TextPaint paintLargeOutline = new TextPaint();
+		paintLargeOutline.setColor(Color.WHITE);
+		paintLargeOutline.setTextSize(FontCache.instance(context).Large.size);
+		paintLargeOutline.setTypeface(FontCache.instance(context).Large.face);
+		
 		canvas.drawColor(Color.WHITE);
 		
 		canvas = drawLine(canvas, 32);		
 		
 		if( currentPage == 0 ) {
 		
+			Protocol.configureIdleBufferSize(true);
+			
 			if(!Preferences.disableWeather) {
 				if (WeatherData.received) {
 					
@@ -123,9 +144,8 @@ public class Idle {
 					canvas.drawBitmap(image, 36, 37, null);
 					
 					// condition
-					drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline);
-					
-					
+					drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_NORMAL);
+										
 					// temperatures
 					if (WeatherData.celsius) {
 						paintLarge.setTextAlign(Paint.Align.RIGHT);
@@ -175,79 +195,87 @@ public class Idle {
 				//canvas.drawText(currentTimeString, 0, 56, paintSmall);
 				
 				canvas = drawLine(canvas, 64);
-			}
-			
-		}	
-		//else if (currentPage == 1) {
-		//	canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test.bmp"), 0, 32, null);
-		//}
-		
-		// icons row
-		//Bitmap imageI = Utils.loadBitmapFromAssets(context, "idle_icons_row.bmp");
-		//canvas.drawBitmap(imageI, 0, 66, null);
-				
-		int rows = 3;
-		/*
-		if (Utils.isGmailAccessSupported(context))
-			rows = 3;
-		else
-			rows = 2;
-		*/
-		int yPos = !Preferences.disableWeather ? 67 : 36;
-		// icons
-		for (int i = 0; i < rows; i++) {
-			int slotSpace = 96/rows;
-			int slotX = slotSpace/2-12;
-			int iconX = slotSpace*i + slotX;
-			switch (i) {
-				case 0:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_call.bmp"), iconX, yPos, null);
-					break;
-				case 1:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), iconX, yPos, null);
-					break;
-				case 2:
-					canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), iconX, yPos, null);
-					break;
-			}
-		}
-				
-		// unread counters
-		for (int i = 0; i < rows; i++) {
-			String count = "";
-			switch (i) {
-				case 0:
-					count = Integer.toString(Utils.getMissedCallsCount(context));	
-					break;
-				case 1:
-					count = Integer.toString(Utils.getUnreadSmsCount(context));
-					break;
-				case 2:
-					if(Preferences.showK9Unread) {
-						Log.d(MetaWatch.TAG, "Idle: About to draw k9 count.");
-						count = Integer.toString(Utils.getUnreadK9Count(context));
-						Log.d(MetaWatch.TAG, "Idle: k9 count is " + count);
-					}
-					else {
-						Log.d(MetaWatch.TAG, "Idle: About to draw Gmail count.");
-						if (Utils.isGmailAccessSupported(context))
-							count = Integer.toString(Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i"));
-						else 
-							count = Integer.toString(Monitors.getGmailUnreadCount());
-						Log.d(MetaWatch.TAG, "Idle: Gmail count is " + count);
-					}
-					break;				
+			}		
+					
+			int rows = 3;
+			int yPos = !Preferences.disableWeather ? 67 : 36;
+			// icons
+			for (int i = 0; i < rows; i++) {
+				int slotSpace = 96/rows;
+				int slotX = slotSpace/2-12;
+				int iconX = slotSpace*i + slotX;
+				switch (i) {
+					case 0:
+						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_call.bmp"), iconX, yPos, null);
+						break;
+					case 1:
+						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), iconX, yPos, null);
+						break;
+					case 2:
+						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), iconX, yPos, null);
+						break;
+				}
 			}
 					
-			int slotSpace = 96/rows;
-			int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2)+1;
-			int countX = slotSpace*i + slotX;
+			// unread counters
+			for (int i = 0; i < rows; i++) {
+				String count = "";
+				switch (i) {
+					case 0:
+						count = Integer.toString(Utils.getMissedCallsCount(context));	
+						break;
+					case 1:
+						count = Integer.toString(Utils.getUnreadSmsCount(context));
+						break;
+					case 2:
+						if(Preferences.showK9Unread) {
+							Log.d(MetaWatch.TAG, "Idle: About to draw k9 count.");
+							count = Integer.toString(Utils.getUnreadK9Count(context));
+							Log.d(MetaWatch.TAG, "Idle: k9 count is " + count);
+						}
+						else {
+							Log.d(MetaWatch.TAG, "Idle: About to draw Gmail count.");
+							if (Utils.isGmailAccessSupported(context))
+								count = Integer.toString(Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i"));
+							else 
+								count = Integer.toString(Monitors.getGmailUnreadCount());
+							Log.d(MetaWatch.TAG, "Idle: Gmail count is " + count);
+						}
+						break;				
+				}
+						
+				int slotSpace = 96/rows;
+				int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2)+1;
+				int countX = slotSpace*i + slotX;
+				
+				canvas.drawText(count, countX, !Preferences.disableWeather ? 92 : 62, paintSmall);
+			}
+			if(Preferences.disableWeather) {
+				canvas = drawLine(canvas, 64);
+				//Add more icons here in future.
+			}
 			
-			canvas.drawText(count, countX, !Preferences.disableWeather ? 92 : 62, paintSmall);
 		}
-		if(Preferences.disableWeather) {
-			canvas = drawLine(canvas, 64);
-			//Add more icons here in future.
+		else if (currentPage == 1) {
+			Protocol.configureIdleBufferSize(false);
+			
+			if(MediaControl.lastTrack=="") {
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player_idle.bmp"), 0, 0, null);				
+			}
+			else {	
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player.bmp"), 0, 0, null);
+				
+				drawWrappedOutlinedText(MediaControl.lastTrack, canvas, 0, 10, 96, paintLarge, paintLargeOutline, Layout.Alignment.ALIGN_CENTER);
+				drawWrappedOutlinedText(MediaControl.lastAlbum + "\n\n" + MediaControl.lastArtist, canvas, 0, 60, 96, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_CENTER);
+			}
+		}
+		else if (currentPage == 2) {
+			Protocol.configureIdleBufferSize(true);
+			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test1.bmp"), 0, 32, null);
+		}
+		else if (currentPage == 3) {
+			Protocol.configureIdleBufferSize(true);
+			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test2.bmp"), 0, 32, null);
 		}
 		
 		/*
@@ -291,7 +319,7 @@ public class Idle {
 		}
 		
 		if (NUM_PAGES>1)
-			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 0); // Right top
+			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 0); // Right top immediate
 
 		
 		return true;
