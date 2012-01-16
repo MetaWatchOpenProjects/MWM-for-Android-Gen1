@@ -47,6 +47,10 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class Idle {
 	
@@ -265,8 +269,38 @@ public class Idle {
 			else {	
 				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player.bmp"), 0, 0, null);
 				
-				drawWrappedOutlinedText(MediaControl.lastTrack, canvas, 0, 10, 96, paintLarge, paintLargeOutline, Layout.Alignment.ALIGN_CENTER);
-				drawWrappedOutlinedText(MediaControl.lastAlbum + "\n\n" + MediaControl.lastArtist, canvas, 0, 60, 96, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_CENTER);
+				
+				TextPaint tp = null;
+				if( paintLarge.measureText(MediaControl.lastTrack) < 170) {
+					tp = paintLarge;
+				}
+				else {
+					tp = paintSmall;
+				}
+				
+				canvas.save();			
+				StaticLayout layout = new StaticLayout(MediaControl.lastTrack, tp, 96, Layout.Alignment.ALIGN_CENTER, 1.2f, 0, false);
+				int height = layout.getHeight();
+				int textY = 26 - (height/2);
+				if(textY<8) {
+					textY=8;
+				}
+				canvas.translate(0, textY); //position the text
+				canvas.clipRect(0,0,96,35);
+				layout.draw(canvas);
+				canvas.restore();	
+				
+				canvas.save();			
+				layout = new StaticLayout(MediaControl.lastArtist + "\n\n" + MediaControl.lastAlbum, paintSmall, 96, Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
+				height = layout.getHeight();
+				textY = 70 - (height/2);
+				if(textY<54) {
+					textY=54;
+				}
+				canvas.translate(0, textY); //position the text
+				canvas.clipRect(0,0,96,35);
+				layout.draw(canvas);
+				canvas.restore();	
 			}
 		}
 		else if (currentPage == 2) {
