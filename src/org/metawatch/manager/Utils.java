@@ -53,27 +53,32 @@ public class Utils {
 
 	public static String getContactNameFromNumber(Context context, String number) {
 		
-		if (number.equals(""))
-			return "Private number";
-
-		String[] projection = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.NUMBER };
-		Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-		Cursor c = context.getContentResolver().query(contactUri, projection, null, null, null);
-		
-		if (c==null)
-			return number;
-		
-		if (c.moveToFirst()) {
-			String name = c.getString(c.getColumnIndex(PhoneLookup.DISPLAY_NAME));
-
-			if (name.length() > 0)
-				return name;
-			else
+		try {
+			if (number.equals(""))
+				return "Private number";
+	
+			String[] projection = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.NUMBER };
+			Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+			Cursor c = context.getContentResolver().query(contactUri, projection, null, null, null);
+			
+			if (c==null)
 				return number;
+			
+			if (c.moveToFirst()) {
+				String name = c.getString(c.getColumnIndex(PhoneLookup.DISPLAY_NAME));
+	
+				if (name.length() > 0)
+					return name;
+				else
+					return number;
+			}
+			
+			c.close();
+			return number;
 		}
-		
-		c.close();
-		return number;		 
+		catch(java.lang.IllegalStateException e) {
+			return number;
+		}
 	}
 	
 	public static int getUnreadSmsCount(Context context) {
