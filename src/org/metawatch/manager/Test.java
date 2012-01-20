@@ -101,10 +101,10 @@ public class Test extends Activity {
 	    	for(int i=0;i<20;++i) {
 	    		smsText += "SMS Line "+i+"\n";
 	    	}
-	    	NotificationBuilder.createSMS(this, "555-123-456", smsText);
+	    	NotificationBuilder.createSMS(this, "555-123-4567", smsText);
 	        return true;
 	    case R.id.testShortMessage:	   
-	    	NotificationBuilder.createSMS(this, "555-123-456", "Hi.");
+	    	NotificationBuilder.createSMS(this, "555-123-4567", "Hi.");
 	        return true;
 	    case R.id.k9:	   
 	    	NotificationBuilder.createK9(this, "The Doctor <doctor@gallifrey.net>", "Now drop your weapons, or I'll kill him with this deadly jelly baby!", "tardis:INBOX");
@@ -178,9 +178,9 @@ public class Test extends Activity {
 	    	//intent.putExtra(Intent.EXTRA_KEY_EVENT, event);
 	    	//sendOrderedBroadcast(intent, null);
 	    	
-	    	Protocol.stopProtocolSender();
-
+	    	//Protocol.stopProtocolSender();
 	    	
+    	
 	    }
 	        return true;
 	        

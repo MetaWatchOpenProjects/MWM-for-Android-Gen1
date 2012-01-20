@@ -37,6 +37,11 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 
 public class Call {
 	
@@ -51,15 +56,59 @@ public class Call {
 		
 		isRinging = true;
 		
-		Bitmap bitmap;
-		String name = Utils.getContactNameFromNumber(context, number);
-		
-		if (name.equals(number))		
-			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", "Phone", new String[] { number });
-		else 
-			bitmap = NotificationBuilder.smartLines(context, "phone.bmp", "Phone", new String[] { number, name });
-		
+		String name = Utils.getContactNameFromNumber(context, number);	
+
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
+
+			//Bitmap bitmap;
+		
+			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
+			Canvas canvas = new Canvas(bitmap);
+			
+			TextPaint paintSmall = new TextPaint();
+			paintSmall.setColor(Color.BLACK);
+			paintSmall.setTextSize(FontCache.instance(context).Small.size);
+			paintSmall.setTypeface(FontCache.instance(context).Small.face);
+			
+			canvas.drawColor(Color.WHITE);
+			
+			int top = 0;
+			int centre = 48;
+			
+			Bitmap contactImage = Utils.getContactPhotoFromNumber(context, number);
+			if(contactImage!=null) {
+				int iconSize = 70;
+				contactImage = Utils.resize(contactImage,iconSize,iconSize);
+				contactImage = Utils.ditherTo1bit(contactImage, true);
+				canvas.drawBitmap(contactImage,(96-iconSize)/2,0,null);
+				
+				top = iconSize;
+				centre = (96+iconSize)/2;
+			}
+			else {
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "phone.bmp"), 0, 0, null);
+			}
+					
+			String displayText;
+			if (name.equals(number))
+				displayText = number;
+			else
+				displayText = name+"\n\n"+number;
+			
+			
+			canvas.save();			
+			StaticLayout layout = new StaticLayout(displayText, paintSmall, 96, Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
+			int height = layout.getHeight();
+			int textY = centre - (height/2);
+			if(textY<top) {
+				textY=top;
+			}
+			canvas.translate(0, textY); //position the text
+			canvas.clipRect(0,0,96,35);
+			layout.draw(canvas);
+			canvas.restore();
+			
+			
 			Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.NOTIFICATION);		
 			Protocol.updateDisplay(2);
 		} else {

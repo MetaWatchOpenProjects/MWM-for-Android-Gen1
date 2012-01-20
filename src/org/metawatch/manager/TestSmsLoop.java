@@ -46,7 +46,7 @@ public class TestSmsLoop implements Runnable {
 	public void run() {
 		runLoop = true;
 		for (int i = 1; runLoop; i++) {
-			NotificationBuilder.createSMS(context, "123-456-789", "\n  Test SMS #" + i);
+			NotificationBuilder.createSMS(context, "555-123-4567", "\n  Test SMS #" + i);
 			try {
 				Thread.sleep(MetaWatchService.Preferences.smsLoopInterval*1000);
 			} catch (InterruptedException e) {

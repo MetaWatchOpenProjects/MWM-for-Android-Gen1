@@ -32,6 +32,9 @@
 
 package org.metawatch.manager;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -43,9 +46,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
@@ -58,6 +65,7 @@ public class Utils {
 				return "Private number";
 	
 			String[] projection = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.NUMBER };
+			
 			Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
 			Cursor c = context.getContentResolver().query(contactUri, projection, null, null, null);
 			
@@ -79,6 +87,50 @@ public class Utils {
 		catch(java.lang.IllegalStateException e) {
 			return number;
 		}
+	}
+	
+	public static Bitmap getContactPhotoFromNumber(Context context, String number) {
+
+		try {
+			if (number.equals(""))
+				return null;
+	
+			String[] projection = new String[] {PhoneLookup.PHOTO_ID, PhoneLookup.NUMBER};
+			
+			Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+			Cursor c = context.getContentResolver().query(contactUri, projection, null, null, null);
+			
+			if (c==null)
+				return null;
+			
+			if (c.moveToFirst()) {
+				int photoID = c.getInt(c.getColumnIndex(PhoneLookup.PHOTO_ID));
+				c.close();
+
+				Uri photoUri = ContactsContract.Data.CONTENT_URI;
+				c = context.getContentResolver().query(photoUri, new String[]{ContactsContract.CommonDataKinds.Photo.PHOTO, ContactsContract.Data.PHOTO_ID}, Data.PHOTO_ID + " = " + photoID, null, null);
+				
+				if (c.moveToFirst() == true) {
+		            try {
+		            	ByteArrayInputStream rawPhotoStream = new ByteArrayInputStream(c.getBlob(c.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO)));
+		            	Bitmap contactPhoto = BitmapFactory.decodeStream(rawPhotoStream);
+		            	c.close();
+		            	return contactPhoto;
+		            }
+		            catch (NullPointerException ex) {
+		            	c.close();
+		            	return null;
+		            }
+		        }
+			}
+			
+			c.close();
+			return null;
+		}
+		catch(java.lang.IllegalStateException e) {
+			return null;
+		}
+
 	}
 	
 	public static int getUnreadSmsCount(Context context) {
@@ -282,6 +334,85 @@ public class Utils {
 			return BitmapFactory.decodeFile(path);
 	}
 	*/
+	
+	public static Bitmap ditherTo1bit(Bitmap input, boolean inverted) {
+	
+		Bitmap output = input.copy(Config.RGB_565, true);
+		
+		double[][] pixels = new double[input.getWidth()][input.getHeight()];
+		
+		final int w=input.getWidth();
+		final int h=input.getHeight();
+		
+		for(int y=0; y<h; ++y) {
+		   for(int x=0; x<w; ++x) {
+			   int col = input.getPixel(x, y);
+			   
+			   double R = ((col >> 16) & 0xff)/256.0; 
+		       double G = ((col >> 8) & 0xff)/256.0;
+		       double B = (col & 0xff)/256.0;
+		        
+		       pixels[x][y] = ( (0.3*R) + (0.59*G) + (0.11*B) );		        
+		   }
+		}
+		
+		for(int y=0; y<h; ++y) {
+			   for(int x=0; x<w; ++x) {
+				   double oldpixel = pixels[x][y];
+				   double newpixel = oldpixel<0.5 ? 0 : 1;
+				   	   
+				   pixels[x][y] = newpixel;
+				   double quant_error = oldpixel - newpixel;
+				   if(x<w-1)
+					   pixels[x+1][y] += 7.0/16.0 * quant_error;
+				   if(x>0 && y<h-1)
+					   pixels[x-1][y+1] += 3.0/16.0 * quant_error;
+				   if(y<h-1)
+					   pixels[x][y+1] += 5.0/16.0 * quant_error;
+				   if(x<w-1 && y<h-1)
+					   pixels[x+1][y+1] += 1.0/16.0 * quant_error;
+			
+				   int col = 0;
+				   if (inverted)
+					   col = newpixel > 0.5 ? 0xff000000 : 0xffffffff;   
+				   else
+					   col = newpixel > 0.5 ? 0xffffffff : 0xff000000;
+				   output.setPixel(x, y, col);
+			   
+			   }
+		}
+
+		return output;
+	}
+	
+	public static Bitmap resize(Bitmap bm, int newHeight, int newWidth) {
+
+		int width = bm.getWidth();
+		int height = bm.getHeight();
+
+		float scaleWidth = ((float) newWidth) / width;
+		float scaleHeight = ((float) newHeight) / height;
+
+		Matrix matrix = new Matrix();
+		matrix.postScale(scaleWidth, scaleHeight);
+
+		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+		return resizedBitmap;
+	}
+	
+	public static void dumpBitmapToSdCard(Bitmap bitmap) {
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("/sdcard/test.png");
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	public static String getVersion(Context context) {		
 		try {
