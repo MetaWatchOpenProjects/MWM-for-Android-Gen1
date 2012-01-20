@@ -206,8 +206,6 @@ public class IntentReceiver extends BroadcastReceiver {
 				|| intent.getAction().equals("com.htc.music.metachanged")
 				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")
 				|| intent.getAction().equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED")) {
-			if (!MetaWatchService.Preferences.notifyMusic)
-				return;
 
 			/* If the intent specifies a "playing" extra, use it. */
 			if (intent.hasExtra("playing")) {
@@ -244,6 +242,9 @@ public class IntentReceiver extends BroadcastReceiver {
 				MediaControl.lastTrack = track;
 				MediaControl.lastAlbum = album;
 			}
+			
+			if (!MetaWatchService.Preferences.notifyMusic)
+				return;
 			
 			if(MediaControl.mediaPlayerActive) {
 				VibratePattern vibratePattern = NotificationBuilder.createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
