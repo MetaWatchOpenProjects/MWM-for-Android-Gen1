@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MetaWatch</string>
+
+    <string name="settings_Main">Main</string>
+    
+	<string name="settings_StartOnBoot">Start On Boot</string>
+	<string name="settings_StartOnBoot_desc">Start MetaWatch service on boot</string>
+    
     
     <string name="settings_Notifications">Notifications</string>
 	<string name="settings_Call">Call</string>
@@ -30,5 +36,10 @@
 	</string-array>
     
     <string name="settings_Other">Other</string>
+    
+    <string name="activitiy_title_main"></string>
+    <string name="activitiy_title_tests">Tests</string>
+    <string name="activitiy_title_settings">Settings</string>
+    
     
 </resources>

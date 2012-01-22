@@ -56,6 +56,8 @@ public class Settings extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		context = this;
 		
+		setTitle(getString(R.string.app_name) + " - " + getString(R.string.activitiy_title_settings));
+		
 		addPreferencesFromResource(R.layout.settings);
 
 		preferenceScreen = getPreferenceScreen();

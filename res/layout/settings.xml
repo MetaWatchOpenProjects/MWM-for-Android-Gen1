@@ -3,6 +3,18 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	>
 	<PreferenceCategory
+		android:title="@string/settings_Main"
+		>
+    		<CheckBoxPreference
+		android:title="@string/settings_StartOnBoot"
+		android:key="StartOnBoot"
+		android:summary="@string/settings_StartOnBoot_desc"
+		android:defaultValue="false"
+		/>
+
+	</PreferenceCategory>
+	
+	<PreferenceCategory
 		android:title="@string/settings_Notifications"
 		>
 		<CheckBoxPreference

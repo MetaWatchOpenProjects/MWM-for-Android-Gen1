@@ -32,12 +32,9 @@
 
 package org.metawatch.manager;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Hashtable;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -48,7 +45,6 @@ import org.anddev.android.weatherforecast.weather.WeatherSet;
 import org.anddev.android.weatherforecast.weather.WeatherUtils;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 
@@ -89,6 +85,7 @@ public class Monitors {
 		public static String tempLow;
 		public static String temp;
 		public static String condition;
+		public static String city;
 	}
 	
 	public static void updateGmailUnreadCount(String account, int count) {
@@ -166,20 +163,22 @@ public class Monitors {
 			
 			// IndexOutOfBoundsException: Invalid index 0, size is 0
 			WeatherForecastCondition wfc = ws.getWeatherForecastConditions().get(0);
-						
+			
+			WeatherData.city = Preferences.weatherCity;
+			
 			String cond = wcc.getCondition();
 			String temp;
 			if (Preferences.weatherCelsius)
 			{
 				WeatherData.tempHigh = "High " + Integer.toString(wfc.getTempMaxCelsius());
 				WeatherData.tempLow = "Low " + Integer.toString(wfc.getTempMinCelsius());
-				temp = Integer.toString(wcc.getTempCelcius()) + "°C";
+				temp = Integer.toString(wcc.getTempCelcius()) + "CÂ°";
 			}
 			else 
 			{
 				WeatherData.tempHigh = "High " + Integer.toString(WeatherUtils.celsiusToFahrenheit(wfc.getTempMaxCelsius()));
 				WeatherData.tempLow = "Low " + Integer.toString(WeatherUtils.celsiusToFahrenheit(wfc.getTempMinCelsius()));
-				temp = Integer.toString(wcc.getTempFahrenheit()) + "°F";
+				temp = Integer.toString(wcc.getTempFahrenheit()) + "F";
 			}
 			//String place = gwh.city;
 			

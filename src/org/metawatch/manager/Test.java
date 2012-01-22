@@ -37,12 +37,19 @@ import org.metawatch.manager.Notification.VibratePattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class Test extends Activity {
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setTitle(getString(R.string.app_name) + " - " + getString(R.string.activitiy_title_tests));
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
