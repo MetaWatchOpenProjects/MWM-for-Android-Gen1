@@ -115,6 +115,7 @@ public class MetaWatchService extends Service {
 	}
 	
 	static class Preferences {
+		public static boolean startOnBoot = false;
 		public static boolean notifyCall = true;
 		public static boolean notifySMS = true;
 		public static boolean notifyGmail = true;
@@ -146,6 +147,8 @@ public class MetaWatchService extends Service {
 	public static void loadPreferences(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		
+		
+		Preferences.startOnBoot = sharedPreferences.getBoolean("StartOnBoot", Preferences.startOnBoot);
 		Preferences.notifyCall = sharedPreferences.getBoolean("NotifyCall", Preferences.notifyCall);
 		Preferences.notifySMS = sharedPreferences.getBoolean("NotifySMS", Preferences.notifySMS);
 		Preferences.notifyGmail = sharedPreferences.getBoolean("NotifyGmail", Preferences.notifyGmail);
