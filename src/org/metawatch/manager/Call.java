@@ -32,6 +32,7 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Notification.VibratePattern;
 
@@ -77,7 +78,7 @@ public class Call {
 			if(contactImage!=null) {
 				int iconSize = 70;
 				contactImage = Utils.resize(contactImage,iconSize,iconSize);
-				contactImage = Utils.ditherTo1bit(contactImage, true);
+				contactImage = Utils.ditherTo1bit(contactImage, Preferences.invertLCD);
 				canvas.drawBitmap(contactImage,(96-iconSize)/2,0,null);
 				
 				top = iconSize;
