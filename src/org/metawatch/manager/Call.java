@@ -59,8 +59,6 @@ public class Call {
 		String name = Utils.getContactNameFromNumber(context, number);	
 
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-
-			//Bitmap bitmap;
 		
 			Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 			Canvas canvas = new Canvas(bitmap);
@@ -107,7 +105,6 @@ public class Call {
 			canvas.clipRect(0,0,96,35);
 			layout.draw(canvas);
 			canvas.restore();
-			
 			
 			Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.NOTIFICATION);		
 			Protocol.updateDisplay(2);

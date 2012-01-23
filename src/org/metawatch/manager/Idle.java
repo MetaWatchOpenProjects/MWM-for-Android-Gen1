@@ -135,10 +135,6 @@ public class Idle {
 			if(!Preferences.disableWeather) {
 				if (WeatherData.received) {
 					
-					//WeatherData.icon = "weather_sunny.bmp";
-					//WeatherData.locationName = "a really long place name";
-					//WeatherData.condition = "cloudy with a chance of meatballs";
-					
 					// icon
 					Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
 					canvas.drawBitmap(image, 36, 37, null);
@@ -188,12 +184,7 @@ public class Idle {
 					}
 					paintSmall.setTextAlign(Paint.Align.LEFT);
 				}
-							
-				// Debug current time
-				//String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-				//String currentTimeString = new SimpleDateFormat("HH:mm").format(new Date());
-				//canvas.drawText(currentTimeString, 0, 56, paintSmall);
-				
+									
 				canvas = drawLine(canvas, 64);
 			}		
 					
@@ -299,21 +290,7 @@ public class Idle {
 				canvas.restore();	
 			}
 		}
-		else if (currentPage == 2) {
-			Protocol.configureIdleBufferSize(true);
-			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test1.bmp"), 0, 32, null);
-		}
-		else if (currentPage == 3) {
-			Protocol.configureIdleBufferSize(true);
-			canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "test2.bmp"), 0, 32, null);
-		}
 		
-		/*
-		FileOutputStream fos = new FileOutputStream("/sdcard/test.png");
-		image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-		fos.close();
-		Log.d("ow", "bmp ok");
-		*/
 		return bitmap;
 	}
 	
