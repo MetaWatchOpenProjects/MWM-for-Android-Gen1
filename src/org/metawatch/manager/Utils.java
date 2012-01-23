@@ -400,10 +400,10 @@ public class Utils {
 		return resizedBitmap;
 	}
 	
-	public static void dumpBitmapToSdCard(Bitmap bitmap) {
+	public static void dumpBitmapToSdCard(Bitmap bitmap, String filename) {
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("/sdcard/test.png");
+			fos = new FileOutputStream(filename);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.close();
 		} catch (FileNotFoundException e) {
