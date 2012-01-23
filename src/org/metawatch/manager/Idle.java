@@ -54,7 +54,6 @@ public class Idle {
 	
 	final static byte IDLE_NEXT_PAGE = 60;
 
-	final static int NUM_PAGES = 2;
 	static int currentPage = 0;
 	
 	public static void NextPage() {
@@ -65,13 +64,21 @@ public class Idle {
 			MediaControl.mediaPlayerActive = false;
 		}
 		
-		currentPage = (currentPage+1) % NUM_PAGES;
+		currentPage = (currentPage+1) % numPages();
 		
 		if(currentPage==1) {
 			Protocol.enableMediaButtons();
 			Log.d(MetaWatch.TAG, "Entering media mode");
 			MediaControl.mediaPlayerActive = true;
 		}
+	}
+	
+	private static int numPages() {
+		int pages = 1;
+		if(Preferences.idleMusicControls) {
+			pages++;
+		}
+		return pages;
 	}
 	
 	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint, android.text.Layout.Alignment align) {
@@ -325,7 +332,7 @@ public class Idle {
 			//Protocol.updateDisplay(0);
 		}
 		
-		if (NUM_PAGES>1)
+		if (numPages()>1)
 			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 0); // Right top immediate
 
 		

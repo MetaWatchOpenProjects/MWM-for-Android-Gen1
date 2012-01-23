@@ -243,9 +243,9 @@
 
 
 		<CheckBoxPreference
-			android:title="Music Controls (Beta)"
+			android:title="Music Controls"
 			android:key="IdleMusicControls"
-			android:summary="Enable music controls on Idle screen"
+			android:summary="Music control screen available (via top-right button)"
 			android:defaultValue="false"
 			/>
 		<ListPreference 
