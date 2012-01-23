@@ -9,7 +9,6 @@ public class FontCache {
 	
 	private FontCache(Context context) {
 		Small = new FontInfo(context, "metawatch_8pt_5pxl_CAPS.ttf", 8, 5);
-		//Small = new FontInfo(context, "uni05_53.ttf", 8, 5);
 		Medium = new FontInfo(context, "metawatch_8pt_7pxl_CAPS.ttf", 8, 7);
 		Large = new FontInfo(context,  "metawatch_16pt_11pxl.ttf", 16, 11);
 	}
