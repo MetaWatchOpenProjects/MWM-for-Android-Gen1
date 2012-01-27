@@ -127,7 +127,7 @@ public class MetaWatchService extends Service {
 		public static volatile boolean CALL = false;
 	}
 
-	static class Preferences {
+	public static class Preferences {
 		public static boolean loaded = false;
 		
 		public static boolean notifyCall = true;

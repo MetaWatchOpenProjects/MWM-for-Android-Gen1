@@ -1,0 +1,146 @@
+package org.metawatch.manager.widgets;
+
+import java.util.Dictionary;
+import java.util.List;
+
+import org.metawatch.manager.FontCache;
+import org.metawatch.manager.Utils;
+import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.Monitors.LocationData;
+import org.metawatch.manager.Monitors.WeatherData;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.text.Layout;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
+
+public class WeatherWidget implements InternalWidget {
+	public final static String id_0 = "weather_96_32";
+	final static String desc_0 = "Weather (96x32)";
+	
+	private Context context;
+	private TextPaint paintSmall;
+	private TextPaint paintSmallOutline;
+	private TextPaint paintLarge;
+	private TextPaint paintLargeOutline;
+	
+	public WeatherWidget(Context context) {
+		this.context = context;
+	}
+	
+	public void init(List<String> widgetIds) {
+
+		paintSmall = new TextPaint();
+		paintSmall.setColor(Color.BLACK);
+		paintSmall.setTextSize(FontCache.instance(context).Small.size);
+		paintSmall.setTypeface(FontCache.instance(context).Small.face);
+		paintSmall.setTextAlign(Align.CENTER);
+		
+		paintSmallOutline = new TextPaint();
+		paintSmallOutline.setColor(Color.WHITE);
+		paintSmallOutline.setTextSize(FontCache.instance(context).Small.size);
+		paintSmallOutline.setTypeface(FontCache.instance(context).Small.face);
+		
+		paintLarge = new TextPaint();
+		paintLarge.setColor(Color.BLACK);
+		paintLarge.setTextSize(FontCache.instance(context).Large.size);
+		paintLarge.setTypeface(FontCache.instance(context).Large.face);
+		
+		paintLargeOutline = new TextPaint();
+		paintLargeOutline.setColor(Color.WHITE);
+		paintLargeOutline.setTextSize(FontCache.instance(context).Large.size);
+		paintLargeOutline.setTypeface(FontCache.instance(context).Large.face);
+		
+
+	}
+
+	public void shutdown() {
+		paintSmall = null;
+	}
+
+	public void refresh(List<String> widgetIds) {
+	}
+
+	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
+
+		if(widgetIds == null || widgetIds.contains(id_0)) {
+			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
+			
+			widget.id = id_0;
+			widget.description = desc_0;
+			widget.width = 96;
+			widget.height = 32;
+			
+			widget.bitmap = draw0();
+			
+			result.put(widget.id, widget);
+		}
+	}
+	
+	private Bitmap draw0() {
+		Bitmap bitmap = Bitmap.createBitmap(96, 32, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		if (WeatherData.received) {
+			
+			// icon
+			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
+			canvas.drawBitmap(image, 36, 5, null);
+			
+			// condition
+			Utils.drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 3, 60, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_NORMAL);
+								
+			// temperatures
+			if (WeatherData.celsius) {
+				paintLarge.setTextAlign(Paint.Align.RIGHT);
+				canvas.drawText(WeatherData.temp, 82, 14, paintLarge);
+				//RM: since the degree symbol draws wrong...
+				canvas.drawText("O", 82, 8, paintSmall);
+				canvas.drawText("C", 95, 14, paintLarge);
+			}
+			else {
+				paintLarge.setTextAlign(Paint.Align.RIGHT);
+				canvas.drawText(WeatherData.temp, 83, 14, paintLarge);
+				//RM: since the degree symbol draws wrong...
+				canvas.drawText("O", 83, 8, paintSmall);
+				canvas.drawText("F", 95, 14, paintLarge);
+			}
+			paintLarge.setTextAlign(Paint.Align.LEFT);
+						
+			canvas.drawText("High", 64, 22, paintSmall);
+			canvas.drawText("Low", 64, 30, paintSmall);
+			
+			paintSmall.setTextAlign(Paint.Align.RIGHT);
+			canvas.drawText(WeatherData.tempHigh, 95, 22, paintSmall);
+			canvas.drawText(WeatherData.tempLow, 95, 30, paintSmall);
+			paintSmall.setTextAlign(Paint.Align.LEFT);
+
+			Utils.drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 30, paintSmall, paintSmallOutline);
+						
+		} else {
+			paintSmall.setTextAlign(Paint.Align.CENTER);
+			if (Preferences.weatherGeolocation) {
+				if( !LocationData.received ) {
+					canvas.drawText("Awaiting location", 48, 18, paintSmall);
+				}
+				else {
+					canvas.drawText("Awaiting weather", 48, 18, paintSmall);
+				}
+			}
+			else {
+				canvas.drawText("No data", 48, 18, paintSmall);
+			}
+			paintSmall.setTextAlign(Paint.Align.LEFT);
+		}
+		
+		return bitmap;
+	}
+
+}

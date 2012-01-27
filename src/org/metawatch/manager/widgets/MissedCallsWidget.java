@@ -7,13 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.text.TextPaint;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 
 import org.metawatch.manager.FontCache;
 import org.metawatch.manager.Utils;
-import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 
 public class MissedCallsWidget implements InternalWidget {
 

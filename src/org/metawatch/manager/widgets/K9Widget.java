@@ -1,12 +1,10 @@
 package org.metawatch.manager.widgets;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 
 import org.metawatch.manager.FontCache;
 import org.metawatch.manager.Utils;
-import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 
 import android.content.Context;
 import android.graphics.Bitmap;

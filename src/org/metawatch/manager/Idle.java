@@ -46,6 +46,7 @@ import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.K9Widget;
 import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
+import org.metawatch.manager.widgets.WeatherWidget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -76,6 +77,7 @@ public class Idle {
 		widgets.add(new SmsWidget(context));
 		widgets.add(new K9Widget(context));
 		widgets.add(new GmailWidget(context));
+		widgets.add(new WeatherWidget(context));
 		
 		for(InternalWidget widget : widgets) {
 			widget.init(null);
@@ -107,31 +109,7 @@ public class Idle {
 		return pages;
 	}
 	
-	static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint, android.text.Layout.Alignment align) {
-		canvas.save();
-		StaticLayout layout = new StaticLayout(text, paint, width, align, 1.0f, 0, false);
-		canvas.translate(x, y); //position the text
-		layout.draw(canvas);
-		canvas.restore();	
-	}
-	
-	static void drawOutlinedText(String text, Canvas canvas, int x, int y, TextPaint col, TextPaint outline) {
-		canvas.drawText(text, x+1, y, outline);
-		canvas.drawText(text, x-1, y, outline);
-		canvas.drawText(text, x, y+1, outline);
-		canvas.drawText(text, x, y-1, outline);
-	
-		canvas.drawText(text, x, y, col);
-	}
-	
-	static void drawWrappedOutlinedText(String text, Canvas canvas, int x, int y, int width, TextPaint col, TextPaint outline, android.text.Layout.Alignment align) {
-		drawWrappedText(text, canvas, x-1, y, width, outline, align);
-		drawWrappedText(text, canvas, x+1, y, width, outline, align);
-		drawWrappedText(text, canvas, x, y-1, width, outline, align);
-		drawWrappedText(text, canvas, x, y+1, width, outline, align);
-		
-		drawWrappedText(text, canvas, x, y, width, col, align);
-	}
+
 
 	static Bitmap createLcdIdle(Context context) {
 		
@@ -162,9 +140,7 @@ public class Idle {
 		paintLargeOutline.setTextSize(FontCache.instance(context).Large.size);
 		paintLargeOutline.setTypeface(FontCache.instance(context).Large.face);
 		
-		canvas.drawColor(Color.WHITE);
-		
-		canvas = drawLine(canvas, 32);		
+		canvas.drawColor(Color.WHITE);	
 		
 		if( currentPage == 0 ) {
 		
@@ -181,59 +157,15 @@ public class Idle {
 			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
 			
 			if(!Preferences.disableWeather) {
-				if (WeatherData.received) {
-					
-					// icon
-					Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-					canvas.drawBitmap(image, 36, 37, null);
-					
-					// condition
-					drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 35, 60, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_NORMAL);
-										
-					// temperatures
-					if (WeatherData.celsius) {
-						paintLarge.setTextAlign(Paint.Align.RIGHT);
-						canvas.drawText(WeatherData.temp, 82, 46, paintLarge);
-						//RM: since the degree symbol draws wrong...
-						canvas.drawText("O", 82, 40, paintSmall);
-						canvas.drawText("C", 95, 46, paintLarge);
-					}
-					else {
-						paintLarge.setTextAlign(Paint.Align.RIGHT);
-						canvas.drawText(WeatherData.temp, 83, 46, paintLarge);
-						//RM: since the degree symbol draws wrong...
-						canvas.drawText("O", 83, 40, paintSmall);
-						canvas.drawText("F", 95, 46, paintLarge);
-					}
-					paintLarge.setTextAlign(Paint.Align.LEFT);
-								
-					canvas.drawText("High", 64, 54, paintSmall);
-					canvas.drawText("Low", 64, 62, paintSmall);
-					
-					paintSmall.setTextAlign(Paint.Align.RIGHT);
-					canvas.drawText(WeatherData.tempHigh, 95, 54, paintSmall);
-					canvas.drawText(WeatherData.tempLow, 95, 62, paintSmall);
-					paintSmall.setTextAlign(Paint.Align.LEFT);
-	
-					drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 62, paintSmall, paintSmallOutline);
-								
-				} else {
-					paintSmall.setTextAlign(Paint.Align.CENTER);
-					if (Preferences.weatherGeolocation) {
-						if( !LocationData.received ) {
-							canvas.drawText("Awaiting location", 48, 50, paintSmall);
-						}
-						else {
-							canvas.drawText("Awaiting weather", 48, 50, paintSmall);
-						}
-					}
-					else {
-						canvas.drawText("No data", 48, 50, paintSmall);
-					}
-					paintSmall.setTextAlign(Paint.Align.LEFT);
+				// Draw Weather
+				List<String> temp1 = new ArrayList<String>();
+				temp1.add(WeatherWidget.id_0);
+				Dictionary<String,WidgetData> temp = RefreshWidgets(temp1);
+				
+				WidgetData widget = temp.get(WeatherWidget.id_0);
+				if(widget!=null && widget.bitmap!=null) {
+					canvas.drawBitmap(widget.bitmap, 0, 32, null);
 				}
-									
-				canvas = drawLine(canvas, 64);
 			}		
 					
 			int rows = widgetsDesired.size();
@@ -249,13 +181,11 @@ public class Idle {
 					int iconX = slotSpace*i + slotX;
 					
 					canvas.drawBitmap(widget.bitmap, iconX, yPos, null);
-				}
+				}			
 			}
-
-			if(Preferences.disableWeather) {
-				canvas = drawLine(canvas, 64);
-				//Add more icons here in future.
-			}
+			
+			canvas = drawLine(canvas, 32);
+			canvas = drawLine(canvas, 64);
 			
 		}
 		else if (currentPage == 1) {

@@ -48,12 +48,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 
 public class Utils {
@@ -445,10 +448,35 @@ public class Utils {
 		StringBuffer stream = new StringBuffer();
 		byte[] b = new byte[4096];
 		for (int n; (n = in.read(b)) != -1;) {
-		stream.append(new String(b, 0, n));
+			stream.append(new String(b, 0, n));
 		}
 		return stream.toString();
-		}
+	}
 	
+	public static void drawWrappedText(String text, Canvas canvas, int x, int y, int width, TextPaint paint, android.text.Layout.Alignment align) {
+		canvas.save();
+		StaticLayout layout = new StaticLayout(text, paint, width, align, 1.0f, 0, false);
+		canvas.translate(x, y); //position the text
+		layout.draw(canvas);
+		canvas.restore();	
+	}
+	
+	public static void drawOutlinedText(String text, Canvas canvas, int x, int y, TextPaint col, TextPaint outline) {
+		canvas.drawText(text, x+1, y, outline);
+		canvas.drawText(text, x-1, y, outline);
+		canvas.drawText(text, x, y+1, outline);
+		canvas.drawText(text, x, y-1, outline);
+	
+		canvas.drawText(text, x, y, col);
+	}
+	
+	public static void drawWrappedOutlinedText(String text, Canvas canvas, int x, int y, int width, TextPaint col, TextPaint outline, android.text.Layout.Alignment align) {
+		drawWrappedText(text, canvas, x-1, y, width, outline, align);
+		drawWrappedText(text, canvas, x+1, y, width, outline, align);
+		drawWrappedText(text, canvas, x, y-1, width, outline, align);
+		drawWrappedText(text, canvas, x, y+1, width, outline, align);
+		
+		drawWrappedText(text, canvas, x, y, width, col, align);
+	}
 
 }
