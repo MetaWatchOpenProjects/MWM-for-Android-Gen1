@@ -38,8 +38,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
-import org.metawatch.manager.Monitors.LocationData;
-import org.metawatch.manager.Monitors.WeatherData;
 import org.metawatch.manager.widgets.GmailWidget;
 import org.metawatch.manager.widgets.InternalWidget;
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
@@ -56,8 +54,6 @@ import android.graphics.Paint;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 
 public class Idle {
