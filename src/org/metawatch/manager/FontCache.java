@@ -40,9 +40,9 @@ public class FontCache {
 		LARGE 
 	}
 	
-	FontInfo Small = null;
-	FontInfo Medium = null;
-	FontInfo Large = null;
+	public FontInfo Small = null;
+	public FontInfo Medium = null;
+	public FontInfo Large = null;
 	
 	public FontInfo Get(FontSize size) {
 		switch(size) {

@@ -32,9 +32,20 @@
 
 package org.metawatch.manager;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
+
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
+import org.metawatch.manager.widgets.GmailWidget;
+import org.metawatch.manager.widgets.InternalWidget;
+import org.metawatch.manager.widgets.InternalWidget.WidgetData;
+import org.metawatch.manager.widgets.K9Widget;
+import org.metawatch.manager.widgets.MissedCallsWidget;
+import org.metawatch.manager.widgets.SmsWidget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -55,6 +66,21 @@ public class Idle {
 	final static byte IDLE_NEXT_PAGE = 60;
 
 	static int currentPage = 0;
+	
+	static List<InternalWidget> widgets = null;
+	
+	public static void InitWidgets(Context context) {
+		widgets = new ArrayList<InternalWidget>();
+		
+		widgets.add(new MissedCallsWidget(context));
+		widgets.add(new SmsWidget(context));
+		widgets.add(new K9Widget(context));
+		widgets.add(new GmailWidget(context));
+		
+		for(InternalWidget widget : widgets) {
+			widget.init(null);
+		}
+	}
 	
 	public static void NextPage() {
 		
@@ -108,6 +134,11 @@ public class Idle {
 	}
 
 	static Bitmap createLcdIdle(Context context) {
+		
+		if(widgets==null) {
+			InitWidgets(context);
+		}
+		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		
@@ -138,6 +169,16 @@ public class Idle {
 		if( currentPage == 0 ) {
 		
 			Protocol.configureIdleBufferSize(true);
+			
+			List<String> widgetsDesired = new ArrayList<String>();
+			widgetsDesired.add(MissedCallsWidget.id_0);
+			widgetsDesired.add(SmsWidget.id_0);
+			if(Preferences.showK9Unread) 
+				widgetsDesired.add(K9Widget.id_0);
+			else
+				widgetsDesired.add(GmailWidget.id_0);
+			
+			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
 			
 			if(!Preferences.disableWeather) {
 				if (WeatherData.received) {
@@ -195,59 +236,22 @@ public class Idle {
 				canvas = drawLine(canvas, 64);
 			}		
 					
-			int rows = 3;
+			int rows = widgetsDesired.size();
 			int yPos = !Preferences.disableWeather ? 67 : 36;
-			// icons
+		
 			for (int i = 0; i < rows; i++) {
-				int slotSpace = 96/rows;
-				int slotX = slotSpace/2-12;
-				int iconX = slotSpace*i + slotX;
-				switch (i) {
-					case 0:
-						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_call.bmp"), iconX, yPos, null);
-						break;
-					case 1:
-						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), iconX, yPos, null);
-						break;
-					case 2:
-						canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), iconX, yPos, null);
-						break;
-				}
-			}
+				String id = widgetsDesired.get(i);
+				WidgetData widget = widgetData.get(id);
+				if(widget!=null && widget.bitmap!=null) {
 					
-			// unread counters
-			for (int i = 0; i < rows; i++) {
-				String count = "";
-				switch (i) {
-					case 0:
-						count = Integer.toString(Utils.getMissedCallsCount(context));	
-						break;
-					case 1:
-						count = Integer.toString(Utils.getUnreadSmsCount(context));
-						break;
-					case 2:
-						if(Preferences.showK9Unread) {
-							Log.d(MetaWatch.TAG, "Idle: About to draw k9 count.");
-							count = Integer.toString(Utils.getUnreadK9Count(context));
-							Log.d(MetaWatch.TAG, "Idle: k9 count is " + count);
-						}
-						else {
-							Log.d(MetaWatch.TAG, "Idle: About to draw Gmail count.");
-							if (Utils.isGmailAccessSupported(context))
-								count = Integer.toString(Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i"));
-							else 
-								count = Integer.toString(Monitors.getGmailUnreadCount());
-							Log.d(MetaWatch.TAG, "Idle: Gmail count is " + count);
-						}
-						break;				
+					int slotSpace = 96/rows;
+					int slotX = slotSpace/2-12;
+					int iconX = slotSpace*i + slotX;
+					
+					canvas.drawBitmap(widget.bitmap, iconX, yPos, null);
 				}
-						
-				int slotSpace = 96/rows;
-				int slotX = (int) (slotSpace/2-paintSmall.measureText(count)/2)+1;
-				int countX = slotSpace*i + slotX;
-				
-				canvas.drawText(count, countX, !Preferences.disableWeather ? 92 : 62, paintSmall);
 			}
+
 			if(Preferences.disableWeather) {
 				canvas = drawLine(canvas, 64);
 				//Add more icons here in future.
@@ -301,6 +305,17 @@ public class Idle {
 		return bitmap;
 	}
 	
+	private static Dictionary<String,WidgetData> RefreshWidgets(List<String> widgetsDesired) {
+		Dictionary<String,WidgetData> result = new Hashtable<String,WidgetData>();
+		
+		for(InternalWidget widget : widgets) {
+			widget.refresh(widgetsDesired);
+			widget.get(widgetsDesired, result);
+		}
+		
+		return result;
+	}
+
 	public static Canvas drawLine(Canvas canvas, int y) {
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
