@@ -44,6 +44,7 @@ public class Notification {
 
 	private static NotificationType lastNotification = null;
 
+	final static byte NOTIFICATION_TIMEOUT = 0;
 	final static byte NOTIFICATION_UP = 30;
 	final static byte NOTIFICATION_DOWN = 31;
 	final static byte NOTIFICATION_DISMISS = 32;
@@ -182,7 +183,7 @@ public class Notification {
 					/* Give some space between notifications. */
 					
 					if (notification.timeout < 0) {
-						//notifyButtonPress = 0;
+						notifyButtonPress = NOTIFICATION_TIMEOUT;
 						if (notification.bitmaps!=null & notification.bitmaps.length>1) {
 							Protocol.enableButton(0, 0, NOTIFICATION_UP, 2); // Right top immediate
 							Protocol.enableButton(1, 0, NOTIFICATION_DOWN, 2); // Right middle immediate
@@ -192,10 +193,12 @@ public class Notification {
 						Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Notification sent, waiting for dismiss " );
 						
+						int timeout = getStickyNotificationTimeout(context);
+						
 						do {
 							try {
 								synchronized (Notification.buttonPressed) {
-									buttonPressed.wait();	
+									buttonPressed.wait(timeout);	
 								}
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -210,6 +213,9 @@ public class Notification {
 								currentNotificationPage++;
 								Protocol.sendLcdBitmap(notification.bitmaps[currentNotificationPage],
 										MetaWatchService.WatchBuffers.NOTIFICATION);
+							}
+							else if (notifyButtonPress==NOTIFICATION_TIMEOUT) {
+								notifyButtonPress = NOTIFICATION_DISMISS;
 							}
 							
 							Log.d(MetaWatch.TAG,
@@ -283,6 +289,9 @@ public class Notification {
 	private static final String NOTIFICATION_TIMEOUT_SETTING = "notificationTimeout";
 	private static final String DEFAULT_NOTIFICATION_TIMEOUT_STRING = "5";
 	private static final int DEFAULT_NOTIFICATION_TIMEOUT = 5;
+	private static final String STICKY_NOTIFICATION_TIMEOUT_SETTING = "stickyNotificationTimeout";
+	private static final String STICKY_NOTIFICATION_TIMEOUT_STRING = "120";
+	private static final int DEFAULT_STICKY_NOTIFICATION_TIMEOUT = 120;
 	private static final int NUM_MS_IN_SECOND = 1000;
 
 	public static int getDefaultNotificationTimeout(Context context) {
@@ -296,6 +305,20 @@ public class Notification {
 			return timeout;
 		} catch (NumberFormatException nfe) {
 			return DEFAULT_NOTIFICATION_TIMEOUT;
+		}
+	}
+	
+	public static int getStickyNotificationTimeout(Context context) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		String timeoutString = sharedPreferences.getString(
+				STICKY_NOTIFICATION_TIMEOUT_SETTING,
+				STICKY_NOTIFICATION_TIMEOUT_STRING);
+		try {
+			int timeout = Integer.parseInt(timeoutString) * NUM_MS_IN_SECOND;
+			return timeout;
+		} catch (NumberFormatException nfe) {
+			return DEFAULT_STICKY_NOTIFICATION_TIMEOUT;
 		}
 	}
 

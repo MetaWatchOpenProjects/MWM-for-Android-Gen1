@@ -236,9 +236,17 @@
 		<EditTextPreference
 			android:title="Notification Timeout"
 			android:key="notificationTimeout"
-			android:summary="Default time to wait before returning to idle screen (seconds)"
+			android:summary="Default time non-sticky notifications wait before returning to idle screen (seconds)"
 			android:numeric="integer"
 			android:defaultValue="5"
+			/>
+			
+		<EditTextPreference
+			android:title="Sticky Notification Timeout"
+			android:key="stickyNotificationTimeout"
+			android:summary="Default time sticky notifications wait before returning to idle screen (seconds)"
+			android:numeric="integer"
+			android:defaultValue="120"
 			/>
 
 
