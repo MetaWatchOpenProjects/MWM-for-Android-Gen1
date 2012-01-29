@@ -205,7 +205,8 @@ public class IntentReceiver extends BroadcastReceiver {
 						"mobi.beyondpod.action.PLAYBACK_STATUS")
 				|| intent.getAction().equals("com.htc.music.metachanged")
 				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")
-				|| intent.getAction().equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED")) {
+				|| intent.getAction().equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED")
+				|| intent.getAction().equals("com.amazon.mp3.metachanged")) {
 
 			/* If the intent specifies a "playing" extra, use it. */
 			if (intent.hasExtra("playing")) {
@@ -224,15 +225,23 @@ public class IntentReceiver extends BroadcastReceiver {
 				artist = intent.getStringExtra("artist");
 			else if (intent.hasExtra("ARTIST_NAME"))
 				artist = intent.getStringExtra("ARTIST_NAME");
+			else if (intent.hasExtra("com.amazon.mp3.artist"))
+				artist = intent.getStringExtra("com.amazon.mp3.artist");
+			
 			if (intent.hasExtra("track"))
 				track = intent.getStringExtra("track");
 			else if (intent.hasExtra("TRACK_NAME"))
 				track = intent.getStringExtra("TRACK_NAME");
+			else if (intent.hasExtra("com.amazon.mp3.track"))
+				track = intent.getStringExtra("com.amazon.mp3.track");
+			
 			if (intent.hasExtra("album"))
 				album = intent.getStringExtra("album");
 			else if (intent.hasExtra("ALBUM_NAME"))
 				album = intent.getStringExtra("ALBUM_NAME");
-			
+			else if (intent.hasExtra("com.amazon.mp3.album"))
+				album = intent.getStringExtra("com.amazon.mp3.album");
+						
 			MediaControl.updateNowPlaying(context, artist, album, track, intent.getAction());
 					
 		}
