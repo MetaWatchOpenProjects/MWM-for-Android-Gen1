@@ -32,9 +32,6 @@
 
 package org.metawatch.manager;
 
-import org.metawatch.manager.MetaWatchService.Preferences;
-import org.metawatch.manager.Notification.VibratePattern;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
