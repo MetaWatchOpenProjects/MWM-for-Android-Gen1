@@ -233,41 +233,8 @@ public class IntentReceiver extends BroadcastReceiver {
 			else if (intent.hasExtra("ALBUM_NAME"))
 				album = intent.getStringExtra("ALBUM_NAME");
 			
-			/* Ignore if track info hasn't changed. */
-			if (artist.equals(MediaControl.lastArtist) && track.equals(MediaControl.lastTrack) && album.equals(MediaControl.lastAlbum)) {
-				Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Track info hasn't changed, ignoring");
-				return;
-			} else {
-				MediaControl.lastArtist = artist;
-				MediaControl.lastTrack = track;
-				MediaControl.lastAlbum = album;
-			}
-			
-			if (!MetaWatchService.Preferences.notifyMusic)
-				return;
-			
-			if(MediaControl.mediaPlayerActive) {
-				VibratePattern vibratePattern = NotificationBuilder.createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
-	
-				Idle.updateLcdIdle(context);
-				
-				if (vibratePattern.vibrate)
-					Protocol.vibrate(vibratePattern.on,
-							vibratePattern.off,
-							vibratePattern.cycles);
-				
-				if (Preferences.notifyLight)
-					Protocol.ledChange(true);
-				
-			}
-			else {
-				if (intent.getAction().equals("com.nullsoft.winamp.metachanged")) {
-					NotificationBuilder.createWinamp(context, artist, track, album);				
-				} else {
-					NotificationBuilder.createMusic(context, artist, track, album);
-				}
-			}
-			
+			MediaControl.updateNowPlaying(context, artist, album, track, intent.getAction());
+					
 		}
 		
 	}

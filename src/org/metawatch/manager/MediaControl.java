@@ -33,6 +33,7 @@
 package org.metawatch.manager;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.Notification.VibratePattern;
 
 import android.content.Context;
 import android.content.Intent;
@@ -127,5 +128,45 @@ public class MediaControl {
 		KeyEvent upEvent = new KeyEvent(time, time, KeyEvent.ACTION_UP, keyCode, 0);
 		upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
 		context.sendOrderedBroadcast(upIntent, permission);
+	}
+	
+	public static void updateNowPlaying(Context context, String artist, String album, String track, String sender) {
+
+		/* Ignore if track info hasn't changed. */
+		if (artist.equals(MediaControl.lastArtist) && track.equals(MediaControl.lastTrack) && album.equals(MediaControl.lastAlbum)) {
+			Log.d(MetaWatch.TAG, "updateNowPlaying(): Track info hasn't changed, ignoring");
+			return;
+		} else {
+			MediaControl.lastArtist = artist;
+			MediaControl.lastTrack = track;
+			MediaControl.lastAlbum = album;
+		}
+		
+		if(MediaControl.mediaPlayerActive)
+			Idle.updateLcdIdle(context);
+		
+		if (!MetaWatchService.Preferences.notifyMusic)
+			return;
+		
+		if(MediaControl.mediaPlayerActive) {
+			VibratePattern vibratePattern = NotificationBuilder.createVibratePatternFromPreference(context, "settingsMusicNumberBuzzes");				
+			
+			if (vibratePattern.vibrate)
+				Protocol.vibrate(vibratePattern.on,
+						vibratePattern.off,
+						vibratePattern.cycles);
+			
+			if (Preferences.notifyLight)
+				Protocol.ledChange(true);
+			
+		}
+		else {
+			if (sender.equals("com.nullsoft.winamp.metachanged")) {
+				NotificationBuilder.createWinamp(context, artist, track, album);				
+			} else {
+				NotificationBuilder.createMusic(context, artist, track, album);
+			}
+		}
+
 	}
 }

@@ -58,13 +58,6 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 							+ notification.flags + " ("
 							+ Integer.toBinaryString(notification.flags) + ")");
 	
-			if ((notification.flags & android.app.Notification.FLAG_ONGOING_EVENT) > 0) {
-				/* Ignore updates to ongoing events. */
-				Log.d(MetaWatch.TAG,
-						"MetaWatchAccessibilityService.onAccessibilityEvent(): Ongoing event, ignoring.");
-				return;
-			}
-	
 			if (notification.tickerText == null
 					|| notification.tickerText.toString().trim().length() == 0) {
 				Log.d(MetaWatch.TAG,
@@ -86,7 +79,33 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 					return;
 				}
 			}
-	
+			
+			/* Deezer track notification */
+			if (packageName.equals("deezer.android.app")) {
+				
+				String text = notification.tickerText.toString().trim();
+				
+				int truncatePos = text.indexOf(" - ");
+				if (truncatePos>-1)
+				{
+					String artist = text.substring(0, truncatePos);
+					String track = text.substring(truncatePos+3);
+					
+					MediaControl.updateNowPlaying(this, artist, "", track, packageName.toString());
+					
+					return;
+				}
+				
+				return;
+			}
+			
+			if ((notification.flags & android.app.Notification.FLAG_ONGOING_EVENT) > 0) {
+				/* Ignore updates to ongoing events. */
+				Log.d(MetaWatch.TAG,
+						"MetaWatchAccessibilityService.onAccessibilityEvent(): Ongoing event, ignoring.");
+				return;
+			}
+			
 			/* Some other notification */
 			if (sharedPreferences.getBoolean("NotifyOtherNotification", true)) {
 	
