@@ -63,11 +63,11 @@ public class SmsWidget implements InternalWidget {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
 		
-		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), 0, 0, null);
+		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_sms.bmp"), 0, 5, null);
 		
 		String count = Integer.toString(Utils.getUnreadSmsCount(context));
 		
-		canvas.drawText(count, 12, 25, paintSmall);
+		canvas.drawText(count, 12, 29, paintSmall);
 		
 		return bitmap;
 	}

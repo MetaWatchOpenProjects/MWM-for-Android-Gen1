@@ -77,7 +77,8 @@ public class Utils {
 			
 			if (c.moveToFirst()) {
 				String name = c.getString(c.getColumnIndex(PhoneLookup.DISPLAY_NAME));
-	
+				c.close();
+				
 				if (name.length() > 0)
 					return name;
 				else
@@ -177,6 +178,7 @@ public class Utils {
 
 				cursor.moveToNext();
 			}
+			cursor.close();
 
 		} catch (Exception x) {
 		}

@@ -64,7 +64,7 @@ public class GmailWidget implements InternalWidget {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
 		
-		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), 0, 0, null);
+		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), 0, 3, null);
 		
 		String count;
 
@@ -73,7 +73,7 @@ public class GmailWidget implements InternalWidget {
 		else 
 			count = Integer.toString(Monitors.getGmailUnreadCount());
 
-		canvas.drawText(count, 12, 25, paintSmall);
+		canvas.drawText(count, 12, 29, paintSmall);
 		
 		return bitmap;
 	}

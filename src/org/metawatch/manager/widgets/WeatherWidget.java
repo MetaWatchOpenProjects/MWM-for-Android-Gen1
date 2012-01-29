@@ -21,8 +21,11 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 
 public class WeatherWidget implements InternalWidget {
-	public final static String id_0 = "weather_96_32";
-	final static String desc_0 = "Weather (96x32)";
+	public final static String id_0 = "weather_24_32";
+	final static String desc_0 = "Weather (24x32)";
+	
+	public final static String id_1 = "weather_96_32";
+	final static String desc_1 = "Weather (96x32)";
 	
 	private Context context;
 	private TextPaint paintSmall;
@@ -69,6 +72,19 @@ public class WeatherWidget implements InternalWidget {
 
 	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
 
+		if(widgetIds == null || widgetIds.contains(id_1)) {
+			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
+			
+			widget.id = id_1;
+			widget.description = desc_1;
+			widget.width = 24;
+			widget.height = 32;
+			
+			widget.bitmap = draw0();
+			
+			result.put(widget.id, widget);
+		}
+		
 		if(widgetIds == null || widgetIds.contains(id_0)) {
 			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
 			
@@ -77,7 +93,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.width = 96;
 			widget.height = 32;
 			
-			widget.bitmap = draw0();
+			widget.bitmap = draw1();
 			
 			result.put(widget.id, widget);
 		}
@@ -137,6 +153,40 @@ public class WeatherWidget implements InternalWidget {
 			else {
 				canvas.drawText("No data", 48, 18, paintSmall);
 			}
+			paintSmall.setTextAlign(Paint.Align.LEFT);
+		}
+		
+		return bitmap;
+	}
+	
+	private Bitmap draw1() {
+		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		if (WeatherData.received) {
+			
+			// icon
+			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
+			canvas.drawBitmap(image, 0, 4, null);
+								
+			// temperatures
+			if (WeatherData.celsius) {
+				Utils.drawOutlinedText(WeatherData.temp+"°C", canvas, 0, 7, paintSmall, paintSmallOutline);
+			}
+			else {
+				Utils.drawOutlinedText(WeatherData.temp+"°F", canvas, 0, 7, paintSmall, paintSmallOutline);
+			}
+			paintLarge.setTextAlign(Paint.Align.LEFT);
+						
+			Utils.drawOutlinedText("H "+WeatherData.tempHigh, canvas, 0, 25, paintSmall, paintSmallOutline);
+			Utils.drawOutlinedText("L "+WeatherData.tempLow, canvas, 0, 31, paintSmall, paintSmallOutline);
+									
+		} else {
+			paintSmall.setTextAlign(Paint.Align.CENTER);
+
+			canvas.drawText("Wait", 12, 16, paintSmall);
+
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 		}
 		

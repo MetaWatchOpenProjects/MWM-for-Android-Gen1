@@ -44,6 +44,7 @@ import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.K9Widget;
 import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
+import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
 
 import android.content.Context;
@@ -74,6 +75,7 @@ public class Idle {
 		widgets.add(new K9Widget(context));
 		widgets.add(new GmailWidget(context));
 		widgets.add(new WeatherWidget(context));
+		widgets.add(new TestWidget(context));
 		
 		for(InternalWidget widget : widgets) {
 			widget.init(null);
@@ -150,22 +152,27 @@ public class Idle {
 			else
 				widgetsDesired.add(GmailWidget.id_0);
 			
+			//widgetsDesired.add(TestWidget.id_0);
+			//widgetsDesired.add(WeatherWidget.id_0);
+			
 			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
 			
 			if(!Preferences.disableWeather) {
 				// Draw Weather
 				List<String> temp1 = new ArrayList<String>();
-				temp1.add(WeatherWidget.id_0);
+				temp1.add(WeatherWidget.id_1);
+				//temp1.add(TestWidget.id_1);
 				Dictionary<String,WidgetData> temp = RefreshWidgets(temp1);
 				
-				WidgetData widget = temp.get(WeatherWidget.id_0);
+				WidgetData widget = temp.get(WeatherWidget.id_1);
+				//WidgetData widget = temp.get(TestWidget.id_1);
 				if(widget!=null && widget.bitmap!=null) {
 					canvas.drawBitmap(widget.bitmap, 0, 32, null);
 				}
 			}		
 					
 			int rows = widgetsDesired.size();
-			int yPos = !Preferences.disableWeather ? 67 : 36;
+			int yPos = !Preferences.disableWeather ? 64 : 32;
 		
 			for (int i = 0; i < rows; i++) {
 				String id = widgetsDesired.get(i);
@@ -180,8 +187,8 @@ public class Idle {
 				}			
 			}
 			
-			canvas = drawLine(canvas, 32);
-			canvas = drawLine(canvas, 64);
+			//canvas = drawLine(canvas, 32);
+			//canvas = drawLine(canvas, 64);
 			
 		}
 		else if (currentPage == 1) {

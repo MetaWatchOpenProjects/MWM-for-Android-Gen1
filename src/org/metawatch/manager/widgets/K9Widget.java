@@ -63,11 +63,11 @@ public class K9Widget implements InternalWidget {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
 		
-		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_k9mail.bmp"), 0, 0, null);
+		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_k9mail.bmp"), 0, 3, null);
 		
 		String count = Integer.toString(Utils.getUnreadK9Count(context));
 		
-		canvas.drawText(count, 12, 25, paintSmall);
+		canvas.drawText(count, 12, 29, paintSmall);
 		
 		return bitmap;
 	}
