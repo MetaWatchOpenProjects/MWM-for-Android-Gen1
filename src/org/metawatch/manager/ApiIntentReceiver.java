@@ -83,14 +83,8 @@ public class ApiIntentReceiver extends BroadcastReceiver {
 		if (action.equals("org.metawatch.manager.NOTIFICATION")) {
 			
 			/* Set up vibrate pattern. */
-			VibratePattern vibrate = Notification.VibratePattern.NO_VIBRATE;
-			if (intent.hasExtra("vibrate_on") && intent.hasExtra("vibrate_off") && intent.hasExtra("vibrate_cycles")) {
-				int vibrateOn = intent.getIntExtra("vibrate_on", 500);
-				int vibrateOff = intent.getIntExtra("vibrate_off", 500);
-				int vibrateCycles = intent.getIntExtra("vibrate_cycles", 3);
-				vibrate = new VibratePattern(true, vibrateOn, vibrateOff, vibrateCycles);
-			}
-			
+			VibratePattern vibrate = getVibratePatternFromIntent(intent);
+						
 			if (intent.hasExtra("oled1") || intent.hasExtra("oled1a")
 					|| intent.hasExtra("oled1b") || intent.hasExtra("oled2")
 					|| intent.hasExtra("oled2a") || intent.hasExtra("oled2b")) {
@@ -150,6 +144,28 @@ public class ApiIntentReceiver extends BroadcastReceiver {
 			return;
 		}
 		
+		if (action.equals("org.metawatch.manager.VIBRATE")) {			
+			/* Set up vibrate pattern. */
+			VibratePattern vibrate = getVibratePatternFromIntent(intent);
+			
+			if(vibrate.vibrate)
+				Protocol.vibrate(vibrate.on, vibrate.off, vibrate.cycles);
+			
+			return;
+		}
+		
+	}
+	
+	private VibratePattern getVibratePatternFromIntent(Intent intent){
+		/* Set up vibrate pattern. */
+		VibratePattern vibrate = Notification.VibratePattern.NO_VIBRATE;
+		if (intent.hasExtra("vibrate_on") && intent.hasExtra("vibrate_off") && intent.hasExtra("vibrate_cycles")) {
+			int vibrateOn = intent.getIntExtra("vibrate_on", 500);
+			int vibrateOff = intent.getIntExtra("vibrate_off", 500);
+			int vibrateCycles = intent.getIntExtra("vibrate_cycles", 3);
+			vibrate = new VibratePattern(true, vibrateOn, vibrateOff, vibrateCycles);
+		}
+		return vibrate;
 	}
 
 }
