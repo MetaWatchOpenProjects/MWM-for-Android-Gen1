@@ -55,6 +55,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.metawatch.manager.MetaWatchService.Preferences;
@@ -105,14 +106,21 @@ public class Monitors {
 		public static boolean updating = false;
 		public static boolean received = false;
 		public static String icon;
-		public static String tempHigh;
-		public static String tempLow;
 		public static String temp;
 		public static String condition;
 		public static String locationName;
 		public static boolean celsius = false;
 		
+		public static Forecast[] forecast;
+		
 		public static long timeStamp = 0;
+	}
+		
+	public class Forecast {
+		public String day;
+		public String icon;
+		public String tempHigh;
+		public String tempLow;
 	}
 	
 	public static class LocationData {
@@ -122,6 +130,8 @@ public class Monitors {
 	    
 	    public static long timeStamp = 0;
 	}
+	
+	private static Monitors m = new Monitors(); // Static instance for new
 	
 	public static void updateGmailUnreadCount(String account, int count) {
 		Log.d(MetaWatch.TAG, "Monitors.updateGmailUnreadCount(): account='"
@@ -265,18 +275,23 @@ public class Monitors {
 
 			String cond = wcc.getCondition();
 			String temp;
+			
+			WeatherData.forecast = new Forecast[1];
+			WeatherData.forecast[0] = m.new Forecast();
+			WeatherData.forecast[0].day = null;
+			
 			if (Preferences.weatherCelsius) {
-				WeatherData.tempHigh = 
+				WeatherData.forecast[0].tempHigh = 
 						  Integer.toString(wfc.getTempMaxCelsius());
-				WeatherData.tempLow = 
+				WeatherData.forecast[0].tempLow = 
 						  Integer.toString(wfc.getTempMinCelsius());
 				temp = Integer.toString(wcc.getTempCelcius());
 			} else {
-				WeatherData.tempHigh = 
+				WeatherData.forecast[0].tempHigh = 
 						  Integer.toString(WeatherUtils
 								.celsiusToFahrenheit(wfc
 										.getTempMaxCelsius()));
-				WeatherData.tempLow = 
+				WeatherData.forecast[0].tempLow = 
 						  Integer.toString(WeatherUtils
 								.celsiusToFahrenheit(wfc
 										.getTempMinCelsius()));
@@ -379,50 +394,37 @@ public class Monitors {
 				
 				JSONObject forecast = json.getJSONObject("forecast");
 				JSONObject today = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday").getJSONObject(0);
+				JSONArray forecastday = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday");
 				
 				WeatherData.locationName = location.getString("city");			
-				WeatherData.condition = current.getString("weather");
-				
-				String cond = current.getString("icon");
-				
-				if (cond.equals("clear") 
-						|| cond.equals("sunny"))
-					WeatherData.icon = "weather_sunny.bmp";
-				else if (cond.equals("cloudy"))
-					WeatherData.icon = "weather_cloudy.bmp";
-				else if (cond.equals("partlycloudy")
-						|| cond.equals("mostlycloudy")
-						|| cond.equals("partlysunny")
-						|| cond.equals("mostlysunny"))
-					WeatherData.icon = "weather_partlycloudy.bmp";
-				else if (cond.equals("rain") 
-						|| cond.equals("chancerain"))
-					WeatherData.icon = "weather_rain.bmp";
-				else if (cond.equals("fog") 
-						|| cond.equals("hazy"))
-					WeatherData.icon = "weather_fog.bmp";
-				else if (cond.equals("tstorms") 
-						|| cond.equals("chancetstorms"))
-					WeatherData.icon = "weather_thunderstorm.bmp";
-				else if (cond.equals("snow") 
-						|| cond.equals("chancesnow")
-						|| cond.equals("sleet")
-						|| cond.equals("chancesleet")
-						|| cond.equals("flurries")
-						|| cond.equals("chanceflurries"))
-					WeatherData.icon = "weather_snow.bmp";
-				else
-					WeatherData.icon = "weather_cloudy.bmp";
+				WeatherData.condition = current.getString("weather");	
+				WeatherData.icon = getIconWunderground(current.getString("icon"));
 				
 				if (Preferences.weatherCelsius) {
 					WeatherData.temp = current.getString("temp_c");
-					WeatherData.tempLow = today.getJSONObject("low").getString("celsius");
-					WeatherData.tempHigh= today.getJSONObject("high").getString("celsius");
 				}
 				else {
 					WeatherData.temp = current.getString("temp_f");
-					WeatherData.tempLow = today.getJSONObject("low").getString("fahrenheit");
-					WeatherData.tempHigh= today.getJSONObject("high").getString("fahrenheit");
+				}
+				
+				int days = forecastday.length();
+				WeatherData.forecast = new Forecast[days];
+				
+				for (int i=0; i<days; ++i) {
+					WeatherData.forecast[i] = m.new Forecast();
+					JSONObject day = forecastday.getJSONObject(i);
+					JSONObject date = day.getJSONObject("date");
+					
+					WeatherData.forecast[i].icon = getIconWunderground(day.getString("icon"));
+					WeatherData.forecast[i].day = date.getString("weekday_short");
+					if (Preferences.weatherCelsius) {
+						WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("celsius");
+						WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("celsius");
+					}
+					else {
+						WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("fahrenheit");
+						WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("fahrenheit");
+					}			
 				}
 			
 				WeatherData.celsius = Preferences.weatherCelsius;
@@ -443,6 +445,37 @@ public class Monitors {
 			
 			WeatherData.updating = false;			
 		}
+	}
+	
+	private static String getIconWunderground(String cond) {
+		if (cond.equals("clear") 
+				|| cond.equals("sunny"))
+			return "weather_sunny.bmp";
+		else if (cond.equals("cloudy"))
+			return "weather_cloudy.bmp";
+		else if (cond.equals("partlycloudy")
+				|| cond.equals("mostlycloudy")
+				|| cond.equals("partlysunny")
+				|| cond.equals("mostlysunny"))
+			return "weather_partlycloudy.bmp";
+		else if (cond.equals("rain") 
+				|| cond.equals("chancerain"))
+			return "weather_rain.bmp";
+		else if (cond.equals("fog") 
+				|| cond.equals("hazy"))
+			return "weather_fog.bmp";
+		else if (cond.equals("tstorms") 
+				|| cond.equals("chancetstorms"))
+			return "weather_thunderstorm.bmp";
+		else if (cond.equals("snow") 
+				|| cond.equals("chancesnow")
+				|| cond.equals("sleet")
+				|| cond.equals("chancesleet")
+				|| cond.equals("flurries")
+				|| cond.equals("chanceflurries"))
+			return "weather_snow.bmp";
+		else
+			return "weather_cloudy.bmp";		
 	}
 
 	public static void updateWeatherData(final Context context) {

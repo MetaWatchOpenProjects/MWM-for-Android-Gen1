@@ -134,8 +134,8 @@ public class WeatherWidget implements InternalWidget {
 			canvas.drawText("Low", 64, 30, paintSmall);
 			
 			paintSmall.setTextAlign(Paint.Align.RIGHT);
-			canvas.drawText(WeatherData.tempHigh, 95, 22, paintSmall);
-			canvas.drawText(WeatherData.tempLow, 95, 30, paintSmall);
+			canvas.drawText(WeatherData.forecast[0].tempHigh, 95, 22, paintSmall);
+			canvas.drawText(WeatherData.forecast[0].tempLow, 95, 30, paintSmall);
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 
 			Utils.drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 30, paintSmall, paintSmallOutline);
@@ -179,8 +179,8 @@ public class WeatherWidget implements InternalWidget {
 			}
 			paintLarge.setTextAlign(Paint.Align.LEFT);
 						
-			Utils.drawOutlinedText("H "+WeatherData.tempHigh, canvas, 0, 25, paintSmall, paintSmallOutline);
-			Utils.drawOutlinedText("L "+WeatherData.tempLow, canvas, 0, 31, paintSmall, paintSmallOutline);
+			Utils.drawOutlinedText("H "+WeatherData.forecast[0].tempHigh, canvas, 0, 25, paintSmall, paintSmallOutline);
+			Utils.drawOutlinedText("L "+WeatherData.forecast[0].tempLow, canvas, 0, 31, paintSmall, paintSmallOutline);
 									
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);
