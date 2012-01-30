@@ -22,10 +22,13 @@ import android.text.TextUtils.TruncateAt;
 
 public class WeatherWidget implements InternalWidget {
 	public final static String id_0 = "weather_24_32";
-	final static String desc_0 = "Weather (24x32)";
+	final static String desc_0 = "Weather Now (24x32)";
 	
 	public final static String id_1 = "weather_96_32";
-	final static String desc_1 = "Weather (96x32)";
+	final static String desc_1 = "Weather Now (96x32)";
+	
+	public final static String id_2 = "weather_fc_96_32";
+	final static String desc_2 = "Weather Forecast (96x32)";
 	
 	private Context context;
 	private TextPaint paintSmall;
@@ -59,8 +62,6 @@ public class WeatherWidget implements InternalWidget {
 		paintLargeOutline.setColor(Color.WHITE);
 		paintLargeOutline.setTextSize(FontCache.instance(context).Large.size);
 		paintLargeOutline.setTypeface(FontCache.instance(context).Large.face);
-		
-
 	}
 
 	public void shutdown() {
@@ -71,12 +72,12 @@ public class WeatherWidget implements InternalWidget {
 	}
 
 	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
-
-		if(widgetIds == null || widgetIds.contains(id_1)) {
+		
+		if(widgetIds == null || widgetIds.contains(id_0)) {
 			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
 			
-			widget.id = id_1;
-			widget.description = desc_1;
+			widget.id = id_0;
+			widget.description = desc_0;
 			widget.width = 24;
 			widget.height = 32;
 			
@@ -85,11 +86,11 @@ public class WeatherWidget implements InternalWidget {
 			result.put(widget.id, widget);
 		}
 		
-		if(widgetIds == null || widgetIds.contains(id_0)) {
+		if(widgetIds == null || widgetIds.contains(id_1)) {
 			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
 			
-			widget.id = id_0;
-			widget.description = desc_0;
+			widget.id = id_1;
+			widget.description = desc_1;
 			widget.width = 96;
 			widget.height = 32;
 			
@@ -97,9 +98,56 @@ public class WeatherWidget implements InternalWidget {
 			
 			result.put(widget.id, widget);
 		}
+		
+		if(widgetIds == null || widgetIds.contains(id_2)) {
+			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
+			
+			widget.id = id_2;
+			widget.description = desc_2;
+			widget.width = 96;
+			widget.height = 32;
+			
+			widget.bitmap = draw2();
+			
+			result.put(widget.id, widget);
+		}
+	}
+		
+	private Bitmap draw0() {
+		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		if (WeatherData.received) {
+			
+			// icon
+			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
+			canvas.drawBitmap(image, 0, 4, null);
+								
+			// temperatures
+			if (WeatherData.celsius) {
+				Utils.drawOutlinedText(WeatherData.temp+"°C", canvas, 0, 7, paintSmall, paintSmallOutline);
+			}
+			else {
+				Utils.drawOutlinedText(WeatherData.temp+"°F", canvas, 0, 7, paintSmall, paintSmallOutline);
+			}
+			paintLarge.setTextAlign(Paint.Align.LEFT);
+						
+			Utils.drawOutlinedText("H "+WeatherData.forecast[0].tempHigh, canvas, 0, 25, paintSmall, paintSmallOutline);
+			Utils.drawOutlinedText("L "+WeatherData.forecast[0].tempLow, canvas, 0, 31, paintSmall, paintSmallOutline);
+									
+		} else {
+			paintSmall.setTextAlign(Paint.Align.CENTER);
+
+			canvas.drawText("Wait", 12, 16, paintSmall);
+
+			paintSmall.setTextAlign(Paint.Align.LEFT);
+		}
+		
+		return bitmap;
 	}
 	
-	private Bitmap draw0() {
+	private Bitmap draw1() {
 		Bitmap bitmap = Bitmap.createBitmap(96, 32, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
@@ -158,39 +206,43 @@ public class WeatherWidget implements InternalWidget {
 		
 		return bitmap;
 	}
-	
-	private Bitmap draw1() {
-		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
+
+	private Bitmap draw2() {
+		Bitmap bitmap = Bitmap.createBitmap(96, 32, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
 		
-		if (WeatherData.received) {
-			
-			// icon
-			Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.icon);
-			canvas.drawBitmap(image, 0, 4, null);
-								
-			// temperatures
-			if (WeatherData.celsius) {
-				Utils.drawOutlinedText(WeatherData.temp+"°C", canvas, 0, 7, paintSmall, paintSmallOutline);
+		paintSmall.setTextAlign(Align.LEFT);
+		paintSmallOutline.setTextAlign(Align.LEFT);
+		
+		if (WeatherData.received && WeatherData.forecast.length>0) {
+			for (int i=0;i<4;++i) {
+				int x = i*24;
+				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.forecast[i+1].icon);
+				canvas.drawBitmap(image, x, 4, null);
+				Utils.drawOutlinedText(WeatherData.forecast[i+1].day, canvas, x, 6, paintSmall, paintSmallOutline);
+				
+				Utils.drawOutlinedText("H "+WeatherData.forecast[i+1].tempHigh, canvas, x, 25, paintSmall, paintSmallOutline);
+				Utils.drawOutlinedText("L "+WeatherData.forecast[i+1].tempLow, canvas, x, 31, paintSmall, paintSmallOutline);
 			}
-			else {
-				Utils.drawOutlinedText(WeatherData.temp+"°F", canvas, 0, 7, paintSmall, paintSmallOutline);
-			}
-			paintLarge.setTextAlign(Paint.Align.LEFT);
-						
-			Utils.drawOutlinedText("H "+WeatherData.forecast[0].tempHigh, canvas, 0, 25, paintSmall, paintSmallOutline);
-			Utils.drawOutlinedText("L "+WeatherData.forecast[0].tempLow, canvas, 0, 31, paintSmall, paintSmallOutline);
-									
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);
-
-			canvas.drawText("Wait", 12, 16, paintSmall);
-
+			if (Preferences.weatherGeolocation) {
+				if( !LocationData.received ) {
+					canvas.drawText("Awaiting location", 48, 18, paintSmall);
+				}
+				else {
+					canvas.drawText("Awaiting weather", 48, 18, paintSmall);
+				}
+			}
+			else {
+				canvas.drawText("No data", 48, 18, paintSmall);
+			}
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 		}
 		
 		return bitmap;
 	}
+
 
 }

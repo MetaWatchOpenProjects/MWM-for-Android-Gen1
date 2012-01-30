@@ -393,7 +393,6 @@ public class Monitors {
 				JSONObject current = json.getJSONObject("current_observation");
 				
 				JSONObject forecast = json.getJSONObject("forecast");
-				JSONObject today = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday").getJSONObject(0);
 				JSONArray forecastday = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday");
 				
 				WeatherData.locationName = location.getString("city");			
