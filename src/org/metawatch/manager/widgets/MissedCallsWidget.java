@@ -20,11 +20,8 @@ public class MissedCallsWidget implements InternalWidget {
 	private Context context;
 	private TextPaint paintSmall;
 	
-	public MissedCallsWidget(Context context) {
+	public void init(Context context, List<String> widgetIds) {
 		this.context = context;
-	}
-	
-	public void init(List<String> widgetIds) {
 
 		paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);

@@ -29,15 +29,12 @@ public class TestWidget implements InternalWidget {
 	public final static String id_3 = "Test_96_96";
 	final static String desc_3 = "Test (96x96)";
 	
-	private Context context;
+	//private Context context;
 	private TextPaint paintSmall;
 	private TextPaint paintLarge;
 	
-	public TestWidget(Context context) {
-		this.context = context;
-	}
-	
-	public void init(List<String> widgetIds) {
+	public void init(Context context, List<String> widgetIds) {
+		//this.context = context;
 
 		paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);

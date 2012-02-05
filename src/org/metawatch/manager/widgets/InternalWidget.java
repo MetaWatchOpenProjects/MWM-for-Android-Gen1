@@ -3,6 +3,7 @@ package org.metawatch.manager.widgets;
 import java.util.Dictionary;
 import java.util.List;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 public interface InternalWidget {
@@ -19,7 +20,7 @@ public interface InternalWidget {
 		public int priority;
 	}
 	
-	public void init(List<String> widgetIds);
+	public void init(Context context, List<String> widgetIds);
 	public void shutdown();
 	
 	public void refresh(List<String> widgetIds);

@@ -36,11 +36,8 @@ public class WeatherWidget implements InternalWidget {
 	private TextPaint paintLarge;
 	private TextPaint paintLargeOutline;
 	
-	public WeatherWidget(Context context) {
+	public void init(Context context, List<String> widgetIds) {
 		this.context = context;
-	}
-	
-	public void init(List<String> widgetIds) {
 
 		paintSmall = new TextPaint();
 		paintSmall.setColor(Color.BLACK);

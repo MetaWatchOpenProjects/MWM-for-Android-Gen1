@@ -34,18 +34,17 @@ package org.metawatch.manager;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.widgets.GmailWidget;
-import org.metawatch.manager.widgets.InternalWidget;
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.K9Widget;
 import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
 import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
+import org.metawatch.manager.widgets.WidgetManager;
 import org.metawatch.manager.widgets.WidgetRow;
 
 import android.content.Context;
@@ -66,22 +65,23 @@ public class Idle {
 
 	static int currentPage = 0;
 	
-	static List<InternalWidget> widgets = null;
+	static boolean widgetsInitialised = false;
+	//static List<InternalWidget> widgets = null;
 	
-	public static void InitWidgets(Context context) {
-		widgets = new ArrayList<InternalWidget>();
+	//public static void InitWidgets(Context context) {
+	//	widgets = new ArrayList<InternalWidget>();
 		
-		widgets.add(new MissedCallsWidget(context));
-		widgets.add(new SmsWidget(context));
-		widgets.add(new K9Widget(context));
-		widgets.add(new GmailWidget(context));
-		widgets.add(new WeatherWidget(context));
-		widgets.add(new TestWidget(context));
-		
-		for(InternalWidget widget : widgets) {
-			widget.init(null);
-		}
-	}
+	//	widgets.add(new MissedCallsWidget(context));
+	//	widgets.add(new SmsWidget(context));
+	//	widgets.add(new K9Widget(context));
+	//	widgets.add(new GmailWidget(context));
+	//	widgets.add(new WeatherWidget(context));
+	//	widgets.add(new TestWidget(context));
+	//	
+	//	for(InternalWidget widget : widgets) {
+	//		widget.init(null);
+	//	}
+	//}
 	
 	public static void NextPage() {
 		
@@ -110,10 +110,11 @@ public class Idle {
 	
 
 
-	static Bitmap createLcdIdle(Context context) {
+	static synchronized Bitmap createLcdIdle(Context context) {
 		
-		if(widgets==null) {
-			InitWidgets(context);
+		if(!widgetsInitialised) {
+			WidgetManager.initWidgets(context, null);
+			widgetsInitialised = true;
 		}
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
@@ -173,7 +174,7 @@ public class Idle {
 			for(WidgetRow row : rows) {
 				widgetsDesired.addAll(row.getIds());
 			}			
-			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
+			Dictionary<String,WidgetData> widgetData = WidgetManager.refreshWidgets(widgetsDesired);
 			
 			int space = (64 - (rows.size()*32)) / (rows.size()+1);
 			int yPos = 32 + space;
@@ -229,17 +230,6 @@ public class Idle {
 		}
 		
 		return bitmap;
-	}
-	
-	private static Dictionary<String,WidgetData> RefreshWidgets(List<String> widgetsDesired) {
-		Dictionary<String,WidgetData> result = new Hashtable<String,WidgetData>();
-		
-		for(InternalWidget widget : widgets) {
-			widget.refresh(widgetsDesired);
-			widget.get(widgetsDesired, result);
-		}
-		
-		return result;
 	}
 
 	public static Canvas drawLine(Canvas canvas, int y) {
