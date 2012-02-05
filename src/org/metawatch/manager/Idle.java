@@ -46,6 +46,7 @@ import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
 import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
+import org.metawatch.manager.widgets.WidgetRow;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -144,52 +145,44 @@ public class Idle {
 		
 			Protocol.configureIdleBufferSize(true);
 			
-			List<String> widgetsDesired = new ArrayList<String>();
-			widgetsDesired.add(MissedCallsWidget.id_0);
-			widgetsDesired.add(SmsWidget.id_0);
-			if(Preferences.showK9Unread) 
-				widgetsDesired.add(K9Widget.id_0);
-			else
-				widgetsDesired.add(GmailWidget.id_0);
+			List<WidgetRow> rows = new ArrayList<WidgetRow>();
 			
-			//widgetsDesired.add(TestWidget.id_0);
-			//widgetsDesired.add(WeatherWidget.id_0);
-			
-			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
-			
-			if(!Preferences.disableWeather) {
-				// Draw Weather
-				List<String> temp1 = new ArrayList<String>();
-				temp1.add(WeatherWidget.id_1);
-				//temp1.add(TestWidget.id_1);
-				Dictionary<String,WidgetData> temp = RefreshWidgets(temp1);
-				
-				WidgetData widget = temp.get(WeatherWidget.id_1);
-				//WidgetData widget = temp.get(TestWidget.id_1);
-				if(widget!=null && widget.bitmap!=null) {
-					canvas.drawBitmap(widget.bitmap, 0, 32, null);
-				}
-			}		
-					
-			int rows = widgetsDesired.size();
-			int yPos = !Preferences.disableWeather ? 64 : 32;
-		
-			for (int i = 0; i < rows; i++) {
-				String id = widgetsDesired.get(i);
-				WidgetData widget = widgetData.get(id);
-				if(widget!=null && widget.bitmap!=null) {
-					
-					int slotSpace = 96/rows;
-					int slotX = slotSpace/2-12;
-					int iconX = slotSpace*i + slotX;
-					
-					canvas.drawBitmap(widget.bitmap, iconX, yPos, null);
-				}			
+			if(!Preferences.disableWeather)
+			{
+				WidgetRow row = new WidgetRow();
+				row.add(WeatherWidget.id_1);
+				rows.add(row);
 			}
 			
-			//canvas = drawLine(canvas, 32);
-			//canvas = drawLine(canvas, 64);
+			{
+				WidgetRow row = new WidgetRow();
+				row.add(MissedCallsWidget.id_0);
+				row.add(SmsWidget.id_0);
+				if(Preferences.showK9Unread) 
+					row.add(K9Widget.id_0);
+				else
+					row.add(GmailWidget.id_0);
+				
+				//row.add(TestWidget.id_0);
+				//row.add(WeatherWidget.id_0);
+				
+				rows.add(row);
+			}
 			
+			List<String> widgetsDesired = new ArrayList<String>();
+			for(WidgetRow row : rows) {
+				widgetsDesired.addAll(row.getIds());
+			}			
+			Dictionary<String,WidgetData> widgetData = RefreshWidgets(widgetsDesired);
+			
+			int space = (64 - (rows.size()*32)) / (rows.size()+1);
+			int yPos = 32 + space;
+			
+			for(WidgetRow row : rows) {
+				row.draw(widgetData, canvas, yPos);
+				yPos += 32 + space;
+			}
+				
 		}
 		else if (currentPage == 1) {
 			Protocol.configureIdleBufferSize(false);

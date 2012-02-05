@@ -71,6 +71,7 @@ public class TestWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw(widget.width, widget.height);
+			widget.priority = 1;
 			
 			result.put(widget.id, widget);
 		}
@@ -84,6 +85,7 @@ public class TestWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw(widget.width, widget.height);
+			widget.priority = 1;
 			
 			result.put(widget.id, widget);
 		}
@@ -97,6 +99,7 @@ public class TestWidget implements InternalWidget {
 			widget.height = 96;
 			
 			widget.bitmap = draw(widget.width, widget.height);
+			widget.priority = 1;
 			
 			result.put(widget.id, widget);
 		}
@@ -110,6 +113,7 @@ public class TestWidget implements InternalWidget {
 			widget.height = 96;
 			
 			widget.bitmap = draw(widget.width, widget.height);
+			widget.priority = 1;
 			
 			result.put(widget.id, widget);
 		}

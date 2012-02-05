@@ -82,6 +82,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw0();
+			widget.priority = WeatherData.received ? 1 : 0;
 			
 			result.put(widget.id, widget);
 		}
@@ -95,6 +96,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw1();
+			widget.priority = WeatherData.received ? 1 : 0;
 			
 			result.put(widget.id, widget);
 		}
@@ -108,6 +110,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw2();
+			widget.priority = WeatherData.received ? 1 : 0;
 			
 			result.put(widget.id, widget);
 		}

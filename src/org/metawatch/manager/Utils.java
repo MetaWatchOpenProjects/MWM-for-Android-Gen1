@@ -49,6 +49,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.CallLog;
@@ -479,6 +480,17 @@ public class Utils {
 		drawWrappedText(text, canvas, x, y+1, width, outline, align);
 		
 		drawWrappedText(text, canvas, x, y, width, col, align);
+	}
+	
+	public static Bitmap DrawIconCountWidget(Context context, int width, int height, Bitmap icon, int count, TextPaint textPaint) {
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		canvas.drawBitmap(icon, 0, 3, null);
+		canvas.drawText(Integer.toString(count), 12, 29, textPaint);
+		
+		return bitmap;
 	}
 
 }

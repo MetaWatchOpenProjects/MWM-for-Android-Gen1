@@ -15,6 +15,8 @@ public interface InternalWidget {
 		public int height;
 		
 		public Bitmap bitmap;
+		
+		public int priority;
 	}
 	
 	public void init(List<String> widgetIds);

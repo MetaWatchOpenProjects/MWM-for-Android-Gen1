@@ -2,7 +2,6 @@ package org.metawatch.manager.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.text.TextPaint;
@@ -45,37 +44,33 @@ public class GmailWidget implements InternalWidget {
 
 	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
 
-		if(widgetIds == null || widgetIds.contains(id_0)) {
-			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
-			
-			widget.id = id_0;
-			widget.description = desc_0;
-			widget.width = 24;
-			widget.height = 32;
-			
-			widget.bitmap = draw0();
-			
-			result.put(widget.id, widget);
+		if(widgetIds == null || widgetIds.contains(id_0)) {		
+			result.put(id_0, GenWidget(id_0));
 		}
 	}
 	
-	private Bitmap draw0() {
-		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
-		Canvas canvas = new Canvas(bitmap);
-		canvas.drawColor(Color.WHITE);
-		
-		canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "idle_gmail.bmp"), 0, 3, null);
-		
-		String count;
+	private InternalWidget.WidgetData GenWidget(String widget_id) {
+		InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
 
+		widget.id = id_0;
+		widget.description = desc_0;
+		widget.width = 24;
+		widget.height = 32;
+		
+		Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_gmail.bmp");
+
+		int count;
 		if (Utils.isGmailAccessSupported(context))
-			count = Integer.toString(Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i"));
+			count = Utils.getUnreadGmailCount(context, Utils.getGoogleAccountName(context), "^i");
 		else 
-			count = Integer.toString(Monitors.getGmailUnreadCount());
+			count = Monitors.getGmailUnreadCount();
 
-		canvas.drawText(count, 12, 29, paintSmall);
+		widget.priority = count;		
+		widget.bitmap = Utils.DrawIconCountWidget(context, widget.width, widget.height, icon, count, paintSmall);
 		
-		return bitmap;
+		return widget;
 	}
+	
+
 
 }
