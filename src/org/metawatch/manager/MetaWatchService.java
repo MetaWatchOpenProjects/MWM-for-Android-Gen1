@@ -118,6 +118,7 @@ public class MetaWatchService extends Service {
 		static final int REGISTER_CLIENT = 0;
 		static final int UNREGISTER_CLIENT = 1;
 		static final int UPDATE_STATUS = 2;
+		static final int STOP_SERVICE = 3;
 	}
 
 	static class WatchModes {
@@ -269,7 +270,7 @@ public class MetaWatchService extends Service {
 
 	private PendingIntent createNotificationPendingIntent() {
 		return PendingIntent.getActivity(this, 0, new Intent(this,
-				MetaWatch.class), 0);
+				TabContainer.class), 0);
 	}
 
 	public void updateNotification() {
@@ -472,6 +473,9 @@ public class MetaWatchService extends Service {
             case Msg.UNREGISTER_CLIENT:
                 mClients.remove(msg.replyTo);
                 break;
+            case Msg.STOP_SERVICE:
+            	
+            	break;
                 
             default:
                 super.handleMessage(msg);

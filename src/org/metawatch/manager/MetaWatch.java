@@ -32,8 +32,6 @@
 
 package org.metawatch.manager;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -66,16 +64,17 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bugsense.trace.BugSenseHandler;
+import android.widget.ToggleButton;
 
 public class MetaWatch extends Activity {
 
 	public static final String TAG = "MetaWatch";
 	
 	private TextView textView;
-	private Button buttonStart;
-	private Button buttonStop;
+	//private Button buttonStart;
+	//private Button buttonStop;
+	
+	private ToggleButton toggleButton;
 	
 	/** Messenger for communicating with service. */
     Messenger mService = null;
@@ -87,20 +86,6 @@ public class MetaWatch extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        // If you want to use BugSense for your fork, register with them
-        // and place your API key in /assets/bugsense.txt
-        // (This prevents me receiving reports of crashes from forked versions
-        // which is somewhat confusing!)      
-        try {
-			InputStream inputStream = getAssets().open("bugsense.txt");
-			String key = Utils.ReadInputStream(inputStream);
-			key=key.trim();
-			Log.d(MetaWatch.TAG, "Using bugsense key '"+key+"'");
-			BugSenseHandler.setup(this, key);
-		} catch (IOException e) {
-			Log.d(MetaWatch.TAG, "No bugsense keyfile found");
-		}
                    
         textView = (TextView) findViewById(R.id.textview);
         
@@ -124,24 +109,30 @@ public class MetaWatch extends Activity {
 			startActivity(new Intent(getApplicationContext(), DeviceSelection.class));
 		}
 		
-		//if (Preferences.idleMusicControls)
-		//	Protocol.enableMediaButtons();
-		//else 
-			//Protocol.disableMediaButtons();
-		
-		buttonStart = (Button) findViewById(R.id.start);
-		buttonStart.setOnClickListener(new View.OnClickListener() {
+	
+		toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+		toggleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startService();
+            	if(toggleButton.isChecked())
+            		startService();
+            	else
+            		stopService();
             }
         });
 		
-		buttonStop = (Button) findViewById(R.id.stop);
-		buttonStop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                stopService();
-            }
-        });
+		//buttonStart = (Button) findViewById(R.id.start);
+		//buttonStart.setOnClickListener(new View.OnClickListener() {
+        //    public void onClick(View v) {
+        //        startService();
+        //    }
+        //});
+		
+		//buttonStop = (Button) findViewById(R.id.stop);
+		//buttonStop.setOnClickListener(new View.OnClickListener() {
+        //    public void onClick(View v) {
+        //        stopService();
+        //    }
+        //});
 		
 		displayStatus();
 		
@@ -155,18 +146,6 @@ public class MetaWatch extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-	    case R.id.start:
-	    	startService();
-	        return true;
-	    case R.id.stop:	   
-	    	stopService();
-	        return true;
-	    case R.id.test:
-	    	startActivity(new Intent(this, Test.class));
-	        return true;
-	    case R.id.settings:	 
-	    	startActivity(new Intent(this, Settings.class));
-	        return true;
 	    case R.id.about:
 	    	showAbout();
 	        return true;
@@ -179,19 +158,23 @@ public class MetaWatch extends Activity {
 	}
     
 	void startService() {
-		startService(new Intent(this, MetaWatchService.class));
+		Context context = getApplicationContext();
+		//context.startService(new Intent(this, MetaWatchService.class));
 		
-        bindService(new Intent(MetaWatch.this, 
+		context.bindService(new Intent(MetaWatch.this, 
                 MetaWatchService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         
-        buttonStart.setEnabled(false);
-        buttonStop.setEnabled(true);
+        toggleButton.setChecked(true);
+        
+        //buttonStart.setEnabled(false);
+        //buttonStop.setEnabled(true);
 	}
 	
     void stopService() {
     	
     	if (mService != null) {
+    		Context context = getApplicationContext();
             try {
                 Message msg = Message.obtain(null,
                         MetaWatchService.Msg.UNREGISTER_CLIENT);
@@ -205,16 +188,19 @@ public class MetaWatch extends Activity {
             try {
             	stopService(new Intent(this, MetaWatchService.class));
                 // Detach our existing connection.
-                unbindService(mConnection);
+                context.unbindService(mConnection);
                 mIsBound = false;
             }
             catch(IllegalArgumentException e) {
             	// The service wasn't running
+            	Log.d(MetaWatch.TAG, e.getMessage());          	
             }
         }
     	
-    	buttonStart.setEnabled(true);
-    	buttonStop.setEnabled(false);
+    	toggleButton.setChecked(false);
+    	
+    	//buttonStart.setEnabled(true);
+    	//buttonStop.setEnabled(false);
    
         displayStatus();
     }
@@ -329,10 +315,15 @@ public class MetaWatch extends Activity {
     }
     
     private void printDate(long ticks) {
-    	final Calendar cal = Calendar.getInstance();
-    	cal.setTimeInMillis(ticks);
-    	Date date = cal.getTime();
-    	textView.append(DateFormat.getDateFormat(this).format(date)+" "+DateFormat.getTimeFormat(this).format(date));
+    	if(ticks==0) {
+    		textView.append("...loading...");
+    	}
+    	else {
+	    	final Calendar cal = Calendar.getInstance();
+	    	cal.setTimeInMillis(ticks);
+	    	Date date = cal.getTime();
+	    	textView.append(DateFormat.getDateFormat(this).format(date)+" "+DateFormat.getTimeFormat(this).format(date));
+    	}
     	textView.append("\n");
     }
     
