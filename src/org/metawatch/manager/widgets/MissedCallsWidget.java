@@ -1,16 +1,16 @@
 package org.metawatch.manager.widgets;
 
+import java.util.List;
+import java.util.Map;
+
+import org.metawatch.manager.FontCache;
+import org.metawatch.manager.Utils;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.text.TextPaint;
-
-import java.util.Dictionary;
-import java.util.List;
-
-import org.metawatch.manager.FontCache;
-import org.metawatch.manager.Utils;
 
 public class MissedCallsWidget implements InternalWidget {
 
@@ -38,7 +38,7 @@ public class MissedCallsWidget implements InternalWidget {
 	public void refresh(List<String> widgetIds) {
 	}
 
-	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
+	public void get(List<String> widgetIds, Map<String,WidgetData> result) {
 
 		if(widgetIds == null || widgetIds.contains(id_0)) {
 			result.put(id_0, GenWidget(id_0));

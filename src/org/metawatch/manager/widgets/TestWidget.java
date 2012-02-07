@@ -1,7 +1,7 @@
 package org.metawatch.manager.widgets;
 
-import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import org.metawatch.manager.FontCache;
 
@@ -57,7 +57,7 @@ public class TestWidget implements InternalWidget {
 	public void refresh(List<String> widgetIds) {
 	}
 
-	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
+	public void get(List<String> widgetIds, Map<String,WidgetData> result) {
 
 		if(widgetIds == null || widgetIds.contains(id_0)) {
 			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();

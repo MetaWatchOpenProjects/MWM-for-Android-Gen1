@@ -33,8 +33,8 @@
 package org.metawatch.manager;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.widgets.GmailWidget;
@@ -42,7 +42,6 @@ import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.K9Widget;
 import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
-import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
 import org.metawatch.manager.widgets.WidgetManager;
 import org.metawatch.manager.widgets.WidgetRow;
@@ -174,7 +173,7 @@ public class Idle {
 			for(WidgetRow row : rows) {
 				widgetsDesired.addAll(row.getIds());
 			}			
-			Dictionary<String,WidgetData> widgetData = WidgetManager.refreshWidgets(widgetsDesired);
+			Map<String,WidgetData> widgetData = WidgetManager.refreshWidgets(widgetsDesired);
 			
 			int space = (64 - (rows.size()*32)) / (rows.size()+1);
 			int yPos = 32 + space;

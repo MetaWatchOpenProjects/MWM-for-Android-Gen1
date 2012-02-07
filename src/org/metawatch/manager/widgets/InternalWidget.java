@@ -1,7 +1,7 @@
 package org.metawatch.manager.widgets;
 
-import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +24,6 @@ public interface InternalWidget {
 	public void shutdown();
 	
 	public void refresh(List<String> widgetIds);
-	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result);
+	public void get(List<String> widgetIds, Map<String,WidgetData> result);
 	
 }

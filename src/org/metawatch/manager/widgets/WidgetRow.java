@@ -1,8 +1,8 @@
 package org.metawatch.manager.widgets;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 
@@ -20,7 +20,7 @@ public class WidgetRow {
 		return widgetIDs;
 	}
 	
-	public void draw(Dictionary<String,WidgetData> widgetData, Canvas canvas, int y)
+	public void draw(Map<String,WidgetData> widgetData, Canvas canvas, int y)
 	{
 		List<WidgetData> widgets = new ArrayList<WidgetData>();
 				

@@ -1,9 +1,9 @@
 package org.metawatch.manager.widgets;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.GmailWidget;
@@ -26,7 +26,7 @@ public class WidgetManager {
 			widgets.add(new K9Widget());
 			widgets.add(new GmailWidget());
 			widgets.add(new WeatherWidget());
-			widgets.add(new TestWidget());
+			//widgets.add(new TestWidget());
 		}
 		
 		for(InternalWidget widget : widgets) {
@@ -34,8 +34,8 @@ public class WidgetManager {
 		}
 	}
 	
-	public static Dictionary<String,WidgetData> refreshWidgets(List<String> widgetsDesired) {
-		Dictionary<String,WidgetData> result = new Hashtable<String,WidgetData>();
+	public static Map<String,WidgetData> refreshWidgets(List<String> widgetsDesired) {
+		Map<String,WidgetData> result = new HashMap<String,WidgetData>();
 		
 		for(InternalWidget widget : widgets) {
 			widget.refresh(widgetsDesired);

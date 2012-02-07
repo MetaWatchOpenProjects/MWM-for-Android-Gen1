@@ -1,13 +1,13 @@
 package org.metawatch.manager.widgets;
 
-import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import org.metawatch.manager.FontCache;
-import org.metawatch.manager.Utils;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
+import org.metawatch.manager.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,10 +22,10 @@ import android.text.TextUtils.TruncateAt;
 
 public class WeatherWidget implements InternalWidget {
 	public final static String id_0 = "weather_24_32";
-	final static String desc_0 = "Weather Now (24x32)";
+	final static String desc_0 = "Current Weather (24x32)";
 	
 	public final static String id_1 = "weather_96_32";
-	final static String desc_1 = "Weather Now (96x32)";
+	final static String desc_1 = "Current Weather (96x32)";
 	
 	public final static String id_2 = "weather_fc_96_32";
 	final static String desc_2 = "Weather Forecast (96x32)";
@@ -43,7 +43,6 @@ public class WeatherWidget implements InternalWidget {
 		paintSmall.setColor(Color.BLACK);
 		paintSmall.setTextSize(FontCache.instance(context).Small.size);
 		paintSmall.setTypeface(FontCache.instance(context).Small.face);
-		paintSmall.setTextAlign(Align.CENTER);
 		
 		paintSmallOutline = new TextPaint();
 		paintSmallOutline.setColor(Color.WHITE);
@@ -68,7 +67,7 @@ public class WeatherWidget implements InternalWidget {
 	public void refresh(List<String> widgetIds) {
 	}
 
-	public void get(List<String> widgetIds, Dictionary<String,WidgetData> result) {
+	public void get(List<String> widgetIds, Map<String,WidgetData> result) {
 		
 		if(widgetIds == null || widgetIds.contains(id_0)) {
 			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
