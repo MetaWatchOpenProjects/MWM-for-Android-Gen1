@@ -37,12 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
-import org.metawatch.manager.widgets.GmailWidget;
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
-import org.metawatch.manager.widgets.K9Widget;
-import org.metawatch.manager.widgets.MissedCallsWidget;
-import org.metawatch.manager.widgets.SmsWidget;
-import org.metawatch.manager.widgets.WeatherWidget;
 import org.metawatch.manager.widgets.WidgetManager;
 import org.metawatch.manager.widgets.WidgetRow;
 
@@ -65,22 +60,6 @@ public class Idle {
 	static int currentPage = 0;
 	
 	static boolean widgetsInitialised = false;
-	//static List<InternalWidget> widgets = null;
-	
-	//public static void InitWidgets(Context context) {
-	//	widgets = new ArrayList<InternalWidget>();
-		
-	//	widgets.add(new MissedCallsWidget(context));
-	//	widgets.add(new SmsWidget(context));
-	//	widgets.add(new K9Widget(context));
-	//	widgets.add(new GmailWidget(context));
-	//	widgets.add(new WeatherWidget(context));
-	//	widgets.add(new TestWidget(context));
-	//	
-	//	for(InternalWidget widget : widgets) {
-	//		widget.init(null);
-	//	}
-	//}
 	
 	public static void NextPage() {
 		
@@ -108,8 +87,11 @@ public class Idle {
 	}
 	
 
-
 	static synchronized Bitmap createLcdIdle(Context context) {
+		return createLcdIdle(context, currentPage);
+	}
+
+	static synchronized Bitmap createLcdIdle(Context context, int page) {
 		
 		if(!widgetsInitialised) {
 			WidgetManager.initWidgets(context, null);
@@ -141,33 +123,11 @@ public class Idle {
 		
 		canvas.drawColor(Color.WHITE);	
 		
-		if( currentPage == 0 ) {
+		if( page == 0 ) {
 		
 			Protocol.configureIdleBufferSize(true);
-			
-			List<WidgetRow> rows = new ArrayList<WidgetRow>();
-			
-			if(!Preferences.disableWeather)
-			{
-				WidgetRow row = new WidgetRow();
-				row.add(WeatherWidget.id_1);
-				rows.add(row);
-			}
-			
-			{
-				WidgetRow row = new WidgetRow();
-				row.add(MissedCallsWidget.id_0);
-				row.add(SmsWidget.id_0);
-				if(Preferences.showK9Unread) 
-					row.add(K9Widget.id_0);
-				else
-					row.add(GmailWidget.id_0);
-				
-				//row.add(TestWidget.id_0);
-				//row.add(WeatherWidget.id_0);
-				
-				rows.add(row);
-			}
+	
+			List<WidgetRow> rows = WidgetManager.getDesiredWidgetsFromPrefs();
 			
 			List<String> widgetsDesired = new ArrayList<String>();
 			for(WidgetRow row : rows) {
@@ -184,7 +144,7 @@ public class Idle {
 			}
 				
 		}
-		else if (currentPage == 1) {
+		else if (page == 1) {
 			Protocol.configureIdleBufferSize(false);
 			
 			if(MediaControl.lastTrack=="") {

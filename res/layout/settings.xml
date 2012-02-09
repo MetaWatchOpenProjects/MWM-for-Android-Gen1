@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	>
 	
-    <PreferenceCategory
+    <PreferenceScreen
 		android:title="@string/settings_Device"
 		>
 		<Preference
@@ -18,9 +18,9 @@
 			android:summary="Enter watch MAC address manually"
 			android:defaultValue=""
 			/>
-	</PreferenceCategory>
+	</PreferenceScreen>
     
-	<PreferenceCategory
+	<PreferenceScreen
 		android:title="@string/settings_Notifications"
 		>
 		<CheckBoxPreference
@@ -216,10 +216,10 @@
 			android:defaultValue="true"
 			/>
 				
-	</PreferenceCategory>
+	</PreferenceScreen>
 
 		
- 	<PreferenceCategory
+ 	<PreferenceScreen
  		android:title="@string/settings_Analog"
  		>
  		<CheckBoxPreference
@@ -228,9 +228,9 @@
 			android:summary="Pause a few seconds before scrolling long messages on the analog watch"
  			android:defaultValue="false"
  			/>
- 	</PreferenceCategory>	
+ 	</PreferenceScreen>	
 	
-	<PreferenceCategory
+	<PreferenceScreen
 		android:title="@string/settings_Digital"
 		>
 		<EditTextPreference
@@ -272,9 +272,9 @@
 			android:summary="Switch black/white bit"
 			android:defaultValue="false"
 			/>
-	</PreferenceCategory>	
+	</PreferenceScreen>	
 	
-	<PreferenceCategory
+	<PreferenceScreen
 	    android:title="Weather"
 	    >
 
@@ -309,9 +309,9 @@
 			android:defaultValue="false"
 			/>	    
 	    
-	</PreferenceCategory>
+	</PreferenceScreen>
 
-	<PreferenceCategory
+	<PreferenceScreen
 	    android:title="Widgets"
 	    >
 	   	<CheckBoxPreference
@@ -320,9 +320,17 @@
 			android:summary="Display unread mail count from K-9 mail, instead of gmail"
 			android:defaultValue="false"
 			/>	
-	</PreferenceCategory>
+			
+		<EditTextPreference
+			android:title="widgetLayout"
+			android:key="widgets"
+			android:summary="Don't manually edit this - Use the widgets tab!"
+			android:defaultValue=""
+			/>	
+			
+	</PreferenceScreen>
 	
-	<PreferenceCategory
+	<PreferenceScreen
 		android:title="@string/settings_Other"
 		>
 		
@@ -388,7 +396,7 @@
 			android:defaultValue="false"
 			/>	
 			
-	</PreferenceCategory>	
+	</PreferenceScreen>	
 
 	
 </PreferenceScreen>

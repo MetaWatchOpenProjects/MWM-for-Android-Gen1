@@ -159,6 +159,7 @@ public class MetaWatchService extends Service {
 		public static boolean disableWeather = false;
 		public static boolean autoConnect = false;
 		public static boolean autoRestart = false;
+		public static String widgets = "weather_96_32|missedCalls_24_32,unreadSms_24_32,unreadGmail_24_32";
 		public static boolean showK9Unread = false;
 	}
 
@@ -225,6 +226,8 @@ public class MetaWatchService extends Service {
 				Preferences.autoRestart);
 		Preferences.showK9Unread = sharedPreferences.getBoolean(
 				"ShowK9Unread", Preferences.showK9Unread);
+		Preferences.widgets = sharedPreferences.getString("widgets",
+				Preferences.widgets);
 
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString(
