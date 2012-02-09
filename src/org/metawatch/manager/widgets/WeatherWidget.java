@@ -158,34 +158,33 @@ public class WeatherWidget implements InternalWidget {
 			canvas.drawBitmap(image, 36, 5, null);
 			
 			// condition
-			Utils.drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 3, 60, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_NORMAL);
+			Utils.drawWrappedOutlinedText(WeatherData.condition, canvas, 1, 1, 60, paintSmall, paintSmallOutline, Layout.Alignment.ALIGN_NORMAL);
 								
 			// temperatures
+			paintLarge.setTextAlign(Paint.Align.RIGHT);
+			paintLargeOutline.setTextAlign(Paint.Align.RIGHT);
+			Utils.drawOutlinedText(WeatherData.temp, canvas, 82, 12, paintLarge, paintLargeOutline);
 			if (WeatherData.celsius) {
-				paintLarge.setTextAlign(Paint.Align.RIGHT);
-				canvas.drawText(WeatherData.temp, 82, 14, paintLarge);
 				//RM: since the degree symbol draws wrong...
-				canvas.drawText("O", 82, 8, paintSmall);
-				canvas.drawText("C", 95, 14, paintLarge);
+				canvas.drawText("O", 82, 6, paintSmall);
+				canvas.drawText("C", 95, 12, paintLarge);
 			}
 			else {
-				paintLarge.setTextAlign(Paint.Align.RIGHT);
-				canvas.drawText(WeatherData.temp, 83, 14, paintLarge);
 				//RM: since the degree symbol draws wrong...
-				canvas.drawText("O", 83, 8, paintSmall);
-				canvas.drawText("F", 95, 14, paintLarge);
+				canvas.drawText("O", 83, 6, paintSmall);
+				canvas.drawText("F", 95, 12, paintLarge);
 			}
 			paintLarge.setTextAlign(Paint.Align.LEFT);
 						
-			canvas.drawText("High", 64, 22, paintSmall);
-			canvas.drawText("Low", 64, 30, paintSmall);
+			canvas.drawText("High", 64, 23, paintSmall);
+			canvas.drawText("Low", 64, 31, paintSmall);
 			
 			paintSmall.setTextAlign(Paint.Align.RIGHT);
-			canvas.drawText(WeatherData.forecast[0].tempHigh, 95, 22, paintSmall);
-			canvas.drawText(WeatherData.forecast[0].tempLow, 95, 30, paintSmall);
+			canvas.drawText(WeatherData.forecast[0].tempHigh, 95, 23, paintSmall);
+			canvas.drawText(WeatherData.forecast[0].tempLow, 95, 31, paintSmall);
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 
-			Utils.drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 30, paintSmall, paintSmallOutline);
+			Utils.drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 31, paintSmall, paintSmallOutline);
 						
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);
