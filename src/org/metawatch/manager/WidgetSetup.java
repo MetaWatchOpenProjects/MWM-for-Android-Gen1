@@ -11,11 +11,13 @@ import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Toast;
 
 public class WidgetSetup extends Activity {
 	
@@ -36,6 +38,14 @@ public class WidgetSetup extends Activity {
         
         setContentView(R.layout.widget_setup);
    
+    }
+    
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        
+        setContentView(R.layout.widget_setup);
+        adapter = null;
+        onStart();
     }
     
 	@Override
