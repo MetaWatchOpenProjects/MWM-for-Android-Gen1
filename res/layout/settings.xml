@@ -310,25 +310,6 @@
 			/>	    
 	    
 	</PreferenceScreen>
-
-	<PreferenceScreen
-	    android:title="Widgets"
-	    >
-	   	<CheckBoxPreference
-			android:title="Show K-9 Unread Counts"
-			android:key="ShowK9Unread"
-			android:summary="Display unread mail count from K-9 mail, instead of gmail"
-			android:defaultValue="false"
-			/>	
-			
-		<EditTextPreference
-			android:title="widgetLayout"
-			android:key="widgets"
-			android:summary="Don't manually edit this - Use the widgets tab!"
-			android:defaultValue=""
-			/>	
-			
-	</PreferenceScreen>
 	
 	<PreferenceScreen
 		android:title="@string/settings_Other"

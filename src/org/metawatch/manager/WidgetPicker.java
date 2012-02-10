@@ -1,6 +1,8 @@
 package org.metawatch.manager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +113,15 @@ public class WidgetPicker extends ListActivity {
             ImageView icon;
         }
     }
+    
+    private static Comparator<WidgetData> COMPARATOR = new Comparator<WidgetData>()
+    {
+	// This is where the sorting happens.
+        public int compare(WidgetData o1, WidgetData o2)
+        {
+            return o1.id.compareTo(o2.id);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,13 +131,15 @@ public class WidgetPicker extends ListActivity {
         widgetList = new ArrayList<WidgetData>();
         
         WidgetData dummy = new WidgetData();
-        dummy.id = null;
+        dummy.id = "";
         dummy.description = "<empty>";
         
         widgetList.add(dummy);
         
         for (Map.Entry<String,WidgetData> e : widgetMap.entrySet())
         	widgetList.add(e.getValue());
+        
+        Collections.sort(widgetList, COMPARATOR);
         
         Log.d(MetaWatch.TAG, "Showing " +widgetList.size() + " widgets");
         

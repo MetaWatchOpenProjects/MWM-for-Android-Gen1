@@ -12,7 +12,7 @@ import org.metawatch.manager.widgets.GmailWidget;
 import org.metawatch.manager.widgets.K9Widget;
 import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
-import org.metawatch.manager.widgets.TestWidget;
+//import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
 
 import android.content.Context;
