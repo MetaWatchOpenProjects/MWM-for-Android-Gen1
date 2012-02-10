@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.metawatch.manager.widgets.WidgetManager;
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
+import org.metawatch.manager.widgets.WidgetManager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +24,8 @@ import android.widget.TextView;
 public class WidgetPicker extends ListActivity {
 	
 	private List<WidgetData> widgetList;
+	private int groupPosition;
+	private int childPosition;
 
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
@@ -100,7 +100,8 @@ public class WidgetPicker extends ListActivity {
 
             // Bind the data efficiently with the holder.
             holder.text.setText(mWidgets.get(position).description);
-            holder.icon.setImageBitmap(mWidgets.get(position).bitmap);
+            if(mWidgets.get(position).bitmap!=null)
+            	holder.icon.setImageBitmap(mWidgets.get(position).bitmap);
 
             return convertView;
         }
@@ -118,10 +119,19 @@ public class WidgetPicker extends ListActivity {
         Map<String,WidgetData> widgetMap = WidgetManager.refreshWidgets(null);
         widgetList = new ArrayList<WidgetData>();
         
+        WidgetData dummy = new WidgetData();
+        dummy.id = null;
+        dummy.description = "<empty>";
+        
+        widgetList.add(dummy);
+        
         for (Map.Entry<String,WidgetData> e : widgetMap.entrySet())
         	widgetList.add(e.getValue());
         
         Log.d(MetaWatch.TAG, "Showing " +widgetList.size() + " widgets");
+        
+    	groupPosition = getIntent().getIntExtra("groupPosition", -1);
+    	childPosition = getIntent().getIntExtra("childPosition", -1);
         
         setListAdapter(new EfficientAdapter(this, widgetList));
     }
@@ -129,7 +139,10 @@ public class WidgetPicker extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	Intent result = new Intent();
-    	result.putExtra("selected_widget", widgetList.get(position).id);
+    	
+    	result.putExtra("selectedWidget", widgetList.get(position).id);
+    	result.putExtra("groupPosition", groupPosition);
+    	result.putExtra("childPosition", childPosition);
     	
     	setResult(Activity.RESULT_OK, result);
 

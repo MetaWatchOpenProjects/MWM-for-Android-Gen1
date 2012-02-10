@@ -9,8 +9,7 @@
         android:layout_width="144sp"
         android:layout_height="48sp"
         android:layout_margin="2sp"
-        android:background="#FFFFFFFF"
-        android:src="@drawable/icon"/>
+        android:background="#FFFFFFFF"/>
 
     <TextView android:id="@+id/text"
         android:layout_gravity="center_vertical"

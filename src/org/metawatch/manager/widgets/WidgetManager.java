@@ -19,6 +19,7 @@ import android.content.Context;
 
 public class WidgetManager {
 	static List<InternalWidget> widgets = new ArrayList<InternalWidget>();
+	static Map<String,WidgetData> dataCache;
 	
 	public static void initWidgets(Context context, List<String> widgetsDesired) {
 		
@@ -37,15 +38,26 @@ public class WidgetManager {
 	}
 	
 	public static Map<String,WidgetData> refreshWidgets(List<String> widgetsDesired) {
-		Map<String,WidgetData> result = new HashMap<String,WidgetData>();
+		if(dataCache==null)
+			dataCache = new HashMap<String,WidgetData>();
 		
 		for(InternalWidget widget : widgets) {
 			widget.refresh(widgetsDesired);
-			widget.get(widgetsDesired, result);
+			widget.get(widgetsDesired, dataCache);
 		}
 		
-		return result;
+		return dataCache;
 	}
+	
+	public static Map<String,WidgetData> getCachedWidgets(List<String> widgetsDesired) {
+		if(dataCache==null)
+			return refreshWidgets(widgetsDesired);
+		
+		return dataCache;
+	}
+
+	
+	
 	
 	public static List<WidgetRow> getDesiredWidgetsFromPrefs() {
 		

@@ -160,6 +160,7 @@ public class MetaWatchService extends Service {
 		public static boolean autoConnect = false;
 		public static boolean autoRestart = false;
 		public static String widgets = "weather_96_32|missedCalls_24_32,unreadSms_24_32,unreadGmail_24_32";
+
 		public static boolean showK9Unread = false;
 	}
 
@@ -249,6 +250,15 @@ public class MetaWatchService extends Service {
 		Editor editor = sharedPreferences.edit();
 
 		editor.putString("MAC", mac);
+		editor.commit();
+	}
+	
+	public static void saveWidgets(Context context, String widgets) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		Editor editor = sharedPreferences.edit();
+
+		editor.putString("widgets", widgets);
 		editor.commit();
 	}
 	
@@ -343,6 +353,9 @@ public class MetaWatchService extends Service {
 				"MetaWatch");
 
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		
+		Idle.updateLcdIdle(context);
+		
 		Monitors.start(this, telephonyManager);
 
 		start();
