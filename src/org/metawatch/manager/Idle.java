@@ -148,10 +148,10 @@ public class Idle {
 			Protocol.configureIdleBufferSize(false);
 			
 			if(MediaControl.lastTrack=="") {
-				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player_idle.bmp"), 0, 0, null);				
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player_idle.png"), 0, 0, null);				
 			}
 			else {	
-				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player.bmp"), 0, 0, null);
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player.png"), 0, 0, null);
 				
 				
 				TextPaint tp = null;
