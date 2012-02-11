@@ -146,8 +146,9 @@
         <activity android:name="Settings" 
         		  android:launchMode="singleTask">
         </activity>
-        <activity android:name="WidgetSetup" 
-        		  android:launchMode="singleTask">
+        <activity android:name="WidgetSetup"
+        		  android:configChanges="keyboardHidden|orientation" 
+        		  android:launchMode="standard">
         </activity>
         <activity android:name="WidgetPicker" 
         		  android:launchMode="standard">
