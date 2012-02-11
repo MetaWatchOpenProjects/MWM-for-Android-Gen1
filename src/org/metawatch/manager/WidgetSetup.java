@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
-import org.metawatch.manager.widgets.WidgetManager;
 import org.metawatch.manager.widgets.InternalWidget.WidgetData;
+import org.metawatch.manager.widgets.WidgetManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
-import android.widget.Toast;
 
 public class WidgetSetup extends Activity {
 	
