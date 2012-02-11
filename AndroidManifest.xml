@@ -87,6 +87,7 @@
             	<action android:name="com.motorola.blur.alarmclock.ALARM_ALERT" />
             	<action android:name="com.motorola.blur.alarmclock.COUNT_DOWN" />
             	<action android:name="com.amazon.mp3.metachanged" />	
+            	<action android:name="com.adam.aslfms.notify.playstatechanged" />
             </intent-filter>
             <intent-filter>
 	            <action android:name="android.intent.action.EVENT_REMINDER" />

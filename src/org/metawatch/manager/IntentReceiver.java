@@ -203,7 +203,8 @@ public class IntentReceiver extends BroadcastReceiver {
 				|| intent.getAction().equals("com.htc.music.metachanged")
 				|| intent.getAction().equals("com.nullsoft.winamp.metachanged")
 				|| intent.getAction().equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED")
-				|| intent.getAction().equals("com.amazon.mp3.metachanged")) {
+				|| intent.getAction().equals("com.amazon.mp3.metachanged")
+				|| intent.getAction().equals("com.adam.aslfms.notify.playstatechanged")) {
 
 			/* If the intent specifies a "playing" extra, use it. */
 			if (intent.hasExtra("playing")) {
