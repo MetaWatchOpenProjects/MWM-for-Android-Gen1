@@ -382,7 +382,7 @@ public class Monitors {
 				
 				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
 
-				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast/q/"+latLng+".json";
+				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast10day/q/"+latLng+".json";
 				
 				Log.d(MetaWatch.TAG,
 						"Request: "+requestUrl);
