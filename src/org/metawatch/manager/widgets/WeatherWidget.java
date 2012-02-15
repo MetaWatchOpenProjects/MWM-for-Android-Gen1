@@ -213,7 +213,7 @@ public class WeatherWidget implements InternalWidget {
 		paintSmall.setTextAlign(Align.LEFT);
 		paintSmallOutline.setTextAlign(Align.LEFT);
 		
-		if (WeatherData.received && WeatherData.forecast.length>=5) {
+		if (WeatherData.received && WeatherData.forecast.length>=6) {
 			for (int i=0;i<4;++i) {
 				int x = i*24;
 				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.forecast[i+1].icon);

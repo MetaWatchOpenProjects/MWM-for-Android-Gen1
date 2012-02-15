@@ -239,7 +239,14 @@ public class IntentReceiver extends BroadcastReceiver {
 				album = intent.getStringExtra("ALBUM_NAME");
 			else if (intent.hasExtra("com.amazon.mp3.album"))
 				album = intent.getStringExtra("com.amazon.mp3.album");
-						
+			
+			if(artist==null)
+				artist="";
+			if(album==null)
+				album="";
+			if(track==null)
+				track="";
+			
 			MediaControl.updateNowPlaying(context, artist, album, track, intent.getAction());
 					
 		}
