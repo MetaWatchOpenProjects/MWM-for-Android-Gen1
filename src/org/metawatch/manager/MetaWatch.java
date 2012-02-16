@@ -70,8 +70,6 @@ public class MetaWatch extends Activity {
 	public static final String TAG = "MetaWatch";
 	
 	private TextView textView;
-	//private Button buttonStart;
-	//private Button buttonStop;
 	
 	private ToggleButton toggleButton;
 	
@@ -119,20 +117,6 @@ public class MetaWatch extends Activity {
             }
         });
 		
-		//buttonStart = (Button) findViewById(R.id.start);
-		//buttonStart.setOnClickListener(new View.OnClickListener() {
-        //    public void onClick(View v) {
-        //        startService();
-        //    }
-        //});
-		
-		//buttonStop = (Button) findViewById(R.id.stop);
-		//buttonStop.setOnClickListener(new View.OnClickListener() {
-        //    public void onClick(View v) {
-        //        stopService();
-        //    }
-        //});
-		
 		displayStatus();
 		
 		Protocol.configureMode();
@@ -165,9 +149,6 @@ public class MetaWatch extends Activity {
         mIsBound = true;
         
         toggleButton.setChecked(true);
-        
-        //buttonStart.setEnabled(false);
-        //buttonStop.setEnabled(true);
 	}
 	
     void stopService() {
@@ -197,10 +178,7 @@ public class MetaWatch extends Activity {
         }
     	
     	toggleButton.setChecked(false);
-    	
-    	//buttonStart.setEnabled(true);
-    	//buttonStop.setEnabled(false);
-   
+
         displayStatus();
     }
     
@@ -276,6 +254,9 @@ public class MetaWatch extends Activity {
     		if (WeatherData.received)
     		{
     			textView.append("Weather last updated:\n");
+    			textView.append("  Forecast:\n    ");
+    			printDate(WeatherData.forecastTimeStamp);
+    			textView.append("  Current Observation:\n    ");
     			printDate(WeatherData.timeStamp);
     		}
     		else
@@ -288,7 +269,7 @@ public class MetaWatch extends Activity {
     		textView.append("\n");
     		if (LocationData.received)
     		{
-    			textView.append("Location last updated:\n");
+    			textView.append("Location last updated:\n  ");
     			printDate(LocationData.timeStamp);
     		}
     		else
