@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Date;
 import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
@@ -110,6 +111,12 @@ public class Monitors {
 		public static String condition;
 		public static String locationName;
 		public static boolean celsius = false;
+		
+		public static int sunriseH = 7;
+		public static int sunriseM = 0;
+		
+		public static int sunsetH = 19;
+		public static int sunsetM = 0;
 		
 		public static Forecast[] forecast = null;
 		
@@ -399,10 +406,34 @@ public class Monitors {
 				
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
-					
+				
+				JSONObject moon = json.getJSONObject("moon_phase");
+				if (moon!=null) {
+					JSONObject sunrise = moon.getJSONObject("sunrise");
+					WeatherData.sunriseH = sunrise.getInt("hour");
+					WeatherData.sunriseM = sunrise.getInt("minute");
+					JSONObject sunset = moon.getJSONObject("sunset");
+					WeatherData.sunsetH = sunset.getInt("hour");
+					WeatherData.sunsetM = sunset.getInt("minute");
+				}
+				
+				boolean isDay = true;
+				
+				Date dt = new Date();
+                int hours = dt.getHours();
+                int minutes = dt.getMinutes();
+                
+                if ((hours<WeatherData.sunriseH) ||
+                	(hours==WeatherData.sunriseH && minutes<WeatherData.sunriseM) ||
+                	(hours>WeatherData.sunsetH) ||
+                	(hours==WeatherData.sunsetH && minutes>WeatherData.sunsetM))
+                {
+                	isDay = false;
+                }
+                						
 				WeatherData.locationName = location.getString("city");			
 				WeatherData.condition = current.getString("weather");	
-				WeatherData.icon = getIconWunderground(current.getString("icon"));
+				WeatherData.icon = getIconWunderground(current.getString("icon"), isDay);
 				
 				if (Preferences.weatherCelsius) {
 					WeatherData.temp = current.getString("temp_c");
@@ -423,7 +454,7 @@ public class Monitors {
 						JSONObject day = forecastday.getJSONObject(i);
 						JSONObject date = day.getJSONObject("date");
 						
-						WeatherData.forecast[i].icon = getIconWunderground(day.getString("icon"));
+						WeatherData.forecast[i].icon = getIconWunderground(day.getString("icon"), true);
 						WeatherData.forecast[i].day = date.getString("weekday_short");
 						if (Preferences.weatherCelsius) {
 							WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("celsius");
@@ -458,17 +489,23 @@ public class Monitors {
 		}
 	}
 	
-	private static String getIconWunderground(String cond) {
+	private static String getIconWunderground(String cond, boolean isDay) {
 		if (cond.equals("clear") 
 				|| cond.equals("sunny"))
-			return "weather_sunny.bmp";
+			if (isDay)
+				return "weather_sunny.bmp";
+			else
+				return "weather_nt_clear.bmp";
 		else if (cond.equals("cloudy"))
 			return "weather_cloudy.bmp";
 		else if (cond.equals("partlycloudy")
 				|| cond.equals("mostlycloudy")
 				|| cond.equals("partlysunny")
 				|| cond.equals("mostlysunny"))
-			return "weather_partlycloudy.bmp";
+			if (isDay)
+				return "weather_partlycloudy.bmp";
+			else
+				return "weather_nt_partlycloudy.bmp";
 		else if (cond.equals("rain") 
 				|| cond.equals("chancerain"))
 			return "weather_rain.bmp";
