@@ -176,13 +176,15 @@ public class WeatherWidget implements InternalWidget {
 			}
 			paintLarge.setTextAlign(Paint.Align.LEFT);
 						
-			canvas.drawText("High", 64, 23, paintSmall);
-			canvas.drawText("Low", 64, 31, paintSmall);
-			
-			paintSmall.setTextAlign(Paint.Align.RIGHT);
-			canvas.drawText(WeatherData.forecast[0].tempHigh, 95, 23, paintSmall);
-			canvas.drawText(WeatherData.forecast[0].tempLow, 95, 31, paintSmall);
-			paintSmall.setTextAlign(Paint.Align.LEFT);
+			if (WeatherData.forecast!=null) {
+				canvas.drawText("High", 64, 23, paintSmall);
+				canvas.drawText("Low", 64, 31, paintSmall);
+				
+				paintSmall.setTextAlign(Paint.Align.RIGHT);
+				canvas.drawText(WeatherData.forecast[0].tempHigh, 95, 23, paintSmall);
+				canvas.drawText(WeatherData.forecast[0].tempLow, 95, 31, paintSmall);
+				paintSmall.setTextAlign(Paint.Align.LEFT);
+			}
 
 			Utils.drawOutlinedText((String) TextUtils.ellipsize(WeatherData.locationName, paintSmall, 63, TruncateAt.END), canvas, 1, 31, paintSmall, paintSmallOutline);
 						
@@ -213,7 +215,7 @@ public class WeatherWidget implements InternalWidget {
 		paintSmall.setTextAlign(Align.LEFT);
 		paintSmallOutline.setTextAlign(Align.LEFT);
 		
-		if (WeatherData.received && WeatherData.forecast.length>=6) {
+		if (WeatherData.forecast != null && WeatherData.forecast.length>=6) {
 			for (int i=0;i<4;++i) {
 				int x = i*24;
 				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.forecast[i+1].icon);

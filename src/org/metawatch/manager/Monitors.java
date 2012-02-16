@@ -111,9 +111,10 @@ public class Monitors {
 		public static String locationName;
 		public static boolean celsius = false;
 		
-		public static Forecast[] forecast;
+		public static Forecast[] forecast = null;
 		
 		public static long timeStamp = 0;
+		public static long forecastTimeStamp = 0;
 	}
 		
 	public class Forecast {
@@ -360,11 +361,12 @@ public class Monitors {
 			if (WeatherData.updating)
 				return;
 			
+			long currentTime = System.currentTimeMillis();
+			
 			// Prevent weather updating more frequently than every 5 mins
 			if (WeatherData.timeStamp!=0 && WeatherData.received) {
-				long currentTime = System.currentTimeMillis();
-				long diff = currentTime - WeatherData.timeStamp;
 				
+				long diff = currentTime - WeatherData.timeStamp;
 				if (diff < 5 * 60*1000) {
 					Log.d(MetaWatch.TAG,
 							"Skipping weather update - updated less than 5m ago");
@@ -381,8 +383,14 @@ public class Monitors {
 			if (LocationData.received && Preferences.wundergroundKey != "") {
 				
 				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
-
-				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/forecast10day/q/"+latLng+".json";
+				String forecastQuery = "";
+				
+				long diff = currentTime - WeatherData.timeStamp;
+				if (WeatherData.forecast==null || (diff > 3 * 60*1000)) {
+					forecastQuery = "forecast10day/astronomy/";
+				}
+				
+				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/"+forecastQuery+"q/"+latLng+".json";
 				
 				Log.d(MetaWatch.TAG,
 						"Request: "+requestUrl);
@@ -391,10 +399,7 @@ public class Monitors {
 				
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
-				
-				JSONObject forecast = json.getJSONObject("forecast");
-				JSONArray forecastday = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday");
-				
+					
 				WeatherData.locationName = location.getString("city");			
 				WeatherData.condition = current.getString("weather");	
 				WeatherData.icon = getIconWunderground(current.getString("icon"));
@@ -406,24 +411,31 @@ public class Monitors {
 					WeatherData.temp = current.getString("temp_f");
 				}
 				
-				int days = forecastday.length();
-				WeatherData.forecast = new Forecast[days];
+				JSONObject forecast = json.getJSONObject("forecast");
+				if (forecast != null) {
+					JSONArray forecastday = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday");
 				
-				for (int i=0; i<days; ++i) {
-					WeatherData.forecast[i] = m.new Forecast();
-					JSONObject day = forecastday.getJSONObject(i);
-					JSONObject date = day.getJSONObject("date");
+					int days = forecastday.length();
+					WeatherData.forecast = new Forecast[days];
 					
-					WeatherData.forecast[i].icon = getIconWunderground(day.getString("icon"));
-					WeatherData.forecast[i].day = date.getString("weekday_short");
-					if (Preferences.weatherCelsius) {
-						WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("celsius");
-						WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("celsius");
+					for (int i=0; i<days; ++i) {
+						WeatherData.forecast[i] = m.new Forecast();
+						JSONObject day = forecastday.getJSONObject(i);
+						JSONObject date = day.getJSONObject("date");
+						
+						WeatherData.forecast[i].icon = getIconWunderground(day.getString("icon"));
+						WeatherData.forecast[i].day = date.getString("weekday_short");
+						if (Preferences.weatherCelsius) {
+							WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("celsius");
+							WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("celsius");
+						}
+						else {
+							WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("fahrenheit");
+							WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("fahrenheit");
+						}			
 					}
-					else {
-						WeatherData.forecast[i].tempLow = day.getJSONObject("low").getString("fahrenheit");
-						WeatherData.forecast[i].tempHigh= day.getJSONObject("high").getString("fahrenheit");
-					}			
+					
+					WeatherData.forecastTimeStamp = System.currentTimeMillis();
 				}
 			
 				WeatherData.celsius = Preferences.weatherCelsius;
