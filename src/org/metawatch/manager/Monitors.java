@@ -391,10 +391,13 @@ public class Monitors {
 				
 				String latLng = Double.toString(LocationData.latitude)+","+Double.toString(LocationData.longitude);
 				String forecastQuery = "";
+				boolean hasForecast = false;
 				
-				long diff = currentTime - WeatherData.timeStamp;
-				if (WeatherData.forecast==null || (diff > 3 * 60*1000)) {
+				long diff = currentTime - WeatherData.forecastTimeStamp;
+				if (WeatherData.forecast==null || (diff > 3 * 60*60*1000)) {
+					// Only update forecast every three hours
 					forecastQuery = "forecast10day/astronomy/";
+					hasForecast = true;
 				}
 				
 				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/"+forecastQuery+"q/"+latLng+".json";
@@ -406,9 +409,9 @@ public class Monitors {
 				
 				JSONObject location = json.getJSONObject("location");
 				JSONObject current = json.getJSONObject("current_observation");
-				
-				JSONObject moon = json.getJSONObject("moon_phase");
-				if (moon!=null) {
+							
+				if (hasForecast) {
+					JSONObject moon = json.getJSONObject("moon_phase");
 					JSONObject sunrise = moon.getJSONObject("sunrise");
 					WeatherData.sunriseH = sunrise.getInt("hour");
 					WeatherData.sunriseM = sunrise.getInt("minute");
@@ -441,9 +444,9 @@ public class Monitors {
 				else {
 					WeatherData.temp = current.getString("temp_f");
 				}
-				
-				JSONObject forecast = json.getJSONObject("forecast");
-				if (forecast != null) {
+					
+				if (hasForecast) {
+					JSONObject forecast = json.getJSONObject("forecast");
 					JSONArray forecastday = forecast.getJSONObject("simpleforecast").getJSONArray("forecastday");
 				
 					int days = forecastday.length();
