@@ -284,7 +284,7 @@ public class MetaWatch extends Activity {
     		}
     	}
     	
-    	if (Preferences.weatherGeolocation) {
+    	//if (Preferences.weatherGeolocation) {
     		textView.append("\n");
     		if (LocationData.received)
     		{
@@ -295,7 +295,7 @@ public class MetaWatch extends Activity {
     		{
     			textView.append("Waiting for location data.\n");
     		}
-    	}
+    	//}
     	
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");

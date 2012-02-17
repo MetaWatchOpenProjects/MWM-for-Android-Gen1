@@ -188,17 +188,17 @@ public class WeatherWidget implements InternalWidget {
 						
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);
-			if (Preferences.weatherGeolocation) {
+			//if (Preferences.weatherGeolocation) {
 				if( !LocationData.received ) {
 					canvas.drawText("Awaiting location", 48, 18, paintSmall);
 				}
 				else {
 					canvas.drawText("Awaiting weather", 48, 18, paintSmall);
 				}
-			}
-			else {
-				canvas.drawText("No data", 48, 18, paintSmall);
-			}
+			//}
+			//else {
+			//	canvas.drawText("No data", 48, 18, paintSmall);
+			//}
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 		}
 		
@@ -225,17 +225,17 @@ public class WeatherWidget implements InternalWidget {
 			}
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);
-			if (Preferences.weatherGeolocation) {
+			//if (Preferences.weatherGeolocation) {
 				if( !LocationData.received ) {
 					canvas.drawText("Awaiting location", 48, 18, paintSmall);
 				}
 				else {
 					canvas.drawText("Awaiting weather", 48, 18, paintSmall);
 				}
-			}
-			else {
-				canvas.drawText("No data", 48, 18, paintSmall);
-			}
+			//}
+			//else {
+			//	canvas.drawText("No data", 48, 18, paintSmall);
+			//}
 			paintSmall.setTextAlign(Paint.Align.LEFT);
 		}
 		

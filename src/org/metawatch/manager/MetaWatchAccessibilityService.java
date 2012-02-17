@@ -80,6 +80,18 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 				}
 			}
 			
+			/* Forward google chat event */
+			if (packageName.equals("com.google.android.gsf")) {
+				if (sharedPreferences.getBoolean("notifySMS", true)) {
+					Log.d(MetaWatch.TAG,
+							"onAccessibilityEvent(): Sending SMS event: '"
+									+ notification.tickerText + "'.");
+					NotificationBuilder.createSMS(this,"Google Chat" ,notification.tickerText.toString());
+					return;
+				}
+			}
+			
+			
 			/* Deezer track notification */
 			if (packageName.equals("deezer.android.app")) {
 				
