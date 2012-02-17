@@ -19,7 +19,8 @@ public class CalendarWidget implements InternalWidget {
 	
 	private Context context;
 	private TextPaint paintSmall;
-		
+
+	
 	public void init(Context context, List<String> widgetIds) {
 		this.context = context;
 		

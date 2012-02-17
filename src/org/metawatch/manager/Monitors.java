@@ -398,11 +398,11 @@ public class Monitors {
 						}
 					}
 				}
-				catch (Exception e){
+				catch (IOException e){
 					Log.e(MetaWatch.TAG, "Exception while retreiving postalcode", e);
 				}
 				
-				if (!PostalCode.equals("")){
+				if (PostalCode.equals("")){
 					PostalCode=Preferences.weatherCity;
 				}
 				

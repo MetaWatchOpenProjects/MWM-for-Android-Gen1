@@ -452,11 +452,15 @@ public class Notification {
 
 	public static void replay(Context context) {
 		Log.d(MetaWatch.TAG, "Notification.replay()");
-		if (lastNotification != null) {
-			lastNotification.vibratePattern.vibrate = false;
-			addToNotificationQueue(lastNotification);
+		//if (lastNotification != null) {
+		//	lastNotification.vibratePattern.vibrate = false;
+			
+			NotificationBuilder.createCalendar(context,Utils.Meeting_Title);
+			
+			
+			//addToNotificationQueue(lastNotification);
 
-		}
+	//	}
 	}
 	
 	public static void buttonPressed(byte button) {

@@ -71,6 +71,10 @@ import android.util.Log;
 
 public class Utils {
 
+	static public String Meeting_Title = "There is no meeting Dave";
+	static public String Meeting_Location = "Nobody likes you Dave";
+	
+	
 	public static String getContactNameFromNumber(Context context, String number) {
 		
 		try {
@@ -258,17 +262,15 @@ public class Utils {
 				if (currentremaintime != 0) {
 					if (currentremaintime > elapsedtimetemp){
 						currentremaintime = elapsedtimetemp;
-						//title = titletemp;
-						//begin = begintemp;
-						//location = locationtemp;
+						Meeting_Title = titletemp;
+						Meeting_Location = locationtemp;
 					}
 				}
 				else
 				{
 					currentremaintime = elapsedtimetemp;
-					//title = titletemp;
-					//begin = begintemp;
-					//location = locationtemp;
+					Meeting_Title = titletemp;
+					Meeting_Location = locationtemp;
 		
 				}
 				
