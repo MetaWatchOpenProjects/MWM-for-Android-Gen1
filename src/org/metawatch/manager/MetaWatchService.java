@@ -211,11 +211,7 @@ public class MetaWatchService extends Service {
 		Preferences.stickyNotifications = sharedPreferences.getBoolean(
 				"stickyNotifications", Preferences.stickyNotifications);
 		Preferences.weatherCity = sharedPreferences.getString("WeatherCity",
-				Preferences.weatherCity);
-		
-		String provider = sharedPreferences.getString("WeatherProvider", 
-				Integer.toString(Preferences.weatherProvider));
-		
+				Preferences.weatherCity);	
 		Preferences.weatherProvider = Integer.parseInt(
 				sharedPreferences.getString("WeatherProvider", 
 				Integer.toString(Preferences.weatherProvider)));
