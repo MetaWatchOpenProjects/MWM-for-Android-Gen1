@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import org.metawatch.manager.Notification.VibratePattern;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.app.AlarmManager;
@@ -366,6 +368,7 @@ public class MetaWatchService extends Service {
 		Monitors.start(this, telephonyManager);
 
 		start();
+
 	}
 	
 	@Override
@@ -454,6 +457,8 @@ public class MetaWatchService extends Service {
 				Protocol.enableReplayButton();
 			else
 				Protocol.disableReplayButton();
+			
+			Notification.addBitmapNotification(this, Utils.loadBitmapFromAssets(context, "splash.png"), new VibratePattern(false, 0, 0, 0), 10000);
 			
 			/* Notify watch on connection if requested. */
 			SharedPreferences sharedPreferences = PreferenceManager
