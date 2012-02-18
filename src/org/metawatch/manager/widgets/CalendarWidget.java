@@ -59,7 +59,7 @@ public class CalendarWidget implements InternalWidget {
 		String Meetingtime;
 		Meetingtime = Utils.readCalendar(context, 0);
 
-		widget.priority = Meetingtime.length()>0 ? 1 : 0;		
+		widget.priority = Meetingtime.equals("None") ? 0 : 1;		
 		widget.bitmap = Utils.DrawIconStringWidget(context, widget.width, widget.height, icon, Meetingtime, paintSmall);
 		
 		return widget;

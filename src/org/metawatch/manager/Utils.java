@@ -310,7 +310,7 @@ public class Utils {
 		}
 		catch(Exception x) {
 			Log.d(MetaWatch.TAG, "Utils.readCalendar(): caught exception: " + x.toString());
-			return "";
+			return "None";
 		}
 
 	}
