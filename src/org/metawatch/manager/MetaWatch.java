@@ -252,32 +252,41 @@ public class MetaWatch extends Activity {
     	
     	if (Preferences.weatherProvider != WeatherProvider.DISABLED) {
     		textView.append("\n");
-    		if (WeatherData.received)
-    		{
+    		if (WeatherData.received) {
     			textView.append("Weather last updated:\n");
     			textView.append("  Forecast:\n    ");
     			printDate(WeatherData.forecastTimeStamp);
     			textView.append("  Current Observation:\n    ");
     			printDate(WeatherData.timeStamp);
     		}
-    		else
-    		{
+    		else {
     			textView.append("Waiting for weather data.\n");
     		}
     	}
     	
     	if (Preferences.weatherGeolocation) {
     		textView.append("\n");
-    		if (LocationData.received)
-    		{
+    		if (LocationData.received) {
     			textView.append("Location last updated:\n  ");
     			printDate(LocationData.timeStamp);
     		}
-    		else
-    		{
+    		else {
     			textView.append("Waiting for location data.\n");
     		}
     	}
+    	
+    	if (Utils.isAccessibilityEnabled(this)) {
+	    	if (MetaWatchAccessibilityService.accessibilityRecieved) {
+	    		textView.append("\nAccessibility enabled and working\n");
+	    	}
+	    	else {
+	    		textView.append("\nAccessibility not working - quit MWM then disable and renable Accessibility\n");
+	    	}
+	    }
+    	else {
+    		textView.append("\nAccessibility disabled\n");
+    	}
+    
     	
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");

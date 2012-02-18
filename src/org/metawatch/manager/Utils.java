@@ -64,6 +64,7 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.Settings.SettingNotFoundException;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.format.DateUtils;
@@ -528,7 +529,7 @@ public class Utils {
 
 		float scaleWidth = ((float) newWidth) / width;
 		float scaleHeight = ((float) newHeight) / height;
-
+		
 		Matrix matrix = new Matrix();
 		matrix.postScale(scaleWidth, scaleHeight);
 
@@ -631,6 +632,35 @@ public class Utils {
 		canvas.drawText(count, 12, 29, textPaint);
 		
 		return bitmap;
+	}
+	
+    public static boolean isAccessibilityEnabled(Context context) {
+	    int accessibilityEnabled = 0;
+	    final String ACCESSIBILITY_SERVICE_NAME = "org.metawatch.manager/org.metawatch.manager.MetaWatchAccessibilityService";
+	
+	    try {
+	        accessibilityEnabled = android.provider.Settings.Secure.getInt(context.getContentResolver(),android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+	    }
+	    catch (SettingNotFoundException e) {
+	        return false;
+	    }
+	
+	    android.text.TextUtils.SimpleStringSplitter mStringColonSplitter = new android.text.TextUtils.SimpleStringSplitter(':');
+	
+	    if (accessibilityEnabled==1){
+	         String settingValue = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+	         if (settingValue != null) {
+	        	 android.text.TextUtils.SimpleStringSplitter splitter = mStringColonSplitter;
+	             splitter.setString(settingValue);
+	             while (splitter.hasNext()) {
+	                 String accessabilityService = splitter.next();
+	                 if (accessabilityService.equalsIgnoreCase(ACCESSIBILITY_SERVICE_NAME)){
+	                     return true;
+	                 }
+	             }
+	         }
+	    }
+	    return false;
 	}
 
 }
