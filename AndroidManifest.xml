@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.metawatch.manager"
       android:versionCode="1"
-      android:installLocation="internalOnly" android:versionName="0.2.4.rm10a">
+      android:installLocation="internalOnly" android:versionName="0.2.4.rm11">
     <uses-sdk android:minSdkVersion="7" />
     <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
     
