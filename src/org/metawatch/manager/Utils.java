@@ -216,7 +216,7 @@ public class Utils {
 			//location="nowhere";
 
 			ContentResolver cr = context.getContentResolver();
-			Cursor cursor = cr.query(Uri.parse("content://com.android.calendar/calendars"), new String[]{ "_id","calendar_displayName"}, null, null, null);
+			Cursor cursor = cr.query(Uri.parse("content://com.android.calendar/calendars"), new String[]{ "_id","name"}, null, null, null);
 			cursor.moveToFirst();
 			String[] CalNames = new String[cursor.getCount()];
 			int[] CalIds = new int[cursor.getCount()];
