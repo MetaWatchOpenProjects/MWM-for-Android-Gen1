@@ -37,10 +37,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -58,10 +66,15 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 public class Utils {
 
+	static public String Meeting_Title = "There is no meeting Dave";
+	static public String Meeting_Location = "Nobody likes you Dave";
+	
+	
 	public static String getContactNameFromNumber(Context context, String number) {
 		
 		try {
@@ -186,6 +199,123 @@ public class Utils {
 		return missed;
 	}
 	
+	public static String readCalendar(Context context, int Return) {
+		long now = new Date().getTime();
+		final long CurrentTime = System.currentTimeMillis();
+
+		try {
+
+			String titletemp="";
+			String locationtemp="";
+			String MeetingTime;
+			long currentremaintime;
+			long begintemp=0;
+			long elapsedtimetemp=0;
+
+			currentremaintime=0;
+			//location="nowhere";
+
+			ContentResolver cr = context.getContentResolver();
+			Cursor cursor = cr.query(Uri.parse("content://com.android.calendar/calendars"), new String[]{ "_id","calendar_displayName"}, null, null, null);
+			cursor.moveToFirst();
+			String[] CalNames = new String[cursor.getCount()];
+			int[] CalIds = new int[cursor.getCount()];
+			for (int i = 0; i < CalNames.length; i++) {
+				CalIds[i] = cursor.getInt(0);
+				CalNames[i] = cursor.getString(1);
+				cursor.moveToNext();
+			}
+			cursor.close();
+			Uri.Builder builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon();
+
+			ContentUris.appendId(builder, now );
+			ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS);	        
+			Cursor eventCursor = cr.query(builder.build(),
+					new String[] { "event_id", "begin", "end", "allDay"}, null, null, "startDay ASC, startMinute ASC");
+			// For a full list of available columns see http://tinyurl.com/yfbg76w
+			MeetingTime="None";
+			while (eventCursor.moveToNext()) {
+				if ((eventCursor.getLong(1) > (CurrentTime+(1000*60*1.2))) &&(eventCursor.getString(3).equals("0"))){
+					String uid2 = eventCursor.getString(0);	
+					Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/events/" + uid2);
+					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
+					Cursor c = cr.query(CALENDAR_URI,new String[] { "title", "eventLocation", "description",}, null, null, null); 
+					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar cursor: "+ c.getCount());
+					if (c.moveToFirst())
+					{	
+						//Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar title: "+ c.getString(c.getColumnIndex("title")));
+						//Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar location: "+ c.getString(c.getColumnIndex("eventLocation")));
+						titletemp = c.getString(c.getColumnIndex("title"));
+						locationtemp = c.getString(c.getColumnIndex("eventLocation"));    
+					}
+
+					c.close();
+					begintemp = eventCursor.getLong(1);	
+					MeetingTime = new SimpleDateFormat("HH:mm").format(begintemp);
+
+
+					elapsedtimetemp = (begintemp-CurrentTime);
+
+					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
+					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
+					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Location : " + locationtemp);
+
+
+					if (currentremaintime != 0) {
+						if (currentremaintime > elapsedtimetemp){
+							currentremaintime = elapsedtimetemp;
+							Meeting_Title = titletemp;
+							Meeting_Location = locationtemp;
+						}
+					}
+					else
+					{
+						currentremaintime = elapsedtimetemp;
+						Meeting_Title = titletemp;
+						Meeting_Location = locationtemp;
+
+					}
+
+					break;
+				}
+			}   
+			eventCursor.close();
+
+
+			/*** Schedule ending notification ***/
+			if (!MeetingTime.equals("None")){
+
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.MILLISECOND, (int)currentremaintime);
+				Intent intent = new Intent("org.metawatch.manager.UPDATE_CALENDAR");
+
+				intent.putExtra("Calendar", titletemp);
+				// In reality, you would want to have a static variable for the request code instead of 192837
+				PendingIntent sender = PendingIntent.getBroadcast(context, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+				// Get the AlarmManager service
+				AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+				am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+				Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
+			}
+
+
+
+			if (Return==1){
+				return String.valueOf(currentremaintime);
+			}
+			else{
+				return MeetingTime;
+			}
+		}
+		catch(Exception x) {
+			Log.d(MetaWatch.TAG, "Utils.readCalendar(): caught exception: " + x.toString());
+			return "";
+		}
+
+	}
+
+
 	public static int getUnreadGmailCount(Context context, String account, String label) {
 		Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): account='"+account+"' label='"+label+"'");
 		try {
@@ -492,6 +622,15 @@ public class Utils {
 		
 		return bitmap;
 	}
-
+	public static Bitmap DrawIconStringWidget(Context context, int width, int height, Bitmap icon, String count, TextPaint textPaint) {
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		canvas.drawBitmap(icon, 0, 3, null);
+		canvas.drawText(count, 12, 29, textPaint);
+		
+		return bitmap;
+	}
 
 }

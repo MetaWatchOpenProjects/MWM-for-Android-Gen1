@@ -14,6 +14,7 @@ import org.metawatch.manager.widgets.MissedCallsWidget;
 import org.metawatch.manager.widgets.SmsWidget;
 //import org.metawatch.manager.widgets.TestWidget;
 import org.metawatch.manager.widgets.WeatherWidget;
+import org.metawatch.manager.widgets.CalendarWidget;
 
 import android.content.Context;
 
@@ -29,6 +30,7 @@ public class WidgetManager {
 			widgets.add(new K9Widget());
 			widgets.add(new GmailWidget());
 			widgets.add(new WeatherWidget());
+			widgets.add(new CalendarWidget());
 			//widgets.add(new TestWidget());
 		}
 		

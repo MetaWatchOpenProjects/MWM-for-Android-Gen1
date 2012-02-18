@@ -44,8 +44,8 @@ import android.view.KeyEvent;
 
 public class MediaControl {
 	
-	final static int MEDIACONTROL_MUSICSERVICECOMMAND = 0;
-	final static int MEDIACONTROL_EMULATE_HEADSET = 1;
+	final static int MUSICSERVICECOMMAND = 0;
+	final static int EMULATE_HEADSET = 1;
 	
 	final static byte VOLUME_UP = 10;
 	final static byte VOLUME_DOWN = 11;
@@ -61,7 +61,7 @@ public class MediaControl {
 	
 	public static void next(Context context) {
 		Log.d(MetaWatch.TAG, "MediaControl.next()");
-		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+		if (Preferences.idleMusicControlMethod == MediaControl.MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.next"));
 		}
 		else {
@@ -71,7 +71,7 @@ public class MediaControl {
 	
 	public static void previous(Context context) {
 		Log.d(MetaWatch.TAG, "MediaControl.previous()");
-		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+		if (Preferences.idleMusicControlMethod == MediaControl.MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.previous"));
 		}
 		else {
@@ -81,7 +81,7 @@ public class MediaControl {
 	
 	public static void togglePause(Context context) {
 		Log.d(MetaWatch.TAG, "MediaControl.togglePause()");
-		if (Preferences.idleMusicControlMethod == MEDIACONTROL_MUSICSERVICECOMMAND){
+		if (Preferences.idleMusicControlMethod == MediaControl.MUSICSERVICECOMMAND){
 			context.sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
 		}
 		else {

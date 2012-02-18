@@ -67,7 +67,7 @@ public class NotificationBuilder {
 		String name = Utils.getContactNameFromNumber(context, number);
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsSMSNumberBuzzes");
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			if (Preferences.stickyNotifications) {
+			if (Preferences.stickyNotifications & !number.equals("Google Chat")) {
 				Bitmap[] bitmaps = smartNotify(context, "message.bmp", name, text);
 				Notification.addBitmapNotification(context, bitmaps, vibratePattern, -1);				
 			}
@@ -136,7 +136,7 @@ public class NotificationBuilder {
 	public static void createCalendar(Context context, String text) {
 		VibratePattern vibratePattern = createVibratePatternFromPreference(context, "settingsCalendarNumberBuzzes");				
 		if (MetaWatchService.watchType == WatchType.DIGITAL) {
-			Bitmap bitmap = smartLines(context, "calendar.bmp", "Calendar", new String[] {text});	
+			Bitmap bitmap = smartLines(context, "calendar.bmp", "Calendar", new String[] {text + " which is being held at " + Utils.readCalendar(context, 0)+ " at this location: "+ Utils.Meeting_Location});	
 			Notification.addBitmapNotification(context, bitmap, vibratePattern, Notification.getDefaultNotificationTimeout(context));	
 		} else {
 			byte[] scroll = new byte[800];

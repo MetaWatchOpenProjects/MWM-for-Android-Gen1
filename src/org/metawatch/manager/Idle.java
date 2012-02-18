@@ -60,7 +60,7 @@ public class Idle {
 	static int currentPage = 0;
 	
 	static boolean widgetsInitialised = false;
-	
+		
 	public static void NextPage() {
 		
 		if(currentPage==1) {
