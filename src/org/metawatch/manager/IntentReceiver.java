@@ -197,6 +197,15 @@ public class IntentReceiver extends BroadcastReceiver {
 			}
 			return;
 		}
+		
+		else if (intent.getAction().equals("org.metawatch.manager.UPDATE_CALENDAR")){
+			
+			if (MetaWatchService.watchType == MetaWatchService.WatchType.DIGITAL) {
+				Idle.updateLcdIdle(context);
+			}
+			
+		}
+		
 		else if (intent.getAction().equals("com.android.music.metachanged")
 				|| intent.getAction().equals(
 						"mobi.beyondpod.action.PLAYBACK_STATUS")

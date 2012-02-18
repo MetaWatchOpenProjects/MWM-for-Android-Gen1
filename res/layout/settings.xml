@@ -278,10 +278,21 @@
 	    android:title="Weather"
 	    >
 
+		<ListPreference 
+			android:entries="@array/settings_weather_provider_names" 
+			android:entryValues="@array/settings_weather_provider_values" 
+			android:dialogTitle="Weather Provider" 
+			android:key="WeatherProvider" 
+			android:title="Weather Provider" 
+			android:negativeButtonText="Cancel" 
+ 			android:enabled="true" 
+ 			android:defaultValue="1"
+ 			android:summary="Choose or disable weather data source"
+ 			/>	
 	    <EditTextPreference
 			android:title="Weather Location"
 			android:key="WeatherCity"
-			android:summary="City for weather data"
+			android:summary="Default city for weather data when geolocation is disabled or not available"
 			android:defaultValue="Dallas,US"
 			/>
 		<CheckBoxPreference
@@ -299,15 +310,9 @@
 		<EditTextPreference
 			android:title="API Key"
 			android:key="WundergroundKey"
-			android:summary="API Key for Weather Underground - Required for geolocation"
+			android:summary="API Key for Weather Underground - Required if using the Weather Underground weather provider"
 			android:defaultValue=""
-			/>
-	    <CheckBoxPreference
-			android:title="Disable Weather"
-			android:key="DisableWeather"
-			android:summary="Disable weather on idle screen"
-			android:defaultValue="false"
-			/>	    
+			/>   
 	    
 	</PreferenceScreen>
 	

@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.MetaWatchService.WeatherProvider;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
 
@@ -202,7 +203,7 @@ public class MetaWatch extends Activity {
 		String html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>About</title></head><body>" + 
 						"<h1>MetaWatch</h1>" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
-						"<p>Modified by Dobie Wollert, Chris Sewell, Prash D, Craig Oliver, Richard Munn and Matthias Gruenewald.</p>" +
+						"<p>Modified by Dobie Wollert, Chris Sewell, Prash D, Craig Oliver, Richard Munn, Matthias Gruenewald and Kyle Schroeder.</p>" +
 						"<p>© Copyright 2011-2012 Meta Watch Ltd.</p>" +
 						"</body></html>";
         webView.loadData(html, "text/html", "utf-8");
@@ -249,7 +250,7 @@ public class MetaWatch extends Activity {
 	    		break;
     	}
     	
-    	if (!Preferences.disableWeather) {
+    	if (Preferences.weatherProvider != WeatherProvider.DISABLED) {
     		textView.append("\n");
     		if (WeatherData.received)
     		{

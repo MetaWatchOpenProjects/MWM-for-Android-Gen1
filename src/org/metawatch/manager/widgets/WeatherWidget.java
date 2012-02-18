@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.metawatch.manager.FontCache;
+import org.metawatch.manager.MetaWatchService;
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
@@ -78,7 +79,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw0();
-			widget.priority = WeatherData.received ? 1 : 0;
+			widget.priority = calcPriority();
 			
 			result.put(widget.id, widget);
 		}
@@ -92,7 +93,7 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw1();
-			widget.priority = WeatherData.received ? 1 : 0;
+			widget.priority = calcPriority();
 			
 			result.put(widget.id, widget);
 		}
@@ -106,10 +107,18 @@ public class WeatherWidget implements InternalWidget {
 			widget.height = 32;
 			
 			widget.bitmap = draw2();
-			widget.priority = WeatherData.received ? 1 : 0;
+			widget.priority = calcPriority();
 			
 			result.put(widget.id, widget);
 		}
+	}
+	
+	private int calcPriority()
+	{
+		if(Preferences.weatherProvider == MetaWatchService.WeatherProvider.DISABLED)
+			return -1;
+		
+		return WeatherData.received ? 1 : 0;
 	}
 		
 	private Bitmap draw0() {
@@ -215,15 +224,21 @@ public class WeatherWidget implements InternalWidget {
 		paintSmall.setTextAlign(Align.LEFT);
 		paintSmallOutline.setTextAlign(Align.LEFT);
 		
-		if (WeatherData.forecast != null && WeatherData.forecast.length>=6) {
+		if (WeatherData.received && WeatherData.forecast.length>3) {
+			int weatherIndex = 0;
+			if(WeatherData.forecast.length>4)
+				weatherIndex = 1; // Start with tomorrow's weather if we've got enough entries
+
 			for (int i=0;i<4;++i) {
 				int x = i*24;
-				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.forecast[i+1].icon);
+				Bitmap image = Utils.loadBitmapFromAssets(context, WeatherData.forecast[weatherIndex].icon);
 				canvas.drawBitmap(image, x, 4, null);
-				Utils.drawOutlinedText(WeatherData.forecast[i+1].day, canvas, x, 6, paintSmall, paintSmallOutline);
+				Utils.drawOutlinedText(WeatherData.forecast[weatherIndex].day, canvas, x, 6, paintSmall, paintSmallOutline);
 				
-				Utils.drawOutlinedText("H "+WeatherData.forecast[i+1].tempHigh, canvas, x, 25, paintSmall, paintSmallOutline);
-				Utils.drawOutlinedText("L "+WeatherData.forecast[i+1].tempLow, canvas, x, 31, paintSmall, paintSmallOutline);
+				Utils.drawOutlinedText("H "+WeatherData.forecast[weatherIndex].tempHigh, canvas, x, 25, paintSmall, paintSmallOutline);
+				Utils.drawOutlinedText("L "+WeatherData.forecast[weatherIndex].tempLow, canvas, x, 31, paintSmall, paintSmallOutline);
+				
+				weatherIndex++;
 			}
 		} else {
 			paintSmall.setTextAlign(Paint.Align.CENTER);

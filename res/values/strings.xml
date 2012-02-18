@@ -83,6 +83,19 @@
     <string-array name="settings_media_control_method_values"> 
 	<item>0</item>
 	<item>1</item>
+	<item>2</item>
+	</string-array>
+	
+	<string-array name="settings_weather_provider_names">
+	<item>Disabled</item>
+    <item>Google Weather</item>
+    <item>Weather Underground</item>
+    </string-array>
+    
+    <string-array name="settings_weather_provider_values"> 
+	<item>0</item>
+	<item>1</item>
+	<item>2</item>
 	</string-array>
     
     <string name="settings_Digital">Digital Watch</string>

@@ -88,6 +88,7 @@
             	<action android:name="com.motorola.blur.alarmclock.COUNT_DOWN" />
             	<action android:name="com.amazon.mp3.metachanged" />	
             	<action android:name="com.adam.aslfms.notify.playstatechanged" />
+            	<action android:name="org.metawatch.manager.UPDATE_CALENDAR"/>
             </intent-filter>
             <intent-filter>
 	            <action android:name="android.intent.action.EVENT_REMINDER" />

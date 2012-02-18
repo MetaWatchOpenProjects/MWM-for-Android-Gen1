@@ -41,7 +41,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -60,6 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.MetaWatchService.WeatherProvider;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -69,6 +73,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -189,8 +195,7 @@ public class Monitors {
 			RefreshLocation();
 		}
 		else {
-			Log.d(MetaWatch.TAG,
-					"Geolocation disabled");
+			Log.d(MetaWatch.TAG,"Geolocation disabled");
 		}
 		
 		CallStateListener phoneListener = new CallStateListener(context);
@@ -248,7 +253,9 @@ public class Monitors {
 		
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
 		if (Preferences.weatherGeolocation & locationManager!=null) {
-			locationManager.removeUpdates(networkLocationListener);
+			if (locationManager!=null) {
+				locationManager.removeUpdates(networkLocationListener);
+			}
 		}
 		stopAlarmTicker();		
 	}
@@ -256,15 +263,75 @@ public class Monitors {
 	private static synchronized void updateWeatherDataGoogle(Context context) {
 		try {
 
+			if (WeatherData.updating)
+				return;
+			
+			// Prevent weather updating more frequently than every 5 mins
+			if (WeatherData.timeStamp!=0 && WeatherData.received) {
+				long currentTime = System.currentTimeMillis();
+				long diff = currentTime - WeatherData.timeStamp;
+				
+				if (diff < 5 * 60*1000) {
+					Log.d(MetaWatch.TAG,
+							"Skipping weather update - updated less than 5m ago");
+
+            		//IdleScreenWidgetRenderer.sendIdleScreenWidgetUpdate(context);
+
+					return;
+				}
+			}
+			
+			WeatherData.updating = true;
+			
 			Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherDataGoogle(): start");
-			
-			URL url;
-			String queryString = "http://www.google.com/ig/api?weather="
-					+ Preferences.weatherCity;
-			url = new URL(queryString.replace(" ", "%20"));
+		
+			String queryString;
+			List<Address> addresses;
+			if (Preferences.weatherGeolocation && LocationData.received) {
+				Geocoder geocoder;
+				String locality = "";
+				String PostalCode="";
+				try{
+					geocoder = new Geocoder(context, Locale.getDefault());
+					addresses = geocoder.getFromLocation(LocationData.latitude, LocationData.longitude, 1);
 
-			WeatherData.locationName = Preferences.weatherCity; 
+					for (Address address : addresses) {
+						if (!address.getPostalCode().equalsIgnoreCase("")){
+							PostalCode=address.getPostalCode();
+							locality=address.getLocality();
+							if (locality.equals("")) {
+								locality=PostalCode;
+							}
+							else {
+								PostalCode = locality+", "+PostalCode;
+							}
+								
+						}
+					}
+				}
+				catch (IOException e){
+					Log.e(MetaWatch.TAG, "Exception while retreiving postalcode", e);
+				}
+				
+				if (PostalCode.equals("")){
+					PostalCode=Preferences.weatherCity;
+				}
+				if (locality.equals("")){
+					WeatherData.locationName = PostalCode;
+				}
+				else{
+					WeatherData.locationName = locality;
+				}
+				
+				queryString = "http://www.google.com/ig/api?weather=" + PostalCode;
+			}
+			else{
+				queryString = "http://www.google.com/ig/api?weather=" + Preferences.weatherCity;
+				WeatherData.locationName = Preferences.weatherCity;
+			}
+						
+			URL url = new URL(queryString.replace(" ", "%20"));			 
 			
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
@@ -276,77 +343,52 @@ public class Monitors {
 			WeatherSet ws = gwh.getWeatherSet();
 			WeatherCurrentCondition wcc = ws
 					.getWeatherCurrentCondition();
-
-			// IndexOutOfBoundsException: Invalid index 0, size is 0
-			WeatherForecastCondition wfc = ws
-					.getWeatherForecastConditions().get(0);
-
-			String cond = wcc.getCondition();
-			String temp;
 			
-			WeatherData.forecast = new Forecast[1];
-			WeatherData.forecast[0] = m.new Forecast();
-			WeatherData.forecast[0].day = null;
+			ArrayList<WeatherForecastCondition> conditions = ws.getWeatherForecastConditions();
 			
-			if (Preferences.weatherCelsius) {
-				WeatherData.forecast[0].tempHigh = 
-						  Integer.toString(wfc.getTempMaxCelsius());
-				WeatherData.forecast[0].tempLow = 
-						  Integer.toString(wfc.getTempMinCelsius());
-				temp = Integer.toString(wcc.getTempCelcius());
-			} else {
-				WeatherData.forecast[0].tempHigh = 
-						  Integer.toString(WeatherUtils
-								.celsiusToFahrenheit(wfc
-										.getTempMaxCelsius()));
-				WeatherData.forecast[0].tempLow = 
-						  Integer.toString(WeatherUtils
-								.celsiusToFahrenheit(wfc
-										.getTempMinCelsius()));
-				temp = Integer.toString(wcc.getTempFahrenheit());
+			int days = conditions.size();
+			WeatherData.forecast = new Forecast[days];
+			
+			for (int i=0; i<days; ++i) {
+				WeatherForecastCondition wfc = conditions.get(i);
+				
+				WeatherData.forecast[i] = m.new Forecast();
+				WeatherData.forecast[i].day = null;
+				
+				WeatherData.forecast[i].icon = getIconGoogleWeather(wfc.getCondition());
+				WeatherData.forecast[i].day = wfc.getDayofWeek();
+				
+				if (Preferences.weatherCelsius) {
+					WeatherData.forecast[i].tempHigh = 
+							  Integer.toString(wfc.getTempMaxCelsius());
+					WeatherData.forecast[i].tempLow = 
+							  Integer.toString(wfc.getTempMinCelsius());
+				} else {
+					WeatherData.forecast[i].tempHigh = 
+							  Integer.toString(WeatherUtils
+									.celsiusToFahrenheit(wfc
+											.getTempMaxCelsius()));
+					WeatherData.forecast[i].tempLow = 
+							  Integer.toString(WeatherUtils
+									.celsiusToFahrenheit(wfc
+											.getTempMinCelsius()));
+				}
 			}
 			
 			WeatherData.celsius = Preferences.weatherCelsius;
-					
-			// String place = gwh.city
-			
+								
+			String cond =  wcc.getCondition();
 			WeatherData.condition = cond;
-			WeatherData.temp = temp;
+		
+			if (Preferences.weatherCelsius) {
+				WeatherData.temp = Integer.toString(wcc.getTempCelcius());
+			} else {
+				WeatherData.temp = Integer.toString(wcc.getTempFahrenheit());
+			}
 
 			cond = cond.toLowerCase();
 
-			if (cond.equals("clear")
-					|| cond.equals("sunny"))
-				WeatherData.icon = "weather_sunny.bmp";
-			else if (cond.equals("cloudy")
-					|| cond.equals("overcast") )
-				WeatherData.icon = "weather_cloudy.bmp";
-			else if (cond.equals("mostly cloudy")
-					|| cond.equals("partly cloudy")
-					|| cond.equals("mostly sunny")
-					|| cond.equals("partly sunny"))
-				WeatherData.icon = "weather_partlycloudy.bmp";
-			else if (cond.equals("light rain") || cond.equals("rain")
-					|| cond.equals("rain showers")
-					|| cond.equals("showers")
-					|| cond.equals("chance of showers")
-					|| cond.equals("scattered showers")
-					|| cond.equals("freezing rain")
-					|| cond.equals("freezing drizzle")
-					|| cond.equals("rain and snow"))
-				WeatherData.icon = "weather_rain.bmp";
-			else if (cond.equals("thunderstorm")
-					|| cond.equals("chance of storm")
-					|| cond.equals("isolated thunderstorms"))
-				WeatherData.icon = "weather_thunderstorm.bmp";
-			else if (cond.equals("chance of snow")
-					|| cond.equals("snow showers")
-					|| cond.equals("ice/snow")
-					|| cond.equals("flurries"))
-				WeatherData.icon = "weather_snow.bmp";
-			else
-				WeatherData.icon = "weather_cloudy.bmp";
-
+			WeatherData.icon = getIconGoogleWeather(cond);
 			WeatherData.received = true;
 			WeatherData.timeStamp = System.currentTimeMillis();		
 
@@ -361,7 +403,7 @@ public class Monitors {
 		}
 		
 	}
-	
+
 	private static synchronized void updateWeatherDataWunderground(Context context) {
 		try {
 
@@ -492,7 +534,42 @@ public class Monitors {
 		}
 	}
 	
+	private static String getIconGoogleWeather(String cond) {
+		if (cond.equals("clear")
+				|| cond.equals("sunny"))
+			return "weather_sunny.bmp";
+		else if (cond.equals("cloudy")
+				|| cond.equals("overcast") )
+			return "weather_cloudy.bmp";
+		else if (cond.equals("mostly cloudy")
+				|| cond.equals("partly cloudy")
+				|| cond.equals("mostly sunny")
+				|| cond.equals("partly sunny"))
+			return "weather_partlycloudy.bmp";
+		else if (cond.equals("light rain") || cond.equals("rain")
+				|| cond.equals("rain showers")
+				|| cond.equals("showers")
+				|| cond.equals("chance of showers")
+				|| cond.equals("scattered showers")
+				|| cond.equals("freezing rain")
+				|| cond.equals("freezing drizzle")
+				|| cond.equals("rain and snow"))
+			return "weather_rain.bmp";
+		else if (cond.equals("thunderstorm")
+				|| cond.equals("chance of storm")
+				|| cond.equals("isolated thunderstorms"))
+			return "weather_thunderstorm.bmp";
+		else if (cond.equals("chance of snow")
+				|| cond.equals("snow showers")
+				|| cond.equals("ice/snow")
+				|| cond.equals("flurries"))
+			return "weather_snow.bmp";
+		else
+			return "weather_cloudy.bmp";
+	}
+	
 	private static String getIconWunderground(String cond, boolean isDay) {
+
 		if (cond.equals("clear") 
 				|| cond.equals("sunny"))
 			if (isDay)
@@ -536,13 +613,18 @@ public class Monitors {
 				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 				PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Weather");
 			 	wl.acquire();
-				if (Preferences.weatherGeolocation) {
-					updateWeatherDataWunderground(context);
-				}
-				else {
-					updateWeatherDataGoogle(context);
-				}
-				wl.release();
+			 	
+			 	switch (Preferences.weatherProvider) {
+			 	case WeatherProvider.GOOGLE:
+			 		updateWeatherDataGoogle(context);
+			 		break;
+			 		
+			 	case WeatherProvider.WUNDERGROUND:
+			 		updateWeatherDataWunderground(context);
+			 		break;
+			 	}
+			 	
+			 	wl.release();
 			}
 		};
 		thread.start();
