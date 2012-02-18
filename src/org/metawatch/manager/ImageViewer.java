@@ -65,7 +65,7 @@ public class ImageViewer extends Activity {
 	        Bitmap bmp = BitmapFactory.decodeStream(is, null, options);
 	        
 	        if (bmp!=null) {
-		        Bitmap scaled = Utils.resize(bmp, 96, 96,);
+		        Bitmap scaled = Utils.resize(bmp, 96, 96);
 		        Bitmap dithered = Utils.ditherTo1bit(scaled, Preferences.invertLCD);
 		        
 		        VibratePattern vibratePattern = new VibratePattern(false, 1,1,1);
