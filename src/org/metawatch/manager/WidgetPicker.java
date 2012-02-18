@@ -13,6 +13,9 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -133,6 +136,9 @@ public class WidgetPicker extends ListActivity {
         WidgetData dummy = new WidgetData();
         dummy.id = "";
         dummy.description = "<empty>";
+        dummy.bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(dummy.bitmap);
+        canvas.drawColor(Color.WHITE);	
         
         widgetList.add(dummy);
         
