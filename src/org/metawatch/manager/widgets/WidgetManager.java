@@ -32,6 +32,7 @@ public class WidgetManager {
 			widgets.add(new GmailWidget());
 			widgets.add(new WeatherWidget());
 			widgets.add(new CalendarWidget());
+			widgets.add(new PhoneStatusWidget());
 			//widgets.add(new TestWidget());
 		}
 		

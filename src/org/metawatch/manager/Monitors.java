@@ -69,9 +69,11 @@ import org.xml.sax.XMLReader;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.location.Address;
 import android.location.Geocoder;
@@ -79,6 +81,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -145,6 +148,10 @@ public class Monitors {
 	    public static long timeStamp = 0;
 	}
 	
+	public static class BatteryData {
+		public static String level = "???";
+	}
+	
 	private static Monitors m = new Monitors(); // Static instance for new
 	
 	public static void updateGmailUnreadCount(String account, int count) {
@@ -180,6 +187,8 @@ public class Monitors {
 		
 		Log.d(MetaWatch.TAG,
 				"Monitors.start()");
+		
+		createBatteryLevelReciever(context);
 				
 		if (Preferences.weatherGeolocation) {
 			Log.d(MetaWatch.TAG,
@@ -224,6 +233,7 @@ public class Monitors {
 			contentResolverCalls.registerContentObserver(android.provider.CallLog.Calls.CONTENT_URI, true, contentObserverCalls);
 		} catch (Exception x) {
 		}
+	
 		
 		// temporary one time update
 		updateWeatherData(context);
@@ -774,6 +784,28 @@ public class Monitors {
 		}
 
 		return jArray;
+	}
+	
+
+	static BroadcastReceiver batteryLevelReceiver = null;
+	private static void createBatteryLevelReciever(Context context) {
+		if(batteryLevelReceiver!=null)
+			return;
+		
+		batteryLevelReceiver = new BroadcastReceiver() {
+			public void onReceive(Context context, Intent intent) {
+				context.unregisterReceiver(this);
+				int rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+				int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+				int level = -1;
+				if (rawlevel >= 0 && scale > 0) {
+					level = (rawlevel * 100) / scale;
+				}
+				BatteryData.level = level + "%";
+			}
+		};
+		IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		context.registerReceiver(batteryLevelReceiver, batteryLevelFilter);
 	}
 
 	
