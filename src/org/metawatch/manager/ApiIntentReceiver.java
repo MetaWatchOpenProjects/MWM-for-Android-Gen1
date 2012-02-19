@@ -50,6 +50,9 @@ public class ApiIntentReceiver extends BroadcastReceiver {
 		// add digital watch check
 		
 		if (action.equals("org.metawatch.manager.APPLICATION_UPDATE")) {
+			//boolean dither = false;
+			//if (intent.hasExtra("requires_dither"))
+			//	dither = true;
 			if (intent.hasExtra("array")) {
 				int[] array = intent.getIntArrayExtra("array");			
 				Application.updateAppMode(context, array);

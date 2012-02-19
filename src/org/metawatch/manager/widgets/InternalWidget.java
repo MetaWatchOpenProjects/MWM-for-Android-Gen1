@@ -1,6 +1,6 @@
 package org.metawatch.manager.widgets;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import android.content.Context;
@@ -20,10 +20,10 @@ public interface InternalWidget {
 		public int priority;
 	}
 	
-	public void init(Context context, List<String> widgetIds);
+	public void init(Context context, ArrayList<CharSequence> widgetIds);
 	public void shutdown();
 	
-	public void refresh(List<String> widgetIds);
-	public void get(List<String> widgetIds, Map<String,WidgetData> result);
+	public void refresh(ArrayList<CharSequence> widgetIds);
+	public void get(ArrayList<CharSequence> widgetIds, Map<String,WidgetData> result);
 	
 }

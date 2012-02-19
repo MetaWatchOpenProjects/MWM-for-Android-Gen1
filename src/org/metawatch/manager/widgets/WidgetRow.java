@@ -10,13 +10,13 @@ import android.graphics.Canvas;
 
 public class WidgetRow {
 	
-	List<String> widgetIDs = new ArrayList<String>();
+	ArrayList<CharSequence> widgetIDs = new ArrayList<CharSequence>();
 	
 	public void add(String id) {
 		widgetIDs.add(id);
 	}
 	
-	public List<String> getIds() {
+	public ArrayList<CharSequence> getIds() {
 		return widgetIDs;
 	}
 	
@@ -25,7 +25,7 @@ public class WidgetRow {
 		List<WidgetData> widgets = new ArrayList<WidgetData>();
 				
 		int totalWidth = 0;
-		for( String id : widgetIDs ) {
+		for( CharSequence id : widgetIDs ) {
 			WidgetData widget = widgetData.get(id);
 			if(widget!=null && widget.bitmap!=null && widget.priority>-1) {
 				widgets.add(widget);

@@ -129,7 +129,7 @@ public class Idle {
 	
 			List<WidgetRow> rows = WidgetManager.getDesiredWidgetsFromPrefs();
 			
-			List<String> widgetsDesired = new ArrayList<String>();
+			ArrayList<CharSequence> widgetsDesired = new ArrayList<CharSequence>();
 			for(WidgetRow row : rows) {
 				widgetsDesired.addAll(row.getIds());
 			}			

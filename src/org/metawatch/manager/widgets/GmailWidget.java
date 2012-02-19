@@ -1,6 +1,6 @@
 package org.metawatch.manager.widgets;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.metawatch.manager.FontCache;
@@ -21,7 +21,7 @@ public class GmailWidget implements InternalWidget {
 	private Context context;
 	private TextPaint paintSmall;
 		
-	public void init(Context context, List<String> widgetIds) {
+	public void init(Context context, ArrayList<CharSequence> widgetIds) {
 		this.context = context;
 		
 		paintSmall = new TextPaint();
@@ -36,10 +36,10 @@ public class GmailWidget implements InternalWidget {
 		paintSmall = null;
 	}
 
-	public void refresh(List<String> widgetIds) {
+	public void refresh(ArrayList<CharSequence> widgetIds) {
 	}
 
-	public void get(List<String> widgetIds, Map<String,WidgetData> result) {
+	public void get(ArrayList<CharSequence> widgetIds, Map<String,WidgetData> result) {
 
 		if(widgetIds == null || widgetIds.contains(id_0)) {		
 			result.put(id_0, GenWidget(id_0));

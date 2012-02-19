@@ -17,12 +17,13 @@ import org.metawatch.manager.widgets.WeatherWidget;
 import org.metawatch.manager.widgets.CalendarWidget;
 
 import android.content.Context;
+import android.content.Intent;
 
 public class WidgetManager {
 	static List<InternalWidget> widgets = new ArrayList<InternalWidget>();
 	static Map<String,WidgetData> dataCache;
 	
-	public static void initWidgets(Context context, List<String> widgetsDesired) {
+	public static void initWidgets(Context context, ArrayList<CharSequence> widgetsDesired) {
 		
 		if(widgets.size()==0) {
 			widgets.add(new MissedCallsWidget());
@@ -39,7 +40,7 @@ public class WidgetManager {
 		}
 	}
 	
-	public static Map<String,WidgetData> refreshWidgets(List<String> widgetsDesired) {
+	public static Map<String,WidgetData> refreshWidgets(ArrayList<CharSequence> widgetsDesired) {
 		if(dataCache==null)
 			dataCache = new HashMap<String,WidgetData>();
 		
@@ -48,10 +49,16 @@ public class WidgetManager {
 			widget.get(widgetsDesired, dataCache);
 		}
 		
+		Intent intent = new Intent("org.metawatch.manager.REFRESH_WIDGET_REQUEST");
+		if(widgetsDesired==null)
+			intent.putExtra("get_previews", true);
+		else
+			intent.putCharSequenceArrayListExtra("widgets_desired", widgetsDesired);
+		
 		return dataCache;
 	}
 	
-	public static Map<String,WidgetData> getCachedWidgets(List<String> widgetsDesired) {
+	public static Map<String,WidgetData> getCachedWidgets(ArrayList<CharSequence> widgetsDesired) {
 		if(dataCache==null)
 			return refreshWidgets(widgetsDesired);
 		
