@@ -32,8 +32,15 @@
 
 package org.metawatch.manager;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import org.metawatch.manager.MetaWatchService.Preferences;
+import org.metawatch.manager.Notification.VibratePattern;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +56,26 @@ public class ImageViewer extends Activity {
         Log.d(MetaWatch.TAG, "action: " + i.getAction());                        
         Log.d(MetaWatch.TAG, "data: "+ i.getData().getPath() );
         
-        Application.updateAppMode(this, BitmapFactory.decodeFile(i.getData().getPath()));
+        InputStream is;
+		try {
+			is = getContentResolver().openInputStream(i.getData());
+			
+	        BitmapFactory.Options options = new BitmapFactory.Options();       
+	        Bitmap bmp = BitmapFactory.decodeStream(is, null, options);
+	        
+	        if (bmp!=null) {
+		        Bitmap scaled = Utils.resize(bmp, 96, 96);
+		        Bitmap dithered = Utils.ditherTo1bit(scaled, Preferences.invertLCD);
+		        
+		        VibratePattern vibratePattern = new VibratePattern(false, 1,1,1);
+		        		
+		        Notification.addBitmapNotification(this, dithered, vibratePattern, -1);
+	        }
+        
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         finish();
 	}

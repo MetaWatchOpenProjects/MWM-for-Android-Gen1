@@ -1,6 +1,7 @@
 package org.metawatch.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +73,11 @@ public class WidgetSetup extends Activity {
 		groupData = new ArrayList<Map<String, String>>();
 	    childData = new ArrayList<List<Map<String, String>>>();
 
-		String[] rows = Preferences.widgets.split("\\|");
+	    // Add a dummy entry at the end, if all rows have content
+		ArrayList<String> rows = new ArrayList<String>(Arrays.asList(Preferences.widgets.split("\\|")));
+		if (rows.size()>0 && rows.get(rows.size()-1).length()>0) {
+			rows.add("");
+		}
 			
 		int i=1;
 		for(String line : rows) {
@@ -83,7 +88,7 @@ public class WidgetSetup extends Activity {
 	        
 	        List<Map<String, String>> children = new ArrayList<Map<String, String>>();
 	        
-			String[] widgets = line.split(",");
+			String[] widgets = (line+",").split(",");
 			for(String widget : widgets) {
 	        	Map<String, String> curChildMap = new HashMap<String, String>();
 	            children.add(curChildMap);
