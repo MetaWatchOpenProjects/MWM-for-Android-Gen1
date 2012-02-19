@@ -802,6 +802,7 @@ public class Monitors {
 					level = (rawlevel * 100) / scale;
 				}
 				BatteryData.level = level + "%";
+				Idle.updateLcdIdle(context);
 			}
 		};
 		IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
