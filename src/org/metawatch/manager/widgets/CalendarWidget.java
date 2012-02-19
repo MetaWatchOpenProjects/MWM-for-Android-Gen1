@@ -8,18 +8,25 @@ import org.metawatch.manager.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 
 public class CalendarWidget implements InternalWidget {
 
 	public final static String id_0 = "Calendar_24_32";
-	final static String desc_0 = "Calendar (24x32)";
+	final static String desc_0 = "Next Calendar Appointment (24x32)";
+	
+	public final static String id_1 = "Calendar_96_32";
+	final static String desc_1 = "Next Calendar Appointment (96x32)";
 	
 	private Context context;
 	private TextPaint paintSmall;
 
+	private String meetingTime = "None";
 	
 	public void init(Context context, List<String> widgetIds) {
 		this.context = context;
@@ -37,6 +44,7 @@ public class CalendarWidget implements InternalWidget {
 	}
 
 	public void refresh(List<String> widgetIds) {
+		meetingTime = Utils.readCalendar(context, 0);
 	}
 
 	public void get(List<String> widgetIds, Map<String,WidgetData> result) {
@@ -44,23 +52,62 @@ public class CalendarWidget implements InternalWidget {
 		if(widgetIds == null || widgetIds.contains(id_0)) {		
 			result.put(id_0, GenWidget(id_0));
 		}
+		
+		if(widgetIds == null || widgetIds.contains(id_1)) {		
+			result.put(id_1, GenWidget(id_1));
+		}
 	}
 	
 	private InternalWidget.WidgetData GenWidget(String widget_id) {
 		InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
 
-		widget.id = id_0;
-		widget.description = desc_0;
-		widget.width = 24;
-		widget.height = 32;
+		widget.priority = meetingTime.equals("None") ? 0 : 1;	
 		
-		Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
-
-		String Meetingtime;
-		Meetingtime = Utils.readCalendar(context, 0);
-
-		widget.priority = Meetingtime.equals("None") ? 0 : 1;		
-		widget.bitmap = Utils.DrawIconStringWidget(context, widget.width, widget.height, icon, Meetingtime, paintSmall);
+		if (widget_id.equals(id_0)) {
+			widget.id = id_0;
+			widget.description = desc_0;
+			widget.width = 24;
+			widget.height = 32;
+			
+			Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
+	
+	
+			widget.bitmap = Utils.DrawIconStringWidget(context, widget.width, widget.height, icon, meetingTime, paintSmall);
+		}
+		else if (widget_id.equals(id_1)) {
+			widget.id = id_1;
+			widget.description = desc_1;
+			widget.width = 96;
+			widget.height = 32;
+			
+			Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
+			
+			widget.bitmap = Bitmap.createBitmap(widget.width, widget.height, Bitmap.Config.RGB_565);
+			Canvas canvas = new Canvas(widget.bitmap);
+			canvas.drawColor(Color.WHITE);
+			
+			canvas.drawBitmap(icon, 0, 3, null);
+			canvas.drawText(meetingTime, 12, 29, paintSmall);
+			
+			paintSmall.setTextAlign(Align.LEFT);
+			
+			String text = Utils.Meeting_Title;
+			if (Utils.Meeting_Location.length()>0)
+				text += " - " + Utils.Meeting_Location;
+			
+			canvas.save();			
+			StaticLayout layout = new StaticLayout(text, paintSmall, 70, Layout.Alignment.ALIGN_CENTER, 1.2f, 0, false);
+			int height = layout.getHeight();
+			int textY = 16 - (height/2);
+			if(textY<0) {
+				textY=0;
+			}
+			canvas.translate(25, textY); //position the text
+			layout.draw(canvas);
+			canvas.restore();	
+			
+			paintSmall.setTextAlign(Align.CENTER);
+		}
 		
 		return widget;
 	}
