@@ -160,7 +160,7 @@ public class WidgetSetup extends Activity {
     
     private void refreshPreview() {
     	ImageView v = (ImageView) findViewById(R.id.idlePreview);
-    	v.setImageBitmap(Idle.createLcdIdle(this, 0));
+    	v.setImageBitmap(Idle.createLcdIdle(this, true, 0));
     }
     
     private void storeWidgetLayout() {

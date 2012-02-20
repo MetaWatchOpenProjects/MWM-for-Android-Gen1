@@ -88,10 +88,10 @@ public class Idle {
 	
 
 	static synchronized Bitmap createLcdIdle(Context context) {
-		return createLcdIdle(context, currentPage);
+		return createLcdIdle(context, false, currentPage);
 	}
 
-	static synchronized Bitmap createLcdIdle(Context context, int page) {
+	static synchronized Bitmap createLcdIdle(Context context, boolean preview, int page) {
 		
 		if(!widgetsInitialised) {
 			WidgetManager.initWidgets(context, null);
@@ -125,6 +125,10 @@ public class Idle {
 		
 		if( page == 0 ) {
 		
+			if( preview ) {
+				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "dummy_clock.png"), 0, 0, null);
+			} 
+			
 			Protocol.configureIdleBufferSize(true);
 	
 			List<WidgetRow> rows = WidgetManager.getDesiredWidgetsFromPrefs();
