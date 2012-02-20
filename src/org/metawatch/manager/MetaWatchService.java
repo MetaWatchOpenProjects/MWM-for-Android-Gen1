@@ -393,7 +393,7 @@ public class MetaWatchService extends Service {
 		Log.d(MetaWatch.TAG,
 				"MetaWatchService.onDestroy()");
 
-		Monitors.stop();
+		Monitors.stop(this);
 		removeNotification();
 		notifyClients();
 	}

@@ -112,6 +112,8 @@ public class Monitors {
 	
 	private static NetworkLocationListener networkLocationListener;
 	
+	private static BroadcastReceiver batteryLevelReceiver;
+	
 	public static class WeatherData {
 		public static boolean updating = false;
 		public static boolean received = false;
@@ -256,7 +258,7 @@ public class Monitors {
 		}
 	}
 	
-	public static void stop() {
+	public static void stop(Context context) {
 		
 		Log.d(MetaWatch.TAG,
 				"Monitors.stop()");
@@ -267,7 +269,12 @@ public class Monitors {
 				locationManager.removeUpdates(networkLocationListener);
 			}
 		}
-		stopAlarmTicker();		
+		stopAlarmTicker();
+		
+		if (batteryLevelReceiver!=null) {
+			context.unregisterReceiver(batteryLevelReceiver);
+			batteryLevelReceiver=null;
+		}
 	}
 	
 	private static synchronized void updateWeatherDataGoogle(Context context) {
@@ -787,14 +794,13 @@ public class Monitors {
 	}
 	
 
-	static BroadcastReceiver batteryLevelReceiver = null;
+
 	private static void createBatteryLevelReciever(Context context) {
 		if(batteryLevelReceiver!=null)
 			return;
 		
 		batteryLevelReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
-				context.unregisterReceiver(this);
 				int rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 				int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 				int level = -1;
@@ -805,8 +811,7 @@ public class Monitors {
 				Idle.updateLcdIdle(context);
 			}
 		};
-		IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		context.registerReceiver(batteryLevelReceiver, batteryLevelFilter);
+		context.registerReceiver(batteryLevelReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 	}
 
 	
