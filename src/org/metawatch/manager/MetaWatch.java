@@ -25,30 +25,37 @@
  /*****************************************************************************
   * MetaWatch.java                                                            *
   * MetaWatch                                                                 *
-  * Main activity with menu                                                            *
+  * Main activity with tab container                                          *
   *                                                                           *
   *                                                                           *
   *****************************************************************************/
 
+
 package org.metawatch.manager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WeatherProvider;
+import org.metawatch.manager.MetaWatch.IncomingHandler;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
 
-import android.app.Activity;
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
+import android.app.TabActivity;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -61,32 +68,84 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class MetaWatch extends Activity {
-
+public class MetaWatch extends TabActivity {
+   
 	public static final String TAG = "MetaWatch";
 	
-	private TextView textView;
-	
-	private ToggleButton toggleButton;
+	public static TextView textView = null;	
+	public static ToggleButton toggleButton = null;
 	
 	/** Messenger for communicating with service. */
     Messenger mService = null;
 	
     /** Flag indicating whether we have called bind on the service. */
     boolean mIsBound;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-                   
-        textView = (TextView) findViewById(R.id.textview);
         
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // If you want to use BugSense for your fork, register with them
+        // and place your API key in /assets/bugsense.txt
+        // (This prevents me receiving reports of crashes from forked versions
+        // which is somewhat confusing!)      
+        try {
+			InputStream inputStream = getAssets().open("bugsense.txt");
+			String key = Utils.ReadInputStream(inputStream);
+			key=key.trim();
+			Log.d(MetaWatch.TAG, "Using bugsense key '"+key+"'");
+			BugSenseHandler.setup(this, key);
+		} catch (IOException e) {
+			Log.d(MetaWatch.TAG, "No bugsense keyfile found");
+		}
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+        final Resources res = getResources();
+        final TabHost tabHost = getTabHost();
+
+        tabHost.addTab(tabHost.newTabSpec("tab1")
+                .setIndicator("Status",res.getDrawable(R.drawable.ic_tab_status))
+                .setContent(new Intent(this, MetaWatchStatus.class)));
+
+        tabHost.addTab(tabHost.newTabSpec("tab2")
+                .setIndicator("Preferences",res.getDrawable(R.drawable.ic_tab_settings))
+                .setContent(new Intent(this, Settings.class)));
+        
+        tabHost.addTab(tabHost.newTabSpec("tab3")
+                .setIndicator("Widgets",res.getDrawable(R.drawable.ic_tab_widgets))
+                .setContent(new Intent(this, WidgetSetup.class)));
+        
+        tabHost.addTab(tabHost.newTabSpec("tab4")
+                .setIndicator("Tests",res.getDrawable(R.drawable.ic_tab_test))
+                .setContent(new Intent(this, Test.class)));
+        
+        // This tab sets the intent flag so that it is recreated each time
+        // the tab is clicked.
+        //tabHost.addTab(tabHost.newTabSpec("tab3")
+        //        .setIndicator("destroy")
+        //        .setContent(new Intent(this, Controls2.class)
+        //                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)));
+        
+        synchronized (MetaWatchStatus.textView) {
+        	if (MetaWatchStatus.textView==null) {
+		        try {
+					MetaWatchStatus.textView.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					finish();
+				}
+        	}
+	        textView = MetaWatchStatus.textView;
+	        toggleButton = MetaWatchStatus.toggleButton;
+        }
     }
 
 	@Override
@@ -108,7 +167,6 @@ public class MetaWatch extends Activity {
 		}
 		
 	
-		toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
 		toggleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	if(toggleButton.isChecked())
@@ -388,5 +446,4 @@ public class MetaWatch extends Activity {
             textView.append("Binding.\n");
         }
     }
-    
 }
