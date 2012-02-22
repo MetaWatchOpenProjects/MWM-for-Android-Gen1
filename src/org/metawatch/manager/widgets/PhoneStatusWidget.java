@@ -9,6 +9,7 @@ import org.metawatch.manager.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.text.TextPaint;
@@ -56,10 +57,21 @@ public class PhoneStatusWidget implements InternalWidget {
 		
 		Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_phone_status.bmp");
 
-		String level = Monitors.BatteryData.level;
+		int level = Monitors.BatteryData.level;
+		String count = level==-1 ? "-" : level+"%";
 
-		widget.priority = level.equals("???") ? 0 : 1;		
-		widget.bitmap = Utils.DrawIconStringWidget(context, widget.width, widget.height, icon, level, paintSmall);
+		widget.priority = level==-1 ? 0 : 1;		
+		widget.bitmap = Bitmap.createBitmap(widget.width, widget.height, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(widget.bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		canvas.drawBitmap(icon, 0, 3, null);
+		canvas.drawText(count, 12, 29,  paintSmall);
+	
+		if(level>95)
+			level=100;
+		if(level>-1)
+			canvas.drawRect(13, 8 + ((100-level)/10), 19, 18, paintSmall);
 		
 		return widget;
 	}

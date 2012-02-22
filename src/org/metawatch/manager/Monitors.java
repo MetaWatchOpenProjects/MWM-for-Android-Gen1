@@ -151,7 +151,7 @@ public class Monitors {
 	}
 	
 	public static class BatteryData {
-		public static String level = "???";
+		public static int level = -1;
 	}
 	
 	private static Monitors m = new Monitors(); // Static instance for new
@@ -807,7 +807,7 @@ public class Monitors {
 				if (rawlevel >= 0 && scale > 0) {
 					level = (rawlevel * 100) / scale;
 				}
-				BatteryData.level = level + "%";
+				BatteryData.level = level;
 				Idle.updateLcdIdle(context);
 			}
 		};
