@@ -17,7 +17,7 @@ import android.text.TextPaint;
 public class PhoneStatusWidget implements InternalWidget {
 
 	public final static String id_0 = "phoneStatus_24_32";
-	final static String desc_0 = "Phone Status (24x32)";
+	final static String desc_0 = "Phone Battery Status (24x32)";
 	
 	private Context context;
 	private TextPaint paintSmall;
