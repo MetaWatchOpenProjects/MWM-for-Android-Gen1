@@ -36,6 +36,7 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 
 		accessibilityReceived = true;
+		MetaWatchService.notifyClients();
 		
 		/* Acquire details of event. */
 		int eventType = event.getEventType();

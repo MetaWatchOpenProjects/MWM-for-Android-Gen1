@@ -343,7 +343,7 @@ public class MetaWatch extends TabActivity {
 	    		//textView.append("\nAccessibility enabled and working\n");
 	    	}
 	    	else {
-	    		if(startupTime==0 || System.currentTimeMillis()-startupTime<10*1000) {
+	    		if(startupTime==0 || System.currentTimeMillis()-startupTime<60*1000) {
 	    			textView.append("\nAccessibility enabled - waiting for notifications\n");
 	    		}
 	    		else {
