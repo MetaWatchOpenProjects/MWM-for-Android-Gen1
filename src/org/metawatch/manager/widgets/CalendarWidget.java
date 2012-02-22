@@ -1,6 +1,7 @@
 package org.metawatch.manager.widgets;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 import org.metawatch.manager.FontCache;
@@ -25,6 +26,7 @@ public class CalendarWidget implements InternalWidget {
 	
 	private Context context;
 	private TextPaint paintSmall;
+	private TextPaint paintNumerals;
 
 	private String meetingTime = "None";
 	
@@ -36,7 +38,12 @@ public class CalendarWidget implements InternalWidget {
 		paintSmall.setTextSize(FontCache.instance(context).Small.size);
 		paintSmall.setTypeface(FontCache.instance(context).Small.face);
 		paintSmall.setTextAlign(Align.CENTER);
-
+		
+		paintNumerals = new TextPaint();
+		paintNumerals.setColor(Color.BLACK);
+		paintNumerals.setTextSize(FontCache.instance(context).Numerals.size);
+		paintNumerals.setTypeface(FontCache.instance(context).Numerals.face);
+		paintNumerals.setTextAlign(Align.CENTER);
 	}
 
 	public void shutdown() {
@@ -68,27 +75,27 @@ public class CalendarWidget implements InternalWidget {
 			widget.description = desc_0;
 			widget.width = 24;
 			widget.height = 32;
-			
-			Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
-	
-	
-			widget.bitmap = Utils.DrawIconStringWidget(context, widget.width, widget.height, icon, meetingTime, paintSmall);
 		}
 		else if (widget_id.equals(id_1)) {
 			widget.id = id_1;
 			widget.description = desc_1;
 			widget.width = 96;
 			widget.height = 32;
+		}
+							
+		Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
+		
+		widget.bitmap = Bitmap.createBitmap(widget.width, widget.height, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(widget.bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		canvas.drawBitmap(icon, 0, 3, null);
+		Calendar c = Calendar.getInstance(); 
+		String day = ""+c.get(Calendar.DAY_OF_MONTH);
+		canvas.drawText(day, 12, 16, paintNumerals);
+		canvas.drawText(meetingTime, 12, 29, paintSmall);
 			
-			Bitmap icon = Utils.loadBitmapFromAssets(context, "idle_calendar.bmp");
-			
-			widget.bitmap = Bitmap.createBitmap(widget.width, widget.height, Bitmap.Config.RGB_565);
-			Canvas canvas = new Canvas(widget.bitmap);
-			canvas.drawColor(Color.WHITE);
-			
-			canvas.drawBitmap(icon, 0, 3, null);
-			canvas.drawText(meetingTime, 12, 29, paintSmall);
-			
+		if (widget_id.equals(id_1)) {
 			paintSmall.setTextAlign(Align.LEFT);
 			
 			String text = Utils.Meeting_Title;

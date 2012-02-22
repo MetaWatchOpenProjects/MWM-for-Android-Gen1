@@ -11,6 +11,7 @@ public class FontCache {
 		Small = new FontInfo(context, "metawatch_8pt_5pxl_CAPS.ttf", 8, 5);
 		Medium = new FontInfo(context, "metawatch_8pt_7pxl_CAPS.ttf", 8, 7);
 		Large = new FontInfo(context,  "metawatch_16pt_11pxl.ttf", 16, 11);
+		Numerals = new FontInfo(context, "metawatch_8pt_6pxl_Numerals.ttf", 8, 6);
 	}
 	private static FontCache instance = null;
 	
@@ -43,6 +44,7 @@ public class FontCache {
 	public FontInfo Small = null;
 	public FontInfo Medium = null;
 	public FontInfo Large = null;
+	public FontInfo Numerals = null;
 	
 	public FontInfo Get(FontSize size) {
 		switch(size) {
