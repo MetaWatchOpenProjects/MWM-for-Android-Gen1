@@ -40,7 +40,6 @@ import java.util.Date;
 
 import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WeatherProvider;
-import org.metawatch.manager.MetaWatch.IncomingHandler;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
 
