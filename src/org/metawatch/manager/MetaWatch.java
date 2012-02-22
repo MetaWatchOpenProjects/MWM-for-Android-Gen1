@@ -55,6 +55,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -298,16 +299,16 @@ public class MetaWatch extends TabActivity {
     	
     	switch (MetaWatchService.connectionState) {
 	    	case MetaWatchService.ConnectionState.DISCONNECTED:
-	    		textView.append("DISCONNECTED\n");
+	    		Utils.appendColoredText(textView, "DISCONNECTED\n", Color.RED);
 	    		break;
 	    	case MetaWatchService.ConnectionState.CONNECTING:
-	    		textView.append("CONNECTING\n");
+	    		Utils.appendColoredText(textView, "CONNECTING\n", Color.YELLOW);
 	    		break;
 	    	case MetaWatchService.ConnectionState.CONNECTED:
-	    		textView.append("CONNECTED\n");
+	    		Utils.appendColoredText(textView, "CONNECTED\n", Color.GREEN);
 	    		break;
 	    	case MetaWatchService.ConnectionState.DISCONNECTING:
-	    		textView.append("DISCONNECTING\n");
+	    		Utils.appendColoredText(textView, "DISCONNECTING\n", Color.YELLOW);
 	    		break;
     	}
     	
@@ -337,15 +338,16 @@ public class MetaWatch extends TabActivity {
     	}
     	
     	if (Utils.isAccessibilityEnabled(this)) {
-	    	if (MetaWatchAccessibilityService.accessibilityRecieved) {
-	    		textView.append("\nAccessibility enabled and working\n");
+	    	if (MetaWatchAccessibilityService.accessibilityReceived) {
+	    		Utils.appendColoredText(textView, "\nAccessibility enabled and working\n", Color.GREEN);
+	    		//textView.append("\nAccessibility enabled and working\n");
 	    	}
 	    	else {
 	    		if(startupTime==0 || System.currentTimeMillis()-startupTime<10*1000) {
 	    			textView.append("\nAccessibility enabled - waiting for notifications\n");
 	    		}
 	    		else {
-	    			textView.append("\nAccessibility not working - disable and renable Accessibility in the system settings\n");
+	    			Utils.appendColoredText(textView, "\nAccessibility not working - disable and renable Accessibility in the system settings\n", Color.RED);
 	    		}
 	    	}
 	    }

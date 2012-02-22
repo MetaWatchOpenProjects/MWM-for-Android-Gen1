@@ -65,10 +65,13 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.Settings.SettingNotFoundException;
+import android.text.Spannable;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.widget.TextView;
 
 public class Utils {
 
@@ -662,5 +665,14 @@ public class Utils {
 	    }
 	    return false;
 	}
+    
+    public static void appendColoredText(TextView tv, String text, int color) {
+    	int start = tv.getText().length();
+    	tv.append(text);
+    	int end = tv.getText().length();
+    	
+    	Spannable spannableText = (Spannable) tv.getText();
+    	spannableText.setSpan(new ForegroundColorSpan(color), start, end, 0);
+    }
 
 }

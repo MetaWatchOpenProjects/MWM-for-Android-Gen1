@@ -30,12 +30,12 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 	}
 
 	private String currentActivity = "";
-	public static boolean accessibilityRecieved = false;
+	public static boolean accessibilityReceived = false;
 	
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 
-		accessibilityRecieved = true;
+		accessibilityReceived = true;
 		
 		/* Acquire details of event. */
 		int eventType = event.getEventType();
