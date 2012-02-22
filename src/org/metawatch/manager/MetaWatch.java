@@ -87,6 +87,8 @@ public class MetaWatch extends TabActivity {
 	
     /** Flag indicating whether we have called bind on the service. */
     boolean mIsBound;
+    
+    long startupTime = 0;
         
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,8 @@ public class MetaWatch extends TabActivity {
 		} catch (IOException e) {
 			Log.d(MetaWatch.TAG, "No bugsense keyfile found");
 		}
+        
+        startupTime = System.currentTimeMillis();
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
@@ -338,7 +342,12 @@ public class MetaWatch extends TabActivity {
 	    		textView.append("\nAccessibility enabled and working\n");
 	    	}
 	    	else {
-	    		textView.append("\nAccessibility not working - quit MWM then disable and renable Accessibility\n");
+	    		if(startupTime==0 || System.currentTimeMillis()-startupTime<10*1000) {
+	    			textView.append("\nAccessibility enabled - waiting for notifications\n");
+	    		}
+	    		else {
+	    			textView.append("\nAccessibility not working - disable and renable Accessibility in the system settings\n");
+	    		}
 	    	}
 	    }
     	else {
