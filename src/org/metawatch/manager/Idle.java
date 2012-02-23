@@ -209,10 +209,8 @@ public class Idle {
 	
 	public static synchronized void sendLcdIdle(Context context) {
 		Bitmap bitmap = createLcdIdle(context);
-		//Protocol.loadTemplate(0);		
-		Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.IDLE);
-		//Protocol.activateBuffer();
-		Protocol.updateDisplay(0);
+		if( Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.IDLE) )
+			Protocol.updateDisplay(0);
 	}
 	
 	public static boolean toIdle(Context context) {

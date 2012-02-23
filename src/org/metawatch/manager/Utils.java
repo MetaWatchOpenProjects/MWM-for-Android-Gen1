@@ -242,9 +242,9 @@ public class Utils {
 				if ((eventCursor.getLong(1) > (CurrentTime+(1000*60*1.2))) &&(eventCursor.getString(3).equals("0"))){
 					String uid2 = eventCursor.getString(0);	
 					Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/events/" + uid2);
-					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
+					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
 					Cursor c = cr.query(CALENDAR_URI,new String[] { "title", "eventLocation", "description",}, null, null, null); 
-					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar cursor: "+ c.getCount());
+					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar cursor: "+ c.getCount());
 					if (c.moveToFirst())
 					{	
 						//Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar title: "+ c.getString(c.getColumnIndex("title")));
@@ -260,9 +260,9 @@ public class Utils {
 
 					elapsedtimetemp = (begintemp-CurrentTime);
 
-					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
-					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
-					Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Location : " + locationtemp);
+					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
+					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
+					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Location : " + locationtemp);
 
 
 					if (currentremaintime != 0) {
@@ -300,7 +300,7 @@ public class Utils {
 				// Get the AlarmManager service
 				AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 				am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
-				Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
+				//Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
 			}
 
 

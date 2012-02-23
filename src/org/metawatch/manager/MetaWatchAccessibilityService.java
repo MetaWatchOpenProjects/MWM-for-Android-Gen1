@@ -35,8 +35,10 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 
-		accessibilityReceived = true;
-		MetaWatchService.notifyClients();
+		if(!accessibilityReceived) {
+			accessibilityReceived = true;
+			MetaWatchService.notifyClients();
+		}
 		
 		/* Acquire details of event. */
 		int eventType = event.getEventType();

@@ -807,8 +807,11 @@ public class Monitors {
 				if (rawlevel >= 0 && scale > 0) {
 					level = (rawlevel * 100) / scale;
 				}
-				BatteryData.level = level;
-				Idle.updateLcdIdle(context);
+				if(BatteryData.level != level) {
+					//Log.d(MetaWatch.TAG, "Battery level changed: "+rawlevel+"/"+scale+" - "+level+"%");
+					BatteryData.level = level;
+					Idle.updateLcdIdle(context);
+				}
 			}
 		};
 		context.registerReceiver(batteryLevelReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

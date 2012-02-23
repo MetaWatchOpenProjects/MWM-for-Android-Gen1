@@ -150,18 +150,18 @@ public class Protocol {
 		}
 	}
 
-	public static void sendLcdBitmap(Bitmap bitmap, int bufferType) {
+	public static Boolean sendLcdBitmap(Bitmap bitmap, int bufferType) {
 		if (bitmap==null) 
-			return;
+			return false;
 		
 		Log.d(MetaWatch.TAG, "Protocol.sendLcdBitmap()");
 		int pixelArray[] = new int[96 * 96];
 		bitmap.getPixels(pixelArray, 0, 96, 0, 0, 96, 96);
 
-		sendLcdArray(pixelArray, bufferType);
+		return sendLcdArray(pixelArray, bufferType);
 	}
 
-	static void sendLcdArray(int[] pixelArray, int bufferType) {
+	static Boolean sendLcdArray(int[] pixelArray, int bufferType) {
 		byte send[] = new byte[1152];
 
 		for (int i = 0; i < 1152; i++) {
@@ -182,12 +182,12 @@ public class Protocol {
 			send[i] = (byte) (p[7] * 128 + p[6] * 64 + p[5] * 32 + p[4] * 16
 					+ p[3] * 8 + p[2] * 4 + p[1] * 2 + p[0] * 1);
 		}
-		sendLcdBuffer(send, bufferType);
+		return sendLcdBuffer(send, bufferType);
 	}
 
-	static void sendLcdBuffer(byte[] buffer, int bufferType) {
+	static Boolean sendLcdBuffer(byte[] buffer, int bufferType) {
 		if (MetaWatchService.connectionState != MetaWatchService.ConnectionState.CONNECTED)
-			return;
+			return false;
 
 		int i = 0;
 		if (bufferType == MetaWatchService.WatchBuffers.IDLE && idleShowClock)
@@ -220,6 +220,7 @@ public class Protocol {
 		}
 		Log.d(MetaWatch.TAG, "Sent "+sentLines+ "/96");
 
+		return (sentLines>0);
 	}
 	
 	public static void idleShowClock(boolean show) {
@@ -596,9 +597,10 @@ public class Protocol {
 	}
 
 	public static void configureIdleBufferSize(boolean showClock) {
-		Log.d(MetaWatch.TAG, "Protocol.configureIdleBufferSize("+showClock+")");
 		
-		//if(idleShowClock !=showClock) {
+		if(idleShowClock !=showClock) {
+			Log.d(MetaWatch.TAG, "Protocol.configureIdleBufferSize("+showClock+")");
+			
 			idleShowClock = showClock;
 			
 			byte[] bytes = new byte[5];
@@ -610,7 +612,7 @@ public class Protocol {
 			bytes[4] = (byte) (idleShowClock ? 0 : 1);
 			
 			enqueue(bytes);
-		//}
+		}
 	}
 	
 	public static void getDeviceType() {
