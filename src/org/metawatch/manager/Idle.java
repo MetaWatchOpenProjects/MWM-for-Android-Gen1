@@ -149,7 +149,6 @@ public class Idle {
 				
 		}
 		else if (page == 1) {
-			Protocol.configureIdleBufferSize(false);
 			
 			if(MediaControl.lastTrack=="") {
 				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "media_player_idle.png"), 0, 0, null);				
@@ -207,10 +206,15 @@ public class Idle {
 		return canvas;
 	}
 	
+	private static int lastMode = -1;
+	
 	public static synchronized void sendLcdIdle(Context context) {
 		Bitmap bitmap = createLcdIdle(context);
-		if( Protocol.sendLcdBitmap(bitmap, MetaWatchService.WatchBuffers.IDLE) )
-			Protocol.updateDisplay(0);
+		int mode = currentPage==0 ? MetaWatchService.WatchBuffers.IDLE : MetaWatchService.WatchBuffers.APPLICATION;
+		if( Protocol.sendLcdBitmap(bitmap, mode) || lastMode != mode ) {
+			Protocol.updateDisplay(mode);
+			lastMode = mode;
+		}
 	}
 	
 	public static boolean toIdle(Context context) {
@@ -224,8 +228,10 @@ public class Idle {
 			//Protocol.updateDisplay(0);
 		}
 		
-		if (numPages()>1)
+		if (numPages()>1) {
 			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 0); // Right top immediate
+			Protocol.enableButton(0, 0, IDLE_NEXT_PAGE, 1); // Right top immediate
+		}
 
 		
 		return true;
