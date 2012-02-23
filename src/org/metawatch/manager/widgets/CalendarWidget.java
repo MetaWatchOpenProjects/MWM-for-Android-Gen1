@@ -91,8 +91,15 @@ public class CalendarWidget implements InternalWidget {
 		
 		canvas.drawBitmap(icon, 0, 3, null);
 		Calendar c = Calendar.getInstance(); 
-		String day = ""+c.get(Calendar.DAY_OF_MONTH);
-		canvas.drawText(day, 12, 16, paintNumerals);
+		int dayOfMonth = c.get(Calendar.DAY_OF_MONTH); 
+		if(dayOfMonth<10) {
+			canvas.drawText(""+dayOfMonth, 12, 16, paintNumerals);
+		}
+		else
+		{
+			canvas.drawText(""+dayOfMonth/10, 9, 16, paintNumerals);
+			canvas.drawText(""+dayOfMonth%10, 15, 16, paintNumerals);
+		}
 		canvas.drawText(meetingTime, 12, 29, paintSmall);
 			
 		if (widget_id.equals(id_1)) {
