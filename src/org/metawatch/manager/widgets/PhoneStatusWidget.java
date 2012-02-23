@@ -68,8 +68,6 @@ public class PhoneStatusWidget implements InternalWidget {
 		canvas.drawBitmap(icon, 0, 3, null);
 		canvas.drawText(count, 12, 29,  paintSmall);
 	
-		if(level>95)
-			level=100;
 		if(level>-1)
 			canvas.drawRect(13, 8 + ((100-level)/10), 19, 18, paintSmall);
 		
