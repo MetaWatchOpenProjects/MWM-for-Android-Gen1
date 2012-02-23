@@ -106,7 +106,7 @@ public class CalendarWidget implements InternalWidget {
 			paintSmall.setTextAlign(Align.LEFT);
 			
 			String text = Utils.Meeting_Title;
-			if (Utils.Meeting_Location.length()>0)
+			if ((Utils.Meeting_Location !=null) && (Utils.Meeting_Location.length()>0))
 				text += " - " + Utils.Meeting_Location;
 			
 			canvas.save();			
