@@ -206,15 +206,11 @@ public class Idle {
 		return canvas;
 	}
 	
-	private static int lastMode = -1;
-	
 	public static synchronized void sendLcdIdle(Context context) {
 		Bitmap bitmap = createLcdIdle(context);
 		int mode = currentPage==0 ? MetaWatchService.WatchBuffers.IDLE : MetaWatchService.WatchBuffers.APPLICATION;
-		if( Protocol.sendLcdBitmap(bitmap, mode) || lastMode != mode ) {
-			Protocol.updateDisplay(mode);
-			lastMode = mode;
-		}
+		Protocol.sendLcdBitmap(bitmap, mode);
+		Protocol.updateDisplay(mode);
 	}
 	
 	public static boolean toIdle(Context context) {
