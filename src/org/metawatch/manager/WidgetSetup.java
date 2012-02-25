@@ -88,18 +88,21 @@ public class WidgetSetup extends Activity {
 	        
 	        List<Map<String, String>> children = new ArrayList<Map<String, String>>();
 	        
-			String[] widgets = (line+",").split(",");
+			String[] widgets = (line).split(",");
 			for(String widget : widgets) {
+				widget = widget.trim();
 	        	Map<String, String> curChildMap = new HashMap<String, String>();
 	            children.add(curChildMap);
 	            String name = widget;
+	            if(widget==null || widget=="")
+	            	name="<empty>";
 	            if(widgetMap.containsKey(widget))
 	            	name = widgetMap.get(widget).description;
 	            curChildMap.put(NAME, name);
 	            curChildMap.put(ID, widget);
 	        }
 			
-			while(children.size()<5) {
+			while(children.size()<8) {
 	        	Map<String, String> curChildMap = new HashMap<String, String>();
 	            children.add(curChildMap);
 	            curChildMap.put(NAME, "<empty>");
@@ -139,7 +142,7 @@ public class WidgetSetup extends Activity {
         	
         	if(groupPosition>-1 && childPosition>-1) {
         		Map<String,String> curChildMap = childData.get(groupPosition).get(childPosition);
-        		if(id==null) {
+        		if(id==null || id=="") {
     	            curChildMap.put(NAME, "<empty>");
     	            curChildMap.put(ID, "");
         		}
