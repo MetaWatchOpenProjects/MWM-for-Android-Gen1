@@ -3,32 +3,34 @@
       package="org.metawatch.manager"
       android:versionCode="1"
       android:installLocation="internalOnly" android:versionName="0.2.4.rm11">
+      
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
-    <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:largeScreens="true" android:smallScreens="true"></supports-screens>
+    <supports-screens android:resizeable="true" android:normalScreens="true" android:anyDensity="true" android:largeScreens="true" android:smallScreens="true"/>
     
-    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
-	<uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
-	<uses-permission android:name="android.permission.READ_CALENDAR"></uses-permission>
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
-	<uses-permission android:name="com.google.android.providers.gmail.permission.READ_GMAIL"></uses-permission>
-	<uses-permission android:name="android.permission.ACCOUNT_MANAGER"></uses-permission>
-	<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
-	<uses-permission android:name="com.google.android.gm.permission.READ_GMAIL"></uses-permission>
-	<uses-permission android:name="com.google.android.providers.talk.permission.READ_ONLY"></uses-permission>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
-	<uses-permission android:name="android.permission.CALL_PRIVILEGED"></uses-permission>
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-	<uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCOUNT_MANAGER"/>
 	<uses-permission android:name="android.permission.BATTERY_STATS"/>
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+	<uses-permission android:name="android.permission.CALL_PHONE"/>
+	<uses-permission android:name="android.permission.CALL_PRIVILEGED"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+	<uses-permission android:name="android.permission.READ_CALENDAR"/>
+	<uses-permission android:name="android.permission.READ_CONTACTS"/>
+	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	
 	<uses-permission android:name="com.fsck.k9.permission.READ_MESSAGES"/>
+	<uses-permission android:name="com.google.android.gm.permission.READ_GMAIL"/>
+	<uses-permission android:name="com.google.android.providers.gmail.permission.READ_GMAIL"/>
+	<uses-permission android:name="com.google.android.providers.talk.permission.READ_ONLY"/>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
         <activity android:name=".MetaWatch"
@@ -74,20 +76,20 @@
 		</activity>
         <receiver android:name=".IntentReceiver" android:exported="true">
             <intent-filter>
-            	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
             	<action android:name="android.intent.action.BATTERY_LOW"/>
-            	<action android:name="com.android.music.metachanged" />
             	<action android:name="android.intent.action.TIME_SET"/>
             	<action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            	<action android:name="android.provider.Telephony.SMS_RECEIVED" />  
+            	<action android:name="com.adam.aslfms.notify.playstatechanged" />
+            	<action android:name="com.amazon.mp3.metachanged" />	
             	<action android:name="com.android.alarmclock.ALARM_ALERT" />
-            	<action android:name="com.htc.android.worldclock.ALARM_ALERT" />
             	<action android:name="com.android.deskclock.ALARM_ALERT" />
-            	<action android:name="com.sonyericsson.alarm.ALARM_ALERT" />
-            	<action android:name="com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED" />
+            	<action android:name="com.android.music.metachanged" />
+            	<action android:name="com.htc.android.worldclock.ALARM_ALERT" />
             	<action android:name="com.motorola.blur.alarmclock.ALARM_ALERT" />
             	<action android:name="com.motorola.blur.alarmclock.COUNT_DOWN" />
-            	<action android:name="com.amazon.mp3.metachanged" />	
-            	<action android:name="com.adam.aslfms.notify.playstatechanged" />
+            	<action android:name="com.sonyericsson.alarm.ALARM_ALERT" />
+            	<action android:name="com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED" />
             	<action android:name="org.metawatch.manager.UPDATE_CALENDAR"/>
             </intent-filter>
             <intent-filter>
@@ -111,13 +113,7 @@
 			</intent-filter>
 			<intent-filter>
 				<action android:name="com.nullsoft.winamp.metachanged" />
-			</intent-filter>			
-			<!--
-			<intent-filter>
--                <action android:name="mobi.beyondpod.action.PLAYBACK_STATUS" />
--            </intent-filter>	
-
-			-->		
+			</intent-filter>				
         </receiver> 
         <receiver android:name=".BootCompletedReceiver" android:exported="true">
             <intent-filter>
