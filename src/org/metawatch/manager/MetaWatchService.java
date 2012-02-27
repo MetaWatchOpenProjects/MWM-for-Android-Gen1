@@ -458,11 +458,15 @@ public class MetaWatchService extends Service {
 			else
 				Protocol.disableReplayButton();
 			
-			Notification.addBitmapNotification(this, Utils.loadBitmapFromAssets(context, "splash.png"), new VibratePattern(false, 0, 0, 0), 10000);
-			
-			/* Notify watch on connection if requested. */
 			SharedPreferences sharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(context);
+			
+			boolean displaySplash = sharedPreferences.getBoolean("DisplaySplashScreen", true);
+			if (displaySplash) {
+				Notification.addBitmapNotification(this, Utils.loadBitmapFromAssets(context, "splash.png"), new VibratePattern(false, 0, 0, 0), 10000);
+			}
+			
+			/* Notify watch on connection if requested. */
 			boolean notifyOnConnect = sharedPreferences.getBoolean("NotifyWatchOnConnect", false);
 			Log.d(MetaWatch.TAG, "MetaWatchService.connect(): notifyOnConnect=" + notifyOnConnect);
 			if (notifyOnConnect) {

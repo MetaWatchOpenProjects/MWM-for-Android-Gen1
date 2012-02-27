@@ -92,8 +92,13 @@ public class Idle {
 	private static ArrayList<ArrayList<WidgetRow>> widgetScreens = null;
 	private static Map<String,WidgetData> widgetData = null;
 	
-	public static synchronized void updateWidgetPages()
+	public static synchronized void updateWidgetPages(Context context)
 	{
+		if(!widgetsInitialised) {
+			WidgetManager.initWidgets(context, null);
+			widgetsInitialised = true;
+		}
+		
 		List<WidgetRow> rows = WidgetManager.getDesiredWidgetsFromPrefs();
 		
 		ArrayList<CharSequence> widgetsDesired = new ArrayList<CharSequence>();
@@ -130,11 +135,6 @@ public class Idle {
 	}
 
 	static synchronized Bitmap createLcdIdle(Context context, boolean preview, int page) {
-		
-		if(!widgetsInitialised) {
-			WidgetManager.initWidgets(context, null);
-			widgetsInitialised = true;
-		}
 		
 		Bitmap bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
@@ -246,7 +246,7 @@ public class Idle {
 	}
 	
 	public static synchronized void sendLcdIdle(Context context) {
-		updateWidgetPages();
+		updateWidgetPages(context);
 		Bitmap bitmap = createLcdIdle(context);
 		int mode = currentPage==mediaPlayerPage ? MetaWatchService.WatchBuffers.APPLICATION : MetaWatchService.WatchBuffers.IDLE;
 		Protocol.configureIdleBufferSize(currentPage==0);

@@ -40,8 +40,7 @@ public class WidgetSetup extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.widget_setup);
-   
+        setContentView(R.layout.widget_setup);  
     }
     
     public void onConfigurationChanged(Configuration newConfig) {
@@ -168,7 +167,7 @@ public class WidgetSetup extends Activity {
     }
     
     private void refreshPreview() {
-    	Idle.updateWidgetPages();
+    	Idle.updateWidgetPages(this);
     	LinearLayout ll = (LinearLayout) findViewById(R.id.idlePreviews);
     	
     	ll.removeAllViews();
@@ -182,16 +181,8 @@ public class WidgetSetup extends Activity {
     		View v = factory.inflate(R.layout.idle_screen_preview, null);
     		ImageView iv = (ImageView)v.findViewById(R.id.image);
     		iv.setImageBitmap(bmp);
-    		//android.view.ViewGroup.LayoutParams lp = v.getLayoutParams();
-    		//lp.width = 150;
-    		//lp.height = 150;
     		ll.addView(v);
     	}
-    	
-    	//ll.updateViewLayout(ll, null);
-    	
-    	//ImageView v = (ImageView) findViewById(R.id.idlePreview);
-    	//v.setImageBitmap(Idle.createLcdIdle(this, true, 0));
     }
     
     private void storeWidgetLayout() {

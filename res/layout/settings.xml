@@ -376,6 +376,12 @@
             android:defaultValue="false"
             />
         <CheckBoxPreference
+            android:title="Display splash screen"
+            android:key="DisplaySplashScreen"
+            android:summary="Display MWM splash screen on watch"
+            android:defaultValue="true"
+            />
+        <CheckBoxPreference
 			android:title="Restart if stalled"
 			android:key="AutoRestart"
 			android:summary="Automatically restart the service if it becommes stalled."
