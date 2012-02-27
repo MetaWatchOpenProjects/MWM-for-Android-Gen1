@@ -3,21 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" >
 
-    <ImageView
-        android:id="@+id/idlePreview"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
-        android:layout_gravity="center"
-        android:layout_margin="2sp"
-        android:background="#FFFFFFFF"
-        android:src="@drawable/icon" />
-
+	    <LinearLayout
+	        android:id="@+id/idlePreviews"
+	        android:layout_width="152sp"
+	        android:layout_height="wrap_content">
+	        
+	        <ImageView
+		        android:id="@+id/imageView1"
+		        android:layout_width="150sp"
+		        android:layout_height="150sp"
+		        android:src="@drawable/icon" />  
+	        
+    	</LinearLayout>
+    
+    </HorizontalScrollView>
+
     <ExpandableListView
         android:id="@+id/widgetList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.82" >
+        android:layout_height="312dp"
+        android:layout_weight="0.74" >
+
     </ExpandableListView>
 
 </LinearLayout>

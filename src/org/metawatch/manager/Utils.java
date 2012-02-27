@@ -75,8 +75,8 @@ import android.widget.TextView;
 
 public class Utils {
 
-	static public String Meeting_Title = "There is no meeting Dave";
-	static public String Meeting_Location = "Nobody likes you Dave";
+	static public String Meeting_Title = "---";
+	static public String Meeting_Location = "---";
 	
 	
 	public static String getContactNameFromNumber(Context context, String number) {

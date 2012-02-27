@@ -11,12 +11,16 @@ import org.metawatch.manager.widgets.InternalWidget.WidgetData;
 import org.metawatch.manager.widgets.WidgetManager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SimpleExpandableListAdapter;
 
 public class WidgetSetup extends Activity {
@@ -73,11 +77,13 @@ public class WidgetSetup extends Activity {
 		groupData = new ArrayList<Map<String, String>>();
 	    childData = new ArrayList<List<Map<String, String>>>();
 
-	    // Add a dummy entry at the end, if all rows have content
+	    // Add dummy entries at the end
 		ArrayList<String> rows = new ArrayList<String>(Arrays.asList(Preferences.widgets.split("\\|")));
 		if (rows.size()>0 && rows.get(rows.size()-1).length()>0) {
 			rows.add("");
 		}
+		while(rows.size()<9)
+			rows.add("");
 			
 		int i=1;
 		for(String line : rows) {
@@ -162,8 +168,30 @@ public class WidgetSetup extends Activity {
     }
     
     private void refreshPreview() {
-    	ImageView v = (ImageView) findViewById(R.id.idlePreview);
-    	v.setImageBitmap(Idle.createLcdIdle(this, true, 0));
+    	Idle.updateWidgetPages();
+    	LinearLayout ll = (LinearLayout) findViewById(R.id.idlePreviews);
+    	
+    	ll.removeAllViews();
+    	  	
+    	int pages = Idle.numPages();
+    	for(int i=0; i<pages; ++i) {
+    		Bitmap bmp = Idle.createLcdIdle(this, true, i);
+    		//LayoutInflater factory = LayoutInflater.from(this);
+    		LayoutInflater factory = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    		View v = factory.inflate(R.layout.idle_screen_preview, null);
+    		ImageView iv = (ImageView)v.findViewById(R.id.image);
+    		iv.setImageBitmap(bmp);
+    		//android.view.ViewGroup.LayoutParams lp = v.getLayoutParams();
+    		//lp.width = 150;
+    		//lp.height = 150;
+    		ll.addView(v);
+    	}
+    	
+    	//ll.updateViewLayout(ll, null);
+    	
+    	//ImageView v = (ImageView) findViewById(R.id.idlePreview);
+    	//v.setImageBitmap(Idle.createLcdIdle(this, true, 0));
     }
     
     private void storeWidgetLayout() {
