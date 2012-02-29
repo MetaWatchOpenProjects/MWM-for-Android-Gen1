@@ -262,13 +262,14 @@ public class MetaWatch extends TabActivity {
     void showAbout() {
     	
     	WebView webView = new WebView(this);
-		String html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>About</title></head><body>" + 
+		String html = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>About</title></head><body><center>" + 
 						"<h1>MetaWatch</h1>" +
+						"<img src=\"splash.png\">" +
 						"<p>Version " + Utils.getVersion(this) + ".</p>" +
 						"<p>Modified by Dobie Wollert, Chris Sewell, Prash D, Craig Oliver, Richard Munn, Matthias Gruenewald and Kyle Schroeder.</p>" +
 						"<p>© Copyright 2011-2012 Meta Watch Ltd.</p>" +
-						"</body></html>";
-        webView.loadData(html, "text/html", "utf-8");
+						"</center></body></html>";
+        webView.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null);
         
         new AlertDialog.Builder(this).setView(webView).setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {			
 			//@Override
