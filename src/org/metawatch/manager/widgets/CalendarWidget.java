@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 import org.metawatch.manager.FontCache;
+import org.metawatch.manager.MetaWatch;
 import org.metawatch.manager.Utils;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.graphics.Paint.Align;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 public class CalendarWidget implements InternalWidget {
 
@@ -50,8 +52,16 @@ public class CalendarWidget implements InternalWidget {
 		paintSmall = null;
 	}
 
+	long lastRefresh = 0;
+	
 	public void refresh(ArrayList<CharSequence> widgetIds) {
-		meetingTime = Utils.readCalendar(context, 0);
+		long time = System.currentTimeMillis();
+		if(time - lastRefresh > 5*60*1000) {
+			Log.d(MetaWatch.TAG, "CalendarWidget.refresh() start");
+			meetingTime = Utils.readCalendar(context, 0);
+			lastRefresh = System.currentTimeMillis();
+			Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");		
+		}
 	}
 
 	public void get(ArrayList<CharSequence> widgetIds, Map<String,WidgetData> result) {

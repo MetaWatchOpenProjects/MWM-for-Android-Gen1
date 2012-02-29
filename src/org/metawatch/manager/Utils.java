@@ -302,6 +302,10 @@ public class Utils {
 				am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
 				//Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
 			}
+			else {
+				Meeting_Title = "---";
+				Meeting_Location = "---";
+			}
 
 
 

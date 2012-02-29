@@ -69,7 +69,7 @@ public class Test extends PreferenceActivity {
 		
 		preferenceScreen.findPreference("calendar").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
-		    	NotificationBuilder.createCalendar(context, "Tea with the Hatter", "12:00", "Windmill");
+		    	NotificationBuilder.createCalendar(context, "Tea with the Hatter - Windmill");
 		    	return true;
 			}
 		});

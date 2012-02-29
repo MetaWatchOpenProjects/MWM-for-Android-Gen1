@@ -81,7 +81,7 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 							"onAccessibilityEvent(): Sending calendar event: '"
 									+ notification.tickerText + "'.");
 					NotificationBuilder.createCalendar(this,
-							notification.tickerText.toString(), Utils.readCalendar(this, 0), Utils.Meeting_Location );
+							notification.tickerText.toString() );
 					return;
 				}
 			}
