@@ -32,6 +32,8 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -123,13 +125,21 @@ public class IntentReceiver extends BroadcastReceiver {
 			if (bundle.containsKey("pdus")) {
 				Object[] pdus = (Object[]) bundle.get("pdus");
 				SmsMessage[] smsMessage = new SmsMessage[pdus.length];
+				String fullBody = "";
+				String number = null;
 				for (int i = 0; i < smsMessage.length; i++) {
 					smsMessage[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-					String number = smsMessage[i].getOriginatingAddress();
-					String body = smsMessage[i].getDisplayMessageBody();
+					number = smsMessage[i].getOriginatingAddress();
+					String bodyPart = smsMessage[i].getDisplayMessageBody();
 					
-					NotificationBuilder.createSMS(context, number, body);
+					if(!Preferences.stickyNotifications)
+						NotificationBuilder.createSMS(context, number, bodyPart);
+					else
+						fullBody += bodyPart;
 				}
+				
+				if(Preferences.stickyNotifications)
+					NotificationBuilder.createSMS(context, number, fullBody);
 			}
 			return;
 		}
