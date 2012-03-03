@@ -153,10 +153,9 @@ public class IntentReceiver extends BroadcastReceiver {
 				String folder = bundle.getString("com.fsck.k9.intent.extra.FOLDER");
 				NotificationBuilder.createK9(context, sender, subject, account+":"+folder);
 			}
-			if( MetaWatchService.Preferences.showK9Unread) {
-				Utils.refreshUnreadK9Count(context);
-				Idle.updateLcdIdle(context);
-			}
+			Utils.refreshUnreadK9Count(context);
+			Idle.updateLcdIdle(context);
+
 			return;
 		}	
 		else if (action.equals("com.android.alarmclock.ALARM_ALERT")

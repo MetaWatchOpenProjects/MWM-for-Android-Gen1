@@ -341,7 +341,6 @@ public class MetaWatch extends TabActivity {
     	if (Utils.isAccessibilityEnabled(this)) {
 	    	if (MetaWatchAccessibilityService.accessibilityReceived) {
 	    		Utils.appendColoredText(textView, "\nAccessibility enabled and working\n", Color.GREEN);
-	    		//textView.append("\nAccessibility enabled and working\n");
 	    	}
 	    	else {
 	    		if(startupTime==0 || System.currentTimeMillis()-startupTime<60*1000) {
@@ -356,7 +355,6 @@ public class MetaWatch extends TabActivity {
     		textView.append("\nAccessibility disabled\n");
     	}
     
-    	
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
     	if (Protocol.isStalled()) {

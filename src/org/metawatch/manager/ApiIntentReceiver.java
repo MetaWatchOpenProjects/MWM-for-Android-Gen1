@@ -37,7 +37,6 @@ import org.metawatch.manager.Notification.VibratePattern;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 public class ApiIntentReceiver extends BroadcastReceiver {
@@ -70,16 +69,6 @@ public class ApiIntentReceiver extends BroadcastReceiver {
 		
 		if (action.equals("org.metawatch.manager.APPLICATION_STOP")) {
 			Application.stopAppMode(context);
-			return;
-		}
-		
-		if (action.equals("org.metawatch.manager.IDLE_BUTTONS_OVERRIDE")) {
-			Bundle bundle = intent.getExtras();
-			if (bundle.containsKey("buttons")) {
-					Idle.overridenButtons = bundle.getByteArray("buttons");
-			} else {
-				Idle.overridenButtons = null;
-			}
 			return;
 		}
 		

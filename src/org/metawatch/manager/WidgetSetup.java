@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -181,6 +182,16 @@ public class WidgetSetup extends Activity {
     		View v = factory.inflate(R.layout.idle_screen_preview, null);
     		ImageView iv = (ImageView)v.findViewById(R.id.image);
     		iv.setImageBitmap(bmp);
+    		iv.setClickable(true);
+    		iv.setTag(i);
+    		iv.setOnClickListener(new OnClickListener() {
+    		    //@Override
+    		    public void onClick(View v) {
+    		    	Integer page = (Integer)v.getTag();
+    		        Idle.toPage(page);
+    		        Idle.updateLcdIdle(v.getContext());
+    		    }
+    		});
     		ll.addView(v);
     	}
     }

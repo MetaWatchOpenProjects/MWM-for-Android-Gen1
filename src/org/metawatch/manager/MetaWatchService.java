@@ -74,7 +74,6 @@ public class MetaWatchService extends Service {
 	static volatile Context context;
 	
 	public static BluetoothAdapter bluetoothAdapter;
-	// BluetoothServerSocket bluetoothServerSocket;
 	BluetoothSocket bluetoothSocket;
 	static InputStream inputStream;
 	static OutputStream outputStream;
@@ -82,7 +81,6 @@ public class MetaWatchService extends Service {
 	TelephonyManager telephonyManager;
 	AudioManager audioManager;
 	NotificationManager notificationManager;
-	//RemoteViews remoteViews;
 	android.app.Notification notification;
 
 	public static PowerManager powerManger;
@@ -168,8 +166,7 @@ public class MetaWatchService extends Service {
 		public static boolean autoConnect = false;
 		public static boolean autoRestart = false;
 		public static String widgets = "weather_96_32|missedCalls_24_32,unreadSms_24_32,unreadGmail_24_32";
-
-		public static boolean showK9Unread = false;
+		public static boolean hapticFeedback = false;
 	}
 
 	final class WatchType {
@@ -234,10 +231,10 @@ public class MetaWatchService extends Service {
 				"AutoConnect", Preferences.autoConnect);	
 		Preferences.autoRestart = sharedPreferences.getBoolean("AutoRestart", 
 				Preferences.autoRestart);
-		Preferences.showK9Unread = sharedPreferences.getBoolean(
-				"ShowK9Unread", Preferences.showK9Unread);
 		Preferences.widgets = sharedPreferences.getString("widgets",
 				Preferences.widgets);
+		Preferences.hapticFeedback = sharedPreferences.getBoolean("HapticFeedback",
+				Preferences.hapticFeedback);
 
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString(
@@ -706,11 +703,6 @@ public class MetaWatchService extends Service {
 					Log.d(MetaWatch.TAG,
 							"MetaWatchService.readFromDevice(): device type response; digital watch");
 
-					//if (Preferences.idleMusicControls)
-					//	Protocol.enableMediaButtons();
-					// else
-					// Protocol.disableMediaButtons();
-
 					Protocol.configureMode();
 					Idle.toIdle(this);
 					Idle.updateLcdIdle(this);
@@ -813,6 +805,9 @@ public class MetaWatchService extends Service {
 
 	void pressedButton(byte button) {
 		Log.d(MetaWatch.TAG, "button code: " + Byte.toString(button));
+		
+		if(button>0 && Preferences.hapticFeedback)
+			Protocol.vibrate(5, 5, 2);
 
 		Log.d(MetaWatch.TAG, "MetaWatchService.pressedButton(): watchState="
 				+ watchState);
@@ -839,7 +834,7 @@ public class MetaWatchService extends Service {
 				break;
 				
 			case Idle.IDLE_NEXT_PAGE:
-				Idle.NextPage();
+				Idle.nextPage();
 				Idle.updateLcdIdle(this);
 				break;
 				
@@ -856,11 +851,6 @@ public class MetaWatchService extends Service {
 				break;
 		
 			}
-			/*
-			 * if (Idle.isIdleButtonOverriden(button)) { Log.d(MetaWatch.TAG,
-			 * "this button is overriden"); broadcastButton(button, watchState);
-			 * }
-			 */
 		}
 			break;
 		case WatchStates.APPLICATION:

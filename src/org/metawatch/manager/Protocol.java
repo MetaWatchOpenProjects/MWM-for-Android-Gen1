@@ -190,8 +190,8 @@ public class Protocol {
 			return false;
 
 		int i = 0;
-		if (bufferType == MetaWatchService.WatchBuffers.IDLE && idleShowClock)
-			i = 30;
+		//if (bufferType == MetaWatchService.WatchBuffers.IDLE && idleShowClock)
+		//	i = 30;
 
 		int sentLines = 0;
 		for (; i < 96; i += 2) {

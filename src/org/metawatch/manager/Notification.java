@@ -439,6 +439,7 @@ public class Notification {
 	}
 
 	private static void exitNotification(Context context) {
+		Log.d(MetaWatch.TAG, "Notification.exitNotification()");
 		// disable notification mode
 		MetaWatchService.WatchModes.NOTIFICATION = false;
 

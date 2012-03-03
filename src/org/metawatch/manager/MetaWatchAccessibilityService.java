@@ -167,13 +167,11 @@ public class MetaWatchAccessibilityService extends AccessibilityService {
 		else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
 		{
 			String newActivity = className.toString();
-			if( MetaWatchService.Preferences.showK9Unread) {
-				if (currentActivity.startsWith("com.fsck.k9")) {
-					if (!newActivity.startsWith("com.fsck.k9")) {
-						// User has switched away from k9, so refresh the read count
-						Utils.refreshUnreadK9Count(this);
-						Idle.updateLcdIdle(this);
-					}
+			if (currentActivity.startsWith("com.fsck.k9")) {
+				if (!newActivity.startsWith("com.fsck.k9")) {
+					// User has switched away from k9, so refresh the read count
+					Utils.refreshUnreadK9Count(this);
+					Idle.updateLcdIdle(this);
 				}
 			}
 			

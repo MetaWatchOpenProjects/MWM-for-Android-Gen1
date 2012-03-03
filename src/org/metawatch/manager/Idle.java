@@ -45,15 +45,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 
 public class Idle {
-	
-	public static byte[] overridenButtons = null;
 	
 	final static byte IDLE_NEXT_PAGE = 60;
 
@@ -63,7 +60,11 @@ public class Idle {
 		
 	static int mediaPlayerPage = -1;
 	
-	public static void NextPage() {
+	public static void nextPage() {
+		toPage(currentPage+1);
+	}
+	
+	public static void toPage(int page) {
 		
 		if(currentPage==mediaPlayerPage) {
 			Protocol.disableMediaButtons();
@@ -71,7 +72,7 @@ public class Idle {
 			MediaControl.mediaPlayerActive = false;
 		}
 		
-		currentPage = (currentPage+1) % numPages();
+		currentPage = (page) % numPages();
 		
 		if(currentPage==mediaPlayerPage) {
 			Protocol.enableMediaButtons();
@@ -232,30 +233,23 @@ public class Idle {
 		
 		return bitmap;
 	}
-
-	public static Canvas drawLine(Canvas canvas, int y) {
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
-		
-		int left = 3;
-		
-		for (int i = 0+left; i < 96-left; i += 3)
-			canvas.drawLine(i, y, i+2, y, paint);
-		
-		return canvas;
-	}
 	
-	public static synchronized void sendLcdIdle(Context context) {
+	private static synchronized void sendLcdIdle(Context context) {
+		if(MetaWatchService.watchState != MetaWatchService.WatchStates.IDLE) {
+			Log.d(MetaWatch.TAG, "Ignoring sendLcdIdle as not in idle");
+			return;
+		}
+		
 		updateWidgetPages(context);
 		Bitmap bitmap = createLcdIdle(context);
 		int mode = currentPage==mediaPlayerPage ? MetaWatchService.WatchBuffers.APPLICATION : MetaWatchService.WatchBuffers.IDLE;
-		Protocol.configureIdleBufferSize(currentPage==0);
+		
 		Protocol.sendLcdBitmap(bitmap, mode);
+		Protocol.configureIdleBufferSize(currentPage==0);
 		Protocol.updateDisplay(mode);
 	}
 	
 	public static boolean toIdle(Context context) {
-		// check for parent modes
 		
 		MetaWatchService.WatchModes.IDLE = true;
 		MetaWatchService.watchState = MetaWatchService.WatchStates.IDLE;
@@ -277,14 +271,6 @@ public class Idle {
 		if (MetaWatchService.watchState == MetaWatchService.WatchStates.IDLE
 				&& MetaWatchService.watchType == MetaWatchService.WatchType.DIGITAL)
 			sendLcdIdle(context);
-	}
-	
-	public static boolean isIdleButtonOverriden(byte button) {
-		if (overridenButtons != null)
-			for (int i = 0; i < overridenButtons.length; i++)
-				if (overridenButtons[i] == button)
-					return true;
-		return false;
 	}
 	
 }
