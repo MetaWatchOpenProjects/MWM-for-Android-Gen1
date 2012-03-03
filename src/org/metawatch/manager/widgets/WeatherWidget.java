@@ -290,7 +290,7 @@ public class WeatherWidget implements InternalWidget {
 			int moonPhase = WeatherData.ageOfMoon;
 			int moonImage = phaseImage[moonPhase];
 			int x = 0-(moonImage*24);
-			Bitmap image = Utils.loadBitmapFromAssets(context, "moon.bmp");
+			Bitmap image = Preferences.invertLCD ? Utils.loadBitmapFromAssets(context, "moon-inv.bmp") : Utils.loadBitmapFromAssets(context, "moon.bmp");
 			canvas.drawBitmap(image, x, 0, null);
 			
 			canvas.drawText(Integer.toString(WeatherData.moonPercentIlluminated)+"%", 12, 30, paintSmall);
