@@ -387,6 +387,12 @@
 			android:summary="Automatically restart the service if it becommes stalled."
 			android:defaultValue="false"
 			/>	
+		<CheckBoxPreference
+			android:title="Haptic feedback"
+			android:key="HapticFeedback"
+			android:summary="Vibrate watch on button presses."
+			android:defaultValue="false"
+			/>	
 			
 	</PreferenceScreen>	
 
