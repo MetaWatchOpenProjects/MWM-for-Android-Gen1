@@ -115,20 +115,20 @@ public class WeatherWidget implements InternalWidget {
 			result.put(widget.id, widget);
 		}
 		
-//		if(widgetIds == null || widgetIds.contains(id_3)) {
-//			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
-//			
-//			widget.id = id_3;
-//			widget.description = desc_3;
-//			widget.width = 24;
-//			widget.height = 32;
-//			
-//			widget.bitmap = draw3();
-//			widget.priority = 1;
-//			//widget.priority = calcPriority();
-//			
-//			result.put(widget.id, widget);
-//		}
+		if(widgetIds == null || widgetIds.contains(id_3)) {
+			InternalWidget.WidgetData widget = new InternalWidget.WidgetData();
+			
+			widget.id = id_3;
+			widget.description = desc_3;
+			widget.width = 24;
+			widget.height = 32;
+			
+			widget.bitmap = draw3();
+			widget.priority = 1;
+			widget.priority = WeatherData.moonPercentIlluminated !=-1 ? calcPriority() : -1;
+			
+			result.put(widget.id, widget);
+		}
 	}
 	
 	private int calcPriority()
@@ -277,49 +277,31 @@ public class WeatherWidget implements InternalWidget {
 		return bitmap;
 	}
 	
-//	private Bitmap draw3() {
-//		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
-//		Canvas canvas = new Canvas(bitmap);
-//		canvas.drawColor(Color.WHITE);
-//		
-//		if (WeatherData.received) {
-//			
-//			float percent = 0.1f;
-//			float phaseAngle = (float) ( (Math.PI*2 * percent) - Math.PI);
-//			//float cos = (float) Math.cos(phaseAngle);
-//			
-//			Paint paint = new Paint();
-//			paint.setColor(Color.BLACK);
-//			paint.setStyle(Paint.Style.STROKE);
-//			
-//			canvas.drawCircle(12, 11, 10, paint);
-//			
-//			for(int y=0;y<10;++y) {
-//				float xr = (float) Math.sqrt(10*10 - (y*y));
-//				float xx = (xr * percent);
-//				
-//				float x1 = 12- (percent<0.5 ? xr : xx);
-//				float w = xr + xx;
-//				
-//				canvas.drawRect(x1, 11-y, x1+w, 12-y, paint);
-//				canvas.drawRect(x1, 11+y, x1+w, 12-y, paint);
-//				
-//			}
-//			
-//			//RectF rect = new RectF(2,1,22,21);
-//			
-//			//canvas.drawArc(rect, 90, 45, true, paint);
-//									
-//		} else {
-//			paintSmall.setTextAlign(Paint.Align.CENTER);
-//
-//			canvas.drawText("Wait", 12, 16, paintSmall);
-//
-//			paintSmall.setTextAlign(Paint.Align.LEFT);
-//		}
-//		
-//		return bitmap;
-//	}
+	final static int[] phaseImage = {0,0,1,1,1,1,1,2,2,2,3,3,3,3,4,4,4,5,5,5,5,6,6,6,7,7,7,7,0,0};
+	
+	private Bitmap draw3() {
+		Bitmap bitmap = Bitmap.createBitmap(24, 32, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(Color.WHITE);
+		
+		paintSmall.setTextAlign(Paint.Align.CENTER);
+		
+		if (WeatherData.received && WeatherData.ageOfMoon!=-1) {
+			int moonPhase = WeatherData.ageOfMoon;
+			int moonImage = phaseImage[moonPhase];
+			int x = 0-(moonImage*24);
+			Bitmap image = Utils.loadBitmapFromAssets(context, "moon.bmp");
+			canvas.drawBitmap(image, x, 0, null);
+			
+			canvas.drawText(Integer.toString(WeatherData.moonPercentIlluminated)+"%", 12, 30, paintSmall);
+		} else {
+			canvas.drawText("Wait", 12, 16, paintSmall);
+		}
+		
+		paintSmall.setTextAlign(Paint.Align.LEFT);
+		
+		return bitmap;
+	}
 
 
 }

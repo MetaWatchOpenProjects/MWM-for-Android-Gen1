@@ -623,22 +623,16 @@ public class Utils {
 	}
 	
 	public static Bitmap DrawIconCountWidget(Context context, int width, int height, Bitmap icon, int count, TextPaint textPaint) {
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-		Canvas canvas = new Canvas(bitmap);
-		canvas.drawColor(Color.WHITE);
-		
-		canvas.drawBitmap(icon, 0, 3, null);
-		canvas.drawText(Integer.toString(count), 12, 29, textPaint);
-		
-		return bitmap;
+		return DrawIconStringWidget(context,width,height,icon,Integer.toString(count),textPaint);
 	}
-	public static Bitmap DrawIconStringWidget(Context context, int width, int height, Bitmap icon, String count, TextPaint textPaint) {
+
+	public static Bitmap DrawIconStringWidget(Context context, int width, int height, Bitmap icon, String text, TextPaint textPaint) {
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(Color.WHITE);
 		
 		canvas.drawBitmap(icon, 0, 3, null);
-		canvas.drawText(count, 12, 29, textPaint);
+		canvas.drawText(text, 12, 30, textPaint);
 		
 		return bitmap;
 	}

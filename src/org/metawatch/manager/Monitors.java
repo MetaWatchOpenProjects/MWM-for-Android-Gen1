@@ -129,6 +129,9 @@ public class Monitors {
 		public static int sunsetH = 19;
 		public static int sunsetM = 0;
 		
+		public static int moonPercentIlluminated = -1;
+		public static int ageOfMoon = -1;
+		
 		public static Forecast[] forecast = null;
 		
 		public static long timeStamp = 0;
@@ -477,6 +480,9 @@ public class Monitors {
 					JSONObject sunset = moon.getJSONObject("sunset");
 					WeatherData.sunsetH = sunset.getInt("hour");
 					WeatherData.sunsetM = sunset.getInt("minute");
+					
+					WeatherData.moonPercentIlluminated = moon.getInt("percentIlluminated");
+					WeatherData.ageOfMoon = moon.getInt("ageOfMoon");
 				}
 				
 				boolean isDay = true;
