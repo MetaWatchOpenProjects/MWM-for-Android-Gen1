@@ -34,6 +34,8 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +46,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		Log.d(MetaWatch.TAG, "AlarmReceiver.onReceive(): received intent: " + intent.toString());
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "AlarmReceiver.onReceive(): received intent: " + intent.toString());
 		
 		if (intent.hasExtra("action_update")) {
 			

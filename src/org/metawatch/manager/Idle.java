@@ -68,7 +68,7 @@ public class Idle {
 		
 		if(currentPage==mediaPlayerPage) {
 			Protocol.disableMediaButtons();
-			Log.d(MetaWatch.TAG, "Leaving media mode");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Leaving media mode");
 			MediaControl.mediaPlayerActive = false;
 		}
 		
@@ -76,7 +76,7 @@ public class Idle {
 		
 		if(currentPage==mediaPlayerPage) {
 			Protocol.enableMediaButtons();
-			Log.d(MetaWatch.TAG, "Entering media mode");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Entering media mode");
 			MediaControl.mediaPlayerActive = true;
 		}
 	}
@@ -236,7 +236,7 @@ public class Idle {
 	
 	private static synchronized void sendLcdIdle(Context context) {
 		if(MetaWatchService.watchState != MetaWatchService.WatchStates.IDLE) {
-			Log.d(MetaWatch.TAG, "Ignoring sendLcdIdle as not in idle");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Ignoring sendLcdIdle as not in idle");
 			return;
 		}
 		

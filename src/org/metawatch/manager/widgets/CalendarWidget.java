@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.metawatch.manager.FontCache;
 import org.metawatch.manager.MetaWatch;
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Utils;
 
 import android.content.Context;
@@ -57,10 +58,10 @@ public class CalendarWidget implements InternalWidget {
 	public void refresh(ArrayList<CharSequence> widgetIds) {
 		long time = System.currentTimeMillis();
 		if(time - lastRefresh > 5*60*1000) {
-			Log.d(MetaWatch.TAG, "CalendarWidget.refresh() start");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() start");
 			meetingTime = Utils.readCalendar(context, 0);
 			lastRefresh = System.currentTimeMillis();
-			Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");		
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");		
 		}
 	}
 

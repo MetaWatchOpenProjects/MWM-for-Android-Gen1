@@ -83,7 +83,7 @@ public class Notification {
 									MetaWatchService.WatchBuffers.NOTIFICATION);
 							currentNotificationPage = 0;
 							
-							Log.d(MetaWatch.TAG,
+							if (Preferences.logging) Log.d(MetaWatch.TAG,
 									"Notification contains " + notification.bitmaps.length + " bitmaps.");
 														
 						}
@@ -107,7 +107,7 @@ public class Notification {
 						if (Preferences.notifyLight)
 							Protocol.ledChange(true);
 
-						Log.d(MetaWatch.TAG, "notif bitmap sent from thread");
+						if (Preferences.logging) Log.d(MetaWatch.TAG, "notif bitmap sent from thread");
 
 					} else {
 
@@ -123,7 +123,7 @@ public class Notification {
 
 						if (notification.oledScroll != null) {
 
-							Log.d(MetaWatch.TAG, "notification.scrollLength = "
+							if (Preferences.logging) Log.d(MetaWatch.TAG, "notification.scrollLength = "
 									+ notification.scrollLength);
 
 							/*
@@ -134,7 +134,7 @@ public class Notification {
 							SharedPreferences sharedPreferences = PreferenceManager
 									.getDefaultSharedPreferences(context);							
 							if (sharedPreferences.getBoolean("pauseBeforeScrolling", false)) {
-								Log.d(MetaWatch.TAG,
+								if (Preferences.logging) Log.d(MetaWatch.TAG,
 										"Pausing before scrolling.");
 								Thread.sleep(3000);
 							}
@@ -190,7 +190,7 @@ public class Notification {
 						}
 						Protocol.enableButton(2, 0, NOTIFICATION_DISMISS, 2); // Right bottom immediate
 
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Notification sent, waiting for dismiss " );
 						
 						int timeout = getStickyNotificationTimeout(context);
@@ -218,7 +218,7 @@ public class Notification {
 								notifyButtonPress = NOTIFICATION_DISMISS;
 							}
 							
-							Log.d(MetaWatch.TAG,
+							if (Preferences.logging) Log.d(MetaWatch.TAG,
 									"Displaying page " + currentNotificationPage +" / "+ notification.bitmaps.length );
 							
 							Protocol.updateDisplay(2);
@@ -229,16 +229,16 @@ public class Notification {
 						Protocol.disableButton(1, 0, 2); // Right middle
 						Protocol.disableButton(2, 0, 2); // Right bottom
 					
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Done sleeping.");
 						
 					}
 					else {
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Notification sent, sleeping for "
 										+ notification.timeout + "ms");
 						Thread.sleep(notification.timeout);
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"NotificationSender.run(): Done sleeping.");
 					}
 					
@@ -249,13 +249,13 @@ public class Notification {
 
 				} catch (InterruptedException ie) {
 					/* If we've been interrupted, exit gracefully. */
-					Log.d(MetaWatch.TAG,
+					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"NotificationSender was interrupted waiting for next notification, exiting.");
 					break;
 				}
 				catch (Exception e)
 				{
-					Log.e(MetaWatch.TAG, "Exception in NotificationSender: "+e.toString());
+					if (Preferences.logging) Log.e(MetaWatch.TAG, "Exception in NotificationSender: "+e.toString());
 				}
 			}
 		}
@@ -378,7 +378,7 @@ public class Notification {
 			VibratePattern vibratePattern, int timeout) {
 		
 		if (bitmaps!=null) {
-			Log.d(MetaWatch.TAG, "Notification comprised of "+bitmaps.length+" bitmaps");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Notification comprised of "+bitmaps.length+" bitmaps");
 		}
 		
 		NotificationType notification = new NotificationType();
@@ -439,7 +439,7 @@ public class Notification {
 	}
 
 	private static void exitNotification(Context context) {
-		Log.d(MetaWatch.TAG, "Notification.exitNotification()");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Notification.exitNotification()");
 		// disable notification mode
 		MetaWatchService.WatchModes.NOTIFICATION = false;
 
@@ -452,7 +452,7 @@ public class Notification {
 	}
 
 	public static void replay(Context context) {
-		Log.d(MetaWatch.TAG, "Notification.replay()");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Notification.replay()");
 		if (lastNotification != null) {
 			lastNotification.vibratePattern.vibrate = false;
 			addToNotificationQueue(lastNotification);
@@ -461,7 +461,7 @@ public class Notification {
 	}
 	
 	public static void buttonPressed(byte button) {
-		Log.d(MetaWatch.TAG,
+		if (Preferences.logging) Log.d(MetaWatch.TAG,
 				"Notification:Button pressed "+button );
 
 		notifyButtonPress = button;

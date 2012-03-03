@@ -157,21 +157,21 @@ public class Monitors {
 	private static Monitors m = new Monitors(); // Static instance for new
 	
 	public static void updateGmailUnreadCount(String account, int count) {
-		Log.d(MetaWatch.TAG, "Monitors.updateGmailUnreadCount(): account='"
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Monitors.updateGmailUnreadCount(): account='"
 				+ account + "' count='" + count + "'");
 		gmailUnreadCounts.put(account, count);
-		Log.d(MetaWatch.TAG,
+		if (Preferences.logging) Log.d(MetaWatch.TAG,
 				"Monitors.updateGmailUnreadCount(): new unread count is: "
 						+ gmailUnreadCounts.get(account));
 	}
 	
 	public static int getGmailUnreadCount() {
-		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount()");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount()");
 		int totalCount = 0;
 		for (String key : gmailUnreadCounts.keySet()) {
 			Integer accountCount = gmailUnreadCounts.get(key);
 			totalCount += accountCount.intValue();
-			Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount(): account='"
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount(): account='"
 					+ key + "' accountCount='" + accountCount
 					+ "' totalCount='" + totalCount + "'");
 		}
@@ -180,20 +180,20 @@ public class Monitors {
 	
 	public static int getGmailUnreadCount(String account) {
 		int count = gmailUnreadCounts.get(account);
-		Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount('"+account+"') returning " + count);
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Monitors.getGmailUnreadCount('"+account+"') returning " + count);
 		return count;
 	}
 	
 	public static void start(Context context, TelephonyManager telephonyManager) {
 		// start weather updater
 		
-		Log.d(MetaWatch.TAG,
+		if (Preferences.logging) Log.d(MetaWatch.TAG,
 				"Monitors.start()");
 		
 		createBatteryLevelReciever(context);
 				
 		if (Preferences.weatherGeolocation) {
-			Log.d(MetaWatch.TAG,
+			if (Preferences.logging) Log.d(MetaWatch.TAG,
 					"Initialising Geolocation");
 			
 			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -206,7 +206,7 @@ public class Monitors {
 			RefreshLocation();
 		}
 		else {
-			Log.d(MetaWatch.TAG,"Geolocation disabled");
+			if (Preferences.logging) Log.d(MetaWatch.TAG,"Geolocation disabled");
 		}
 		
 		CallStateListener phoneListener = new CallStateListener(context);
@@ -260,7 +260,7 @@ public class Monitors {
 	
 	public static void stop(Context context) {
 		
-		Log.d(MetaWatch.TAG,
+		if (Preferences.logging) Log.d(MetaWatch.TAG,
 				"Monitors.stop()");
 		
 		contentResolverMessages.unregisterContentObserver(contentObserverMessages);
@@ -289,7 +289,7 @@ public class Monitors {
 				long diff = currentTime - WeatherData.timeStamp;
 				
 				if (diff < 5 * 60*1000) {
-					Log.d(MetaWatch.TAG,
+					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"Skipping weather update - updated less than 5m ago");
 
             		//IdleScreenWidgetRenderer.sendIdleScreenWidgetUpdate(context);
@@ -300,7 +300,7 @@ public class Monitors {
 			
 			WeatherData.updating = true;
 			
-			Log.d(MetaWatch.TAG,
+			if (Preferences.logging) Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherDataGoogle(): start");
 		
 			String queryString;
@@ -328,7 +328,7 @@ public class Monitors {
 					}
 				}
 				catch (IOException e){
-					Log.e(MetaWatch.TAG, "Exception while retreiving postalcode", e);
+					if (Preferences.logging) Log.e(MetaWatch.TAG, "Exception while retreiving postalcode", e);
 				}
 				
 				if (PostalCode.equals("")){
@@ -413,9 +413,9 @@ public class Monitors {
 			MetaWatchService.notifyClients();
 			
 		} catch (Exception e) {
-			Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
+			if (Preferences.logging) Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
 		} finally {
-			Log.d(MetaWatch.TAG,
+			if (Preferences.logging) Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): finish");
 		}
 		
@@ -434,7 +434,7 @@ public class Monitors {
 				
 				long diff = currentTime - WeatherData.timeStamp;
 				if (diff < 5 * 60*1000) {
-					Log.d(MetaWatch.TAG,
+					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"Skipping weather update - updated less than 5m ago");
 					Idle.updateLcdIdle(context);
 					return;
@@ -443,7 +443,7 @@ public class Monitors {
 			
 			WeatherData.updating = true;
 			
-			Log.d(MetaWatch.TAG,
+			if (Preferences.logging) Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherDataWunderground(): start");
 			
 			if (LocationData.received && Preferences.wundergroundKey != "") {
@@ -461,7 +461,7 @@ public class Monitors {
 				
 				String requestUrl =  "http://api.wunderground.com/api/"+Preferences.wundergroundKey+"/geolookup/conditions/"+forecastQuery+"q/"+latLng+".json";
 				
-				Log.d(MetaWatch.TAG,
+				if (Preferences.logging) Log.d(MetaWatch.TAG,
 						"Request: "+requestUrl);
 				
 				JSONObject json = getJSONfromURL( requestUrl );
@@ -542,9 +542,9 @@ public class Monitors {
 
 			
 		} catch (Exception e) {
-			Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
+			if (Preferences.logging) Log.e(MetaWatch.TAG, "Exception while retreiving weather", e);
 		} finally {
-			Log.d(MetaWatch.TAG,
+			if (Preferences.logging) Log.d(MetaWatch.TAG,
 					"Monitors.updateWeatherData(): finish");
 			
 			WeatherData.updating = false;			
@@ -648,7 +648,7 @@ public class Monitors {
 	}
 	
 	static void startAlarmTicker(Context context) {		
-		Log.d(MetaWatch.TAG, "startAlarmTicker()");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "startAlarmTicker()");
 		alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		intent = new Intent(context, AlarmReceiver.class);
 		intent.putExtra("action_update", "update");
@@ -691,7 +691,7 @@ public class Monitors {
 		public void onChange(boolean selfChange) {
 			super.onChange(selfChange);			
 			// change in call history database
-			Log.d(MetaWatch.TAG, "call history change");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "call history change");
 			Idle.updateLcdIdle(context);
 		}
 	}
@@ -711,13 +711,13 @@ public class Monitors {
 			
 			LocationData.timeStamp = location.getTime();
 			
-			Log.d(MetaWatch.TAG, "location changed "+location.toString() );
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "location changed "+location.toString() );
 			
 			LocationData.received = true;
 			MetaWatchService.notifyClients();
 			
 			if (!WeatherData.received && !WeatherData.updating) {
-				Log.d(MetaWatch.TAG, "First location - getting weather");
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "First location - getting weather");
 				Monitors.updateWeatherData(context);
 			}
 		}
@@ -749,7 +749,7 @@ public class Monitors {
 			is = entity.getContent();
 
 		}catch(Exception e){
-			Log.e(MetaWatch.TAG, "Error in http connection "+e.toString());
+			if (Preferences.logging) Log.e(MetaWatch.TAG, "Error in http connection "+e.toString());
 		}
 
 		//convert response to string
@@ -763,7 +763,7 @@ public class Monitors {
 			is.close();
 			result=sb.toString();
 		}catch(Exception e){
-			Log.e(MetaWatch.TAG, "Error converting result "+e.toString());
+			if (Preferences.logging) Log.e(MetaWatch.TAG, "Error converting result "+e.toString());
 		}
 
 		//dump to sdcard for debugging
@@ -787,7 +787,7 @@ public class Monitors {
 		try{
 	        	jArray = new JSONObject(result);
 		}catch(JSONException e){
-			Log.e(MetaWatch.TAG, "Error parsing data "+e.toString());
+			if (Preferences.logging) Log.e(MetaWatch.TAG, "Error parsing data "+e.toString());
 		}
 
 		return jArray;
@@ -808,7 +808,7 @@ public class Monitors {
 					level = (rawlevel * 100) / scale;
 				}
 				if(BatteryData.level != level) {
-					//Log.d(MetaWatch.TAG, "Battery level changed: "+rawlevel+"/"+scale+" - "+level+"%");
+					//if (Preferences.logging) Log.d(MetaWatch.TAG, "Battery level changed: "+rawlevel+"/"+scale+" - "+level+"%");
 					BatteryData.level = level;
 					Idle.updateLcdIdle(context);
 				}

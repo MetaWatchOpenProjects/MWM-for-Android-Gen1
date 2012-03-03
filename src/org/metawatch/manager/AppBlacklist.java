@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -69,7 +71,7 @@ public class AppBlacklist extends Activity {
 			Collections.sort(appInfos);
 
 			// for (AppInfo appInfo : appInfos) {
-			// Log.d(MetaWatch.TAG, "appName='" + appInfo.name
+			// if (Preferences.logging) Log.d(MetaWatch.TAG, "appName='" + appInfo.name
 			// + "' packageName='" + appInfo.packageInfo.packageName +
 			// "' selected="
 			// + appInfo.selected);
@@ -168,7 +170,7 @@ public class AppBlacklist extends Activity {
 			String blacklist = sb.toString();
 			editor.putString("appBlacklist", blacklist);
 			editor.commit();		
-			Log.d(MetaWatch.TAG, "App blacklist: " + blacklist);
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "App blacklist: " + blacklist);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -48,16 +48,16 @@ public class IntentReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();		
-		Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): received intent, action='"+action+"'");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): received intent, action='"+action+"'");
 		
 		Bundle b = intent.getExtras();
 		if (b != null) {
 			for (String key : b.keySet()) {
-				Log.d(MetaWatch.TAG,
+				if (Preferences.logging) Log.d(MetaWatch.TAG,
 						"extra: " + key + " = '" + b.get(key) + "'");
 			}
 			String dataString = intent.getDataString();
-			Log.d(MetaWatch.TAG, "dataString: "
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "dataString: "
 					+ (dataString == null ? "null" : "'" + dataString + "'"));
 		}
 		
@@ -83,29 +83,29 @@ public class IntentReceiver extends BroadcastReceiver {
 					if (count > 0) {
 						NotificationBuilder.createGmailBlank(context,
 								recipient, count);
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"Received Gmail new message notification; "
 										+ count + " new message(s).");
 					} else {
-						Log.d(MetaWatch.TAG,
+						if (Preferences.logging) Log.d(MetaWatch.TAG,
 								"Ignored Gmail new message notification; no new messages.");
 					}
 
 				} else if (tagLabel.equals("^^unseen-^iim")) {
 
 					/* This is a total unread count notification. */
-					Log.d(MetaWatch.TAG,
+					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"IntentReceiver.onReceive(): Received Gmail notification: total unread count for '"
 									+ recipient + "' is " + count + ".");
 
 				} else {
 					/* I have no idea what this is. */
-					Log.d(MetaWatch.TAG,
+					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"Unknown Gmail notification: tagLabel is '"+tagLabel+"'");
 				}
 
 				Monitors.updateGmailUnreadCount(recipient, count);
-				Log.d(MetaWatch.TAG,
+				if (Preferences.logging) Log.d(MetaWatch.TAG,
 						"IntentReceiver.onReceive(): Cached Gmail unread count for account '"
 								+ recipient + "' is "
 								+ Monitors.getGmailUnreadCount(recipient));
@@ -181,7 +181,7 @@ public class IntentReceiver extends BroadcastReceiver {
 		}
 		else if (action.equals("android.intent.action.TIME_SET") ) {
 			
-			Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received time set intent.");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received time set intent.");
 			
 			/* The time has changed, so notify the watch. */
 			//Protocol.setNvalTime(context);
@@ -190,7 +190,7 @@ public class IntentReceiver extends BroadcastReceiver {
 		}		
 		else if (action.equals("android.intent.action.TIMEZONE_CHANGED") ) {
 			
-			Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received timezone changed intent.");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "IntentReceiver.onReceive(): Received timezone changed intent.");
 			
 			/*
 			 * If we're in a new time zone, then the time has probably changed.

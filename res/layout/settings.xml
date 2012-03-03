@@ -340,6 +340,12 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
+			android:title="Debug logging"
+			android:key="logging"
+			android:summary="Log events to the debug log - Disable to improve performance - please turn this on and use logcat if reporting problems"
+			android:defaultValue="true"
+			/>
+		<CheckBoxPreference
 			android:title="Log packet details"
 			android:key="logPacketDetails"
 			android:summary="Log details of Bluetooth packets"

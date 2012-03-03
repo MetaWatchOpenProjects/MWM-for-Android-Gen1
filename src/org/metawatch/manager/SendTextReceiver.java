@@ -1,5 +1,7 @@
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,19 +13,19 @@ public class SendTextReceiver extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Log.d(MetaWatch.TAG, "SendTextReciever created");   
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "SendTextReciever created");   
 		
         Intent i = getIntent();
         
-        Log.d(MetaWatch.TAG, "action: " + i.getAction());                        
-        //Log.d(MetaWatch.TAG, "data: "+ i.getData().getPath() );
+        if (Preferences.logging) Log.d(MetaWatch.TAG, "action: " + i.getAction());                        
+        //if (Preferences.logging) Log.d(MetaWatch.TAG, "data: "+ i.getData().getPath() );
         
         if (Intent.ACTION_SEND.equals(i.getAction())) 
 		{  
 
 			Bundle bundle = i.getExtras();
 			
-			Log.d(MetaWatch.TAG, "extras: " + bundle.keySet().toString());   
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "extras: " + bundle.keySet().toString());   
 			
 			String title="Message";
 			
@@ -37,7 +39,7 @@ public class SendTextReceiver extends Activity {
 	           
 	        	String text = bundle.getString(Intent.EXTRA_TEXT);
 	            NotificationBuilder.createSmart(this, title, text);
-	            Log.d(MetaWatch.TAG, text);
+	            if (Preferences.logging) Log.d(MetaWatch.TAG, text);
 	          
 	        } 
 			

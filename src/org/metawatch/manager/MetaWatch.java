@@ -102,10 +102,10 @@ public class MetaWatch extends TabActivity {
 			InputStream inputStream = getAssets().open("bugsense.txt");
 			String key = Utils.ReadInputStream(inputStream);
 			key=key.trim();
-			Log.d(MetaWatch.TAG, "Using bugsense key '"+key+"'");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Using bugsense key '"+key+"'");
 			BugSenseHandler.setup(this, key);
 		} catch (IOException e) {
-			Log.d(MetaWatch.TAG, "No bugsense keyfile found");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "No bugsense keyfile found");
 		}
         
         startupTime = System.currentTimeMillis();
@@ -236,7 +236,7 @@ public class MetaWatch extends TabActivity {
             }
             catch(IllegalArgumentException e) {
             	// The service wasn't running
-            	Log.d(MetaWatch.TAG, e.getMessage());          	
+            	if (Preferences.logging) Log.d(MetaWatch.TAG, e.getMessage());          	
             }
         }
     	
@@ -365,7 +365,7 @@ public class MetaWatch extends TabActivity {
 		    		Protocol.resetStalledFlag();
 		    		stopService();
 		    		startService();
-		    		Log.d(MetaWatch.TAG, "Restarted stalled service");
+		    		if (Preferences.logging) Log.d(MetaWatch.TAG, "Restarted stalled service");
 	    		}
     		}
     	}	

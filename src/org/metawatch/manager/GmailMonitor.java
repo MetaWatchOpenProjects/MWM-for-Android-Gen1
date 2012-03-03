@@ -75,7 +75,7 @@ public class GmailMonitor {
 					account = acct.name;
 					break;
 				}
-				// Log.d("ow",
+				// if (Preferences.logging) Log.d("ow",
 				// "eclair account - name="+acct.name+", type="+acct.type);
 			}
 
@@ -83,7 +83,7 @@ public class GmailMonitor {
 			contentResolver = context.getContentResolver();
 			contentResolver.registerContentObserver(uri, true, contentObserver);
 		} catch (Exception x) {
-			Log.d(MetaWatch.TAG, x.toString());
+			if (Preferences.logging) Log.d(MetaWatch.TAG, x.toString());
 		}
 	}
 
@@ -98,17 +98,17 @@ public class GmailMonitor {
 		public void onChange(boolean selfChange) {
 			super.onChange(selfChange);
 
-			Log.d("ow", "onChange observer - unread");
+			if (Preferences.logging) Log.d("ow", "onChange observer - unread");
 
 			if (Preferences.notifyGmail) 
 			{
 				int currentGmailUnreadCount = getUnreadGmailCount(account, "^u");
 
-				//Log.d("ow", "current gmail unread count: " + Integer.toString(currentGmailUnreadCount));
+				//if (Preferences.logging) Log.d("ow", "current gmail unread count: " + Integer.toString(currentGmailUnreadCount));
 
 				if (currentGmailUnreadCount > lastUnreadGmailCount)
 				{
-						Log.d("ow", Integer.toString(currentGmailUnreadCount) + " > " + Integer.toString(lastUnreadGmailCount));
+						if (Preferences.logging) Log.d("ow", Integer.toString(currentGmailUnreadCount) + " > " + Integer.toString(lastUnreadGmailCount));
 						sendUnreadGmail(account);						
 				}
 				

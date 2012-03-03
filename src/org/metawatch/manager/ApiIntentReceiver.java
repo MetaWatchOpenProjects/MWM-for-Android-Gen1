@@ -32,6 +32,7 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.Notification.VibratePattern;
 
 import android.content.BroadcastReceiver;
@@ -123,7 +124,7 @@ public class ApiIntentReceiver extends BroadcastReceiver {
 				String text = intent.getStringExtra("text");
 				Notification.addTextNotification(context, text, vibrate,
 						Notification.getDefaultNotificationTimeout(context));
-				Log.d(MetaWatch.TAG,
+				if (Preferences.logging) Log.d(MetaWatch.TAG,
 						"ApiIntentReceiver.onReceive(): sending text notification; text='"
 								+ text + "'");
 			} else if (intent.hasExtra("array")) {

@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -66,7 +68,7 @@ public class DeviceSelection extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			
 			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-				Log.d(MetaWatch.TAG, "discovery finished");
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "discovery finished");
 				
 				pdWait.dismiss();
 				
@@ -77,7 +79,7 @@ public class DeviceSelection extends Activity {
 			}
 			
 			if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
-				Log.d(MetaWatch.TAG, "device found");
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "device found");
 				
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				
@@ -88,7 +90,7 @@ public class DeviceSelection extends Activity {
 				String deviceMac = device.getAddress();
 				
 				//int cl = device.getBluetoothClass().getMajorDeviceClass();
-				//Log.d(MetaWatch.TAG, "device class: " + cl);
+				//if (Preferences.logging) Log.d(MetaWatch.TAG, "device class: " + cl);
 				
 				addToList(deviceMac, deviceName);
 			}
@@ -111,7 +113,7 @@ public class DeviceSelection extends Activity {
 		pdWait.setCancelable(true);
 		pdWait.setOnCancelListener(new OnCancelListener() {			
 			public void onCancel(DialogInterface dialog) {
-				Log.d(MetaWatch.TAG, "canceled");
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "canceled");
 				if (MetaWatchService.bluetoothAdapter.isDiscovering())
 					MetaWatchService.bluetoothAdapter.cancelDiscovery();
 				finish();								
@@ -127,12 +129,12 @@ public class DeviceSelection extends Activity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Log.d(MetaWatch.TAG, "device selected: " + arg2);
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "device selected: " + arg2);
 				
 				Map<String, String> map = list.get(arg2);
 				String mac = map.get("mac");
 				
-				Log.d(MetaWatch.TAG, "mac selected: " + mac);
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "mac selected: " + mac);
 				
 				MetaWatchService.Preferences.watchMacAddress = mac;
 				MetaWatchService.saveMac(context, mac);

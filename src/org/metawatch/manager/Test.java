@@ -35,6 +35,7 @@ package org.metawatch.manager;
 import java.io.IOException;
 import java.util.Random;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
 import org.metawatch.manager.MetaWatchService.WatchType;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
@@ -86,7 +87,7 @@ public class Test extends PreferenceActivity {
 									"Display A, line 2"), Protocol
 							.createOled2lines(context, "Display B, line 1",
 									"Display B, line 2"), null, 0, null);
-					Log.d(MetaWatch.TAG, "Notification timeout is: " + Notification.getDefaultNotificationTimeout(context));
+					if (Preferences.logging) Log.d(MetaWatch.TAG, "Notification timeout is: " + Notification.getDefaultNotificationTimeout(context));
 					
 				}
 				return true;
@@ -268,7 +269,7 @@ public class Test extends PreferenceActivity {
 		    	//Protocol.enableMediaButtons();
 		    	//Protocol.queryNvalTime();
 		    	/*
-		    	Log.d(MetaWatch.TAG, "sending notif test");
+		    	if (Preferences.logging) Log.d(MetaWatch.TAG, "sending notif test");
 				Protocol.loadTemplate(2);
 				Protocol.sendLcdBitmap(Protocol.createTextBitmap(context, "abc"), true);
 				Protocol.updateDisplay(2);

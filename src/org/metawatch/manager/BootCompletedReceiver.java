@@ -1,5 +1,7 @@
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +13,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent)
 	{
 	     context.startService(new Intent(context, MetaWatchService.class));
-	     Log.v(MetaWatch.TAG, "Service loaded at start");
+	     if (Preferences.logging) Log.v(MetaWatch.TAG, "Service loaded at start");
 	}
 
 }

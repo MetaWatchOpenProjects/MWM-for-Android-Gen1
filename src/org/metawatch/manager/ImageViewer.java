@@ -53,8 +53,8 @@ public class ImageViewer extends Activity {
 		
         Intent i = getIntent();
         
-        Log.d(MetaWatch.TAG, "action: " + i.getAction());                        
-        Log.d(MetaWatch.TAG, "data: "+ i.getData().getPath() );
+        if (Preferences.logging) Log.d(MetaWatch.TAG, "action: " + i.getAction());                        
+        if (Preferences.logging) Log.d(MetaWatch.TAG, "data: "+ i.getData().getPath() );
         
         InputStream is;
 		try {

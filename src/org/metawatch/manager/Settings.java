@@ -32,6 +32,8 @@
 
 package org.metawatch.manager;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,7 +78,7 @@ public class Settings extends PreferenceActivity {
 			
 			public boolean onPreferenceClick(Preference arg0) {
 				
-				Log.d(MetaWatch.TAG, "discovery click");
+				if (Preferences.logging) Log.d(MetaWatch.TAG, "discovery click");
 				
 				startActivity(new Intent(context, DeviceSelection.class));
 				

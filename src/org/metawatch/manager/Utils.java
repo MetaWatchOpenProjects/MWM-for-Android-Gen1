@@ -41,6 +41,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.metawatch.manager.MetaWatchService.Preferences;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlarmManager;
@@ -176,7 +178,7 @@ public class Utils {
 			}
 		}
 		catch (java.lang.IllegalStateException e) {
-			Log.d(MetaWatch.TAG, "Failed to query SMS content provider");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Failed to query SMS content provider");
 		}
 		return count;
 	}
@@ -242,13 +244,13 @@ public class Utils {
 				if ((eventCursor.getLong(1) > (CurrentTime+(1000*60*1.2))) &&(eventCursor.getString(3).equals("0"))){
 					String uid2 = eventCursor.getString(0);	
 					Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/events/" + uid2);
-					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
+					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
 					Cursor c = cr.query(CALENDAR_URI,new String[] { "title", "eventLocation", "description",}, null, null, null); 
-					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar cursor: "+ c.getCount());
+					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar cursor: "+ c.getCount());
 					if (c.moveToFirst())
 					{	
-						//Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar title: "+ c.getString(c.getColumnIndex("title")));
-						//Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar location: "+ c.getString(c.getColumnIndex("eventLocation")));
+						//if (Preferences.logging) Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar title: "+ c.getString(c.getColumnIndex("title")));
+						//if (Preferences.logging) Log.d(Constants.LOG_TAG,"CalendarService.GetData(): Calendar location: "+ c.getString(c.getColumnIndex("eventLocation")));
 						titletemp = c.getString(c.getColumnIndex("title"));
 						locationtemp = c.getString(c.getColumnIndex("eventLocation"));    
 					}
@@ -260,9 +262,9 @@ public class Utils {
 
 					elapsedtimetemp = (begintemp-CurrentTime);
 
-					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
-					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
-					//Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Location : " + locationtemp);
+					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
+					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
+					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Location : " + locationtemp);
 
 
 					if (currentremaintime != 0) {
@@ -300,7 +302,7 @@ public class Utils {
 				// Get the AlarmManager service
 				AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 				am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
-				//Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
+				//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService: Next Meeting alarm time : "+ cal);
 			}
 			else {
 				Meeting_Title = "---";
@@ -317,7 +319,7 @@ public class Utils {
 			}
 		}
 		catch(Exception x) {
-			Log.d(MetaWatch.TAG, "Utils.readCalendar(): caught exception: " + x.toString());
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Utils.readCalendar(): caught exception: " + x.toString());
 			return "None";
 		}
 
@@ -325,7 +327,7 @@ public class Utils {
 
 
 	public static int getUnreadGmailCount(Context context, String account, String label) {
-		Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): account='"+account+"' label='"+label+"'");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): account='"+account+"' label='"+label+"'");
 		try {
 			int nameColumn = 0;
 
@@ -343,7 +345,7 @@ public class Utils {
 					for (int i = 0; i < c.getColumnCount(); i++) {
 						if (c.getColumnName(i).equals("numUnreadConversations")) {
 							int count = Integer.parseInt(c.getString(i));
-							Log.d(MetaWatch.TAG,
+							if (Preferences.logging) Log.d(MetaWatch.TAG,
 									"Utils.getUnreadGmailCount(): found count, returning " + count);
 							return count;
 						}
@@ -356,10 +358,10 @@ public class Utils {
 				}
 			}
 		} catch (Exception x) {
-			Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): caught exception: " + x.toString());
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): caught exception: " + x.toString());
 		}
 
-		Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): couldn't find count, returning 0.");
+		if (Preferences.logging) Log.d(MetaWatch.TAG, "Utils.getUnreadGmailCount(): couldn't find count, returning 0.");
 		return 0;
 	}
 	
@@ -396,7 +398,7 @@ public class Utils {
 		try {
 			Cursor cur = context.getContentResolver().query(Uri.parse(k9UnreadUri+"/"+accountNumber+"/"), null, null, null, null);
 		    if (cur!=null) {
-		    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " unread rows returned");
+		    	if (Preferences.logging) Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " unread rows returned");
 		    			    	
 		    	if (cur.getCount()>0) {
 			    	cur.moveToFirst();
@@ -406,7 +408,7 @@ public class Utils {
 			    	do {
 			    		String acct = cur.getString(nameIndex);
 			    		int unreadForAcct = cur.getInt(unreadIndex);
-			    		Log.d(MetaWatch.TAG, "k9: "+acct+" - "+unreadForAcct+" unread");
+			    		if (Preferences.logging) Log.d(MetaWatch.TAG, "k9: "+acct+" - "+unreadForAcct+" unread");
 			    		unread += unreadForAcct;
 			    	} while (cur.moveToNext());
 				    cur.close();
@@ -414,11 +416,11 @@ public class Utils {
 		    	}
 		    }
 		    else {
-		    	Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
+		    	if (Preferences.logging) Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
 		    }
 		}
 		catch (IllegalStateException e) {
-			Log.d(MetaWatch.TAG, "k-9 unread uri unknown.");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "k-9 unread uri unknown.");
 		}
 		return 0;
 	}
@@ -439,7 +441,7 @@ public class Utils {
 		try {
 			Cursor cur = context.getContentResolver().query(k9AccountsUri, null, null, null, null);
 		    if (cur!=null) {
-		    	Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " account rows returned");
+		    	if (Preferences.logging) Log.d(MetaWatch.TAG, "k9: "+cur.getCount()+ " account rows returned");
 
 		    	int count = cur.getCount();
 		    	
@@ -448,14 +450,14 @@ public class Utils {
 		    	return count;
 		    }
 		    else {
-		    	Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
+		    	if (Preferences.logging) Log.d(MetaWatch.TAG, "Failed to query k9 unread contentprovider.");
 		    }
 		}
 		catch (IllegalStateException e) {
-			Log.d(MetaWatch.TAG, "k-9 accounts uri unknown.");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "k-9 accounts uri unknown.");
 		}
 		catch (java.lang.SecurityException e) {
-			Log.d(MetaWatch.TAG, "Permissions failure accessing k-9 databases");
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "Permissions failure accessing k-9 databases");
 		}
 		return 0;
 
@@ -466,10 +468,10 @@ public class Utils {
 			InputStream inputStream = context.getAssets().open(path);
 	        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 	        inputStream.close();
-	        //Log.d(MetaWatch.TAG, "ok");
+	        //if (Preferences.logging) Log.d(MetaWatch.TAG, "ok");
 	        return bitmap;
 		} catch (IOException e) {
-			//Log.d(MetaWatch.TAG, e.toString());
+			//if (Preferences.logging) Log.d(MetaWatch.TAG, e.toString());
 			return null;
 		}
 	}
