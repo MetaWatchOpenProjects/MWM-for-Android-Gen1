@@ -47,7 +47,6 @@
     	<Preference android:key="vibrate" android:title="Vibrate (LCD/OLED)"/>
     	<Preference android:key="load_template" android:title="Load Template (Idle) (LCD)"/>
     	<Preference android:key="write_buffer" android:title="Write Buffer (Idle) (LCD)"/>
-    	<Preference android:key="activate_buffer" android:title="Activate Buffer (Idle) (LCD)"/>
     	<Preference android:key="update_display" android:title="Update Display (Idle) (LCD)"/>    
     	<Preference android:key="test" android:title="Test (OLED)"/>
     	<Preference android:key="dump_hprof" android:title="Dump Hprof data"/>

@@ -92,8 +92,7 @@ public class Test extends PreferenceActivity {
 				return true;
 			}
 		});
-		
-
+	
 		preferenceScreen.findPreference("application_start").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 				if (MetaWatchService.watchType == WatchType.DIGITAL)
@@ -163,10 +162,7 @@ public class Test extends PreferenceActivity {
 		    	return true;
 			}
 		});
-		
-	    	   
-	        
-	        
+		 
 		preferenceScreen.findPreference("gmail_full").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createGmail(context, "bruce@wayneenterprises.com", "me@gmail.com", "Need a ride", "Alfred, would you bring the car around to the docks?");
@@ -174,8 +170,6 @@ public class Test extends PreferenceActivity {
 			}
 		});
     	   
-        
-        
 		preferenceScreen.findPreference("alarm").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createAlarm(context);
@@ -183,9 +177,6 @@ public class Test extends PreferenceActivity {
 			}
 		});
     	   
-
-        
-        
 		preferenceScreen.findPreference("timezone").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createTimezonechange(context);
@@ -193,7 +184,6 @@ public class Test extends PreferenceActivity {
 			}
 		});
     	   
-
 		preferenceScreen.findPreference("Batterylow").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createBatterylow(context);
@@ -201,8 +191,6 @@ public class Test extends PreferenceActivity {
 			}
 		});
 		
-    	   
-
 		preferenceScreen.findPreference("music").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createMusic(context, "Park", "Who is Aliandra", "Building a Better");
@@ -210,7 +198,6 @@ public class Test extends PreferenceActivity {
 			}
 		});
 		
-    	   
 		preferenceScreen.findPreference("winamp").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 		    	NotificationBuilder.createWinamp(context, "Winamp", "It really whips the llama's...", "One Hump or Two");
@@ -252,14 +239,6 @@ public class Test extends PreferenceActivity {
 		    		Protocol.loadTemplate(0);
 
 		    	return true;
-			}
-		});
-		
-		preferenceScreen.findPreference("activate_buffer").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
-			public boolean onPreferenceClick(Preference arg0) {
-		    	//if (MetaWatchService.watchType == WatchType.DIGITAL)
-		    		//Protocol.activateBuffer(0);
-			    return true;
 			}
 		});
 		
@@ -363,7 +342,7 @@ public class Test extends PreferenceActivity {
 		preferenceScreen.findPreference("time_24hr").setOnPreferenceClickListener(new OnPreferenceClickListener() {	
 			public boolean onPreferenceClick(Preference arg0) {
 				Protocol.setNvalTime(true);
-			   	NotificationBuilder.createOtherNotification(context, "", "You'll need to reset your watch for this to take effect.");
+			   	//NotificationBuilder.createOtherNotification(context, "", "You'll need to reset your watch for this to take effect.");
 		    	return true;
 			}
 		});
