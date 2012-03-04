@@ -401,6 +401,22 @@
 			/>	
 			
 	</PreferenceScreen>	
+	
+	<PreferenceScreen
+		android:title="Backup settings"
+		>
+		
+		<Preference
+			android:title="Backup"
+			android:key="Backup"
+			android:summary="Backup settings to external storage."
+			/>
+		<Preference
+			android:title="Restore"
+			android:key="Restore"
+			android:summary="Restore settings from external storage."
+			/>
+	</PreferenceScreen>
 
 	
 </PreferenceScreen>
