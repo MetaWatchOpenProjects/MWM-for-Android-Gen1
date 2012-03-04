@@ -55,7 +55,6 @@ import org.metawatch.manager.MetaWatchService.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.accounts.Account;
@@ -711,11 +710,11 @@ public class Utils {
           }
     }
     
-    public static void backupUserPrefs(Context context) {
-    	final File prefsFile = new File(context.getFilesDir(), "../shared_prefs/org.metawatch.manager_preferences.xml");
-    	final File backupFile = new File(context.getExternalFilesDir(null), "preferenceBackup.xml");
-    	String error = "";
-    	Toast toast;
+	public static void backupUserPrefs(Context context) {
+		final File prefsFile = new File(context.getFilesDir(), "../shared_prefs/"+context.getPackageName()+"_preferences.xml");
+		final File backupFile = new File(context.getExternalFilesDir(null), "preferenceBackup.xml");
+		String error = "";
+		Toast toast;
 		try {
 			FileChannel src = new FileInputStream(prefsFile).getChannel();
 			FileChannel dst = new FileOutputStream(backupFile).getChannel();
@@ -737,24 +736,24 @@ public class Utils {
 		
 		 toast = Toast.makeText(context, "Failed to Back up user prefs to "+backupFile.getAbsolutePath()+ " - "+error, Toast.LENGTH_SHORT);
 		 toast.show();
-    	
-    }
+		
+	}
     
-    public static boolean restoreUserPrefs(Context context) {
-    	final File backupFile = new File(context.getExternalFilesDir(null), "preferenceBackup.xml");
-    	String error = "";
-    	
-        try {
-        	
-    		SharedPreferences sharedPreferences = PreferenceManager
-    				.getDefaultSharedPreferences(context);
-    		
-    		Editor editor = sharedPreferences.edit();
-        	
-        	InputStream inputStream = new FileInputStream(backupFile);
-
-        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        	DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+	public static boolean restoreUserPrefs(Context context) {
+		final File backupFile = new File(context.getExternalFilesDir(null), "preferenceBackup.xml");
+		String error = "";
+		
+	    try {
+	    	
+			SharedPreferences sharedPreferences = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			
+			Editor editor = sharedPreferences.edit();
+	    	
+	    	InputStream inputStream = new FileInputStream(backupFile);
+	
+	    	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+	    	DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 	
 	        Document doc = docBuilder.parse(inputStream);        
 	        Element root = doc.getDocumentElement();
@@ -788,7 +787,7 @@ public class Utils {
 	        toast.show();
 	        
 	        return true;
-        
+	    
 		} catch (FileNotFoundException e) {
 			error = e.getMessage();
 			e.printStackTrace();
@@ -807,6 +806,6 @@ public class Utils {
 		toast.show();
 		
 		return false;
-    }
+	}
 
 }
