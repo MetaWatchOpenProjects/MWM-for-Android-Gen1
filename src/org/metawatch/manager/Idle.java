@@ -168,7 +168,7 @@ public class Idle {
 				canvas.drawBitmap(Utils.loadBitmapFromAssets(context, "dummy_clock.png"), 0, 0, null);
 			} 
 	
-			if(widgetScreens.size() >= page)
+			if(widgetScreens.size() > page)
 			{
 				ArrayList<WidgetRow> rowsToDraw = widgetScreens.get(page);
 				
