@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.preference.Preference;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -32,6 +33,9 @@ public class CalendarWidget implements InternalWidget {
 	private TextPaint paintNumerals;
 
 	private String meetingTime = "None";
+	private String meetingTitle;
+	private String meetingLocation;
+	private long meetingEndTimestamp = 0;
 	
 	public void init(Context context, ArrayList<CharSequence> widgetIds) {
 		this.context = context;
@@ -54,14 +58,29 @@ public class CalendarWidget implements InternalWidget {
 	}
 
 	long lastRefresh = 0;
-	
-	public void refresh(ArrayList<CharSequence> widgetIds) {
+
+public void refresh(ArrayList<CharSequence> widgetIds) {
+	  
+		boolean readCalendar = false;
 		long time = System.currentTimeMillis();
-		if(time - lastRefresh > 5*60*1000) {
+		if (Preferences.readCalendarDuringMeeting) {
+			if(time - lastRefresh > 5*60*1000) {
+				readCalendar = true;
+				lastRefresh = System.currentTimeMillis();
+			}
+		} else {
+			// Only update the current meeting if it is over
+			if (time>=meetingEndTimestamp-Preferences.readCalendarMinDurationToMeetingEnd*60*1000) {
+				readCalendar = true;
+			}
+		}
+		if (readCalendar) {
 			if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() start");
 			meetingTime = Utils.readCalendar(context, 0);
-			lastRefresh = System.currentTimeMillis();
-			if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");		
+			meetingEndTimestamp = Utils.Meeting_EndTimestamp;
+			meetingLocation = Utils.Meeting_Location;
+			meetingTitle = Utils.Meeting_Title;
+			if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");   
 		}
 	}
 
@@ -101,24 +120,35 @@ public class CalendarWidget implements InternalWidget {
 		canvas.drawColor(Color.WHITE);
 		
 		canvas.drawBitmap(icon, 0, 3, null);
-		Calendar c = Calendar.getInstance(); 
-		int dayOfMonth = c.get(Calendar.DAY_OF_MONTH); 
-		if(dayOfMonth<10) {
-			canvas.drawText(""+dayOfMonth, 12, 16, paintNumerals);
+		
+		if ((Preferences.displayLocationInSmallCalendarWidget)&&
+		(!meetingTime.equals("None"))&&(meetingLocation!=null)&&
+		(!meetingLocation.equals("---"))&&(widget_id.equals(id_0))&&
+		(meetingLocation.length()>0)&&(meetingLocation.length()<=3)) {
+			canvas.drawText(meetingLocation, 12, 15, paintSmall);        
 		}
-		else
+		else 
 		{
-			canvas.drawText(""+dayOfMonth/10, 9, 16, paintNumerals);
-			canvas.drawText(""+dayOfMonth%10, 15, 16, paintNumerals);
+			Calendar c = Calendar.getInstance(); 
+			int dayOfMonth = c.get(Calendar.DAY_OF_MONTH); 
+			if(dayOfMonth<10) {
+				canvas.drawText(""+dayOfMonth, 12, 16, paintNumerals);
+			}
+			else
+			{
+				canvas.drawText(""+dayOfMonth/10, 9, 16, paintNumerals);
+				canvas.drawText(""+dayOfMonth%10, 15, 16, paintNumerals);
+			}
 		}
-		canvas.drawText(meetingTime, 12, 29, paintSmall);
-			
+		canvas.drawText(meetingTime, 12, 30, paintSmall);
+		
+
 		if (widget_id.equals(id_1)) {
 			paintSmall.setTextAlign(Align.LEFT);
 			
-			String text = Utils.Meeting_Title;
-			if ((Utils.Meeting_Location !=null) && (Utils.Meeting_Location.length()>0))
-				text += " - " + Utils.Meeting_Location;
+			String text = meetingTitle;
+			if ((meetingLocation !=null) && (meetingLocation.length()>0))
+				text += " - " + meetingLocation;
 			
 			canvas.save();			
 			StaticLayout layout = new StaticLayout(text, paintSmall, 70, Layout.Alignment.ALIGN_CENTER, 1.2f, 0, false);

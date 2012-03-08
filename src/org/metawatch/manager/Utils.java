@@ -78,6 +78,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
@@ -97,7 +98,7 @@ public class Utils {
 
 	static public String Meeting_Title = "---";
 	static public String Meeting_Location = "---";
-	
+	static public long Meeting_EndTimestamp;
 	
 	public static String getContactNameFromNumber(Context context, String number) {
 		
@@ -274,11 +275,15 @@ public class Utils {
 					}
 
 					c.close();
-					begintemp = eventCursor.getLong(1);	
+					begintemp = eventCursor.getLong(1);
 					MeetingTime = new SimpleDateFormat("HH:mm").format(begintemp);
+					Meeting_EndTimestamp = eventCursor.getLong(2);
 
-
-					elapsedtimetemp = (begintemp-CurrentTime);
+					if (Preferences.readCalendarDuringMeeting) {
+					  elapsedtimetemp = (begintemp-CurrentTime);
+					} else {
+					  elapsedtimetemp = (Meeting_EndTimestamp-(Preferences.readCalendarMinDurationToMeetingEnd+1)*60*1000-CurrentTime);
+					}
 
 					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting time : "+ MeetingTime);
 					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Next Meeting Title : " + titletemp);
@@ -327,7 +332,7 @@ public class Utils {
 				Meeting_Location = "---";
 			}
 
-
+			
 
 			if (Return==1){
 				return String.valueOf(currentremaintime);

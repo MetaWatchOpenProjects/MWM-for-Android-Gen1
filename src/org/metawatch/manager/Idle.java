@@ -45,6 +45,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.preference.Preference;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -184,9 +186,20 @@ public class Idle {
 					row.draw(widgetData, canvas, yPos);
 					yPos += row.getHeight() + space;
 				}
-				
+
+				if (Preferences.displayWidgetRowSeparator) {
+					int i = (page==0 ? -1:0);
+					yPos = 0 + space;
+					for(WidgetRow row : rowsToDraw) {
+						yPos += row.getHeight() + space;
+						i++;
+						if (i!=rowsToDraw.size())
+							drawLine(canvas, yPos);
+					}
+				}
+
 			}
-				
+
 		}
 		else {
 			
@@ -232,6 +245,18 @@ public class Idle {
 		}
 		
 		return bitmap;
+	}
+	
+	public static Canvas drawLine(Canvas canvas, int y) {
+	  Paint paint = new Paint();
+	  paint.setColor(Color.BLACK);
+
+	  int left = 3;
+
+	  for (int i = 0+left; i < 96-left; i += 3)
+	    canvas.drawLine(i, y, i+2, y, paint);
+	
+	  return canvas;
 	}
 	
 	private static synchronized void sendLcdIdle(Context context) {

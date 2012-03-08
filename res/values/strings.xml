@@ -24,7 +24,17 @@
     <string name="settings_Device">Device</string>
     <string name="settings_Mac">MAC</string>
     <string name="settings_Mac_desc">Watch Bluetooth MAC address</string>
-    
+    <string name="settings_Read_calendar_during_meeting">Read calender during ongoing meetings</string>
+    <string name="settings_Read_calendar_during_meeting_desc">Update calendar information while a meeting is ongoing (untick to keep the calendar widget information after the meeting has started)</string>
+    <string name="settings_Read_calendar_min_duration_to_meeting_end">Minimum duration to meeting end</string>
+    <string name="settings_Read_calendar_min_duration_to_meeting_end_desc">Duration in minutes to the end of an ongoing meeting before calendar read is allowed</string>
+    <string name="settings_Display_location_in_small_calendar_widget">Display location in small calendar widget</string>
+    <string name="settings_Display_location_in_small_calendar_widget_desc">Displays the location instead of the date in the 24x32 next calendar appointment widget if there is enough space</string>
+    <string name="settings_Display_widget_row_separator">Display separator line</string>
+    <string name="settings_Display_widget_row_separator_desc">Draws a separator line between widget rows</string>
+    <string name="settings_Overlay_weather_text">Overlay text in weather widget</string>
+    <string name="settings_Overlay_weather_text_desc">Draws the text (condition and location) over the weather icon</string>
+        
     <string-array name="settings_font_size_name"> 
    	<item>Small</item>
    	<item>Medium</item>

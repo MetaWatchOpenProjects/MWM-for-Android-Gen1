@@ -126,6 +126,19 @@
  			android:defaultValue="3"
  			/>			
 		<CheckBoxPreference
+			android:title="@string/settings_Read_calendar_during_meeting"
+			android:key="ReadCalendarDuringMeeting"
+			android:summary="@string/settings_Read_calendar_during_meeting_desc"
+			android:defaultValue="true"
+			/>
+		<EditTextPreference
+			android:title="@string/settings_Read_calendar_min_duration_to_meeting_end"
+			android:key="ReadCalendarMinDurationToMeetingEnd"
+			android:summary="@string/settings_Read_calendar_min_duration_to_meeting_end_desc"
+			android:numeric="integer"
+			android:defaultValue="15"
+			/>
+		<CheckBoxPreference
 			android:title="@string/settings_Batterylow"
 			android:key="NotifyBatterylow"
 			android:summary="@string/settings_Batterylow_desc"
@@ -271,6 +284,24 @@
 			android:key="InvertLCD"
 			android:summary="Switch black/white bit"
 			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Display_widget_row_separator"
+			android:key="DisplayWidgetRowSeparator"
+			android:summary="@string/settings_Display_widget_row_separator_desc"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Display_location_in_small_calendar_widget"
+			android:key="DisplayLocationInSmallCalendarWidget"
+			android:summary="@string/settings_Display_location_in_small_calendar_widget_desc"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:title="@string/settings_Overlay_weather_text"
+			android:key="OverlayWeatherText"
+			android:summary="@string/settings_Overlay_weather_text_desc"
+			android:defaultValue="true"
 			/>
 	</PreferenceScreen>	
 	

@@ -357,18 +357,6 @@ public class MetaWatch extends TabActivity {
     
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
-    	if (Protocol.isStalled()) {
-    		if (MetaWatchService.connectionState == MetaWatchService.ConnectionState.CONNECTED) {
-	    		textView.append("\n**CONNECTION STALLED**\n");
-	    		if (Preferences.autoRestart) {
-		    		Toast.makeText(this, "Restarting stalled connection", Toast.LENGTH_SHORT);
-		    		Protocol.resetStalledFlag();
-		    		stopService();
-		    		startService();
-		    		if (Preferences.logging) Log.d(MetaWatch.TAG, "Restarted stalled service");
-	    		}
-    		}
-    	}	
     }
     
     private void printDate(long ticks) {

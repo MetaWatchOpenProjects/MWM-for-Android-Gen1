@@ -168,6 +168,11 @@ public class MetaWatchService extends Service {
 		public static boolean autoRestart = false;
 		public static String widgets = "weather_96_32|missedCalls_24_32,unreadSms_24_32,unreadGmail_24_32";
 		public static boolean hapticFeedback = false;
+		public static boolean readCalendarDuringMeeting = true;
+		public static int readCalendarMinDurationToMeetingEnd = 15;
+		public static boolean displayLocationInSmallCalendarWidget = false;
+		public static boolean displayWidgetRowSeparator = false;
+		public static boolean overlayWeatherText = false;
 	}
 
 	final class WatchType {
@@ -238,6 +243,17 @@ public class MetaWatchService extends Service {
 				Preferences.widgets);
 		Preferences.hapticFeedback = sharedPreferences.getBoolean("HapticFeedback",
 				Preferences.hapticFeedback);
+		Preferences.readCalendarDuringMeeting = sharedPreferences.getBoolean("ReadCalendarDuringMeeting",
+				Preferences.readCalendarDuringMeeting);
+		Preferences.readCalendarMinDurationToMeetingEnd = Integer.parseInt(
+				sharedPreferences.getString("ReadCalendarMinDurationToMeetingEnd", 
+				Integer.toString(Preferences.readCalendarMinDurationToMeetingEnd)));
+		Preferences.displayLocationInSmallCalendarWidget = sharedPreferences.getBoolean("DisplayLocationInSmallCalendarWidget",
+				Preferences.displayLocationInSmallCalendarWidget);
+		Preferences.displayWidgetRowSeparator = sharedPreferences.getBoolean("DisplayWidgetRowSeparator",
+				Preferences.displayWidgetRowSeparator);
+		Preferences.overlayWeatherText = sharedPreferences.getBoolean("OverlayWeatherText",
+				Preferences.overlayWeatherText);
 
 		try {
 			Preferences.fontSize = Integer.valueOf(sharedPreferences.getString(
