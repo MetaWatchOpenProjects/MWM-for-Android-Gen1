@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
-import android.preference.Preference;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;

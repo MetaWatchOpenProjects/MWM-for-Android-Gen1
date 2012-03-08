@@ -40,23 +40,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.metawatch.manager.MetaWatchService.ConnectionState;
 import org.metawatch.manager.MetaWatchService.Preferences;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.os.Message;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Protocol {
 

@@ -72,7 +72,6 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MetaWatch extends TabActivity {
