@@ -230,7 +230,16 @@ public class Idle {
 				canvas.restore();	
 				
 				canvas.save();			
-				layout = new StaticLayout(MediaControl.lastArtist + "\n\n" + MediaControl.lastAlbum, paintSmall, 96, Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
+				StringBuilder lowerText = new StringBuilder();
+				if(!MediaControl.lastArtist.equals("")) {
+					lowerText.append(MediaControl.lastArtist);
+				}
+				if(!MediaControl.lastAlbum.equals("")) {
+					if(lowerText.length()>0)
+						lowerText.append("\n\n");
+					lowerText.append(MediaControl.lastAlbum);
+				}
+				layout = new StaticLayout(lowerText.toString(), paintSmall, 96, Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
 				height = layout.getHeight();
 				textY = 70 - (height/2);
 				if(textY<54) {
