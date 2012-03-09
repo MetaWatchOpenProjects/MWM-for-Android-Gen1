@@ -379,10 +379,8 @@ public class Monitors {
 				WeatherData.forecast[i].day = wfc.getDayofWeek();
 				
 				if (Preferences.weatherCelsius) {
-					WeatherData.forecast[i].tempHigh = 
-							  Integer.toString(wfc.getTempMaxCelsius());
-					WeatherData.forecast[i].tempLow = 
-							  Integer.toString(wfc.getTempMinCelsius());
+					WeatherData.forecast[i].tempHigh = wfc.getTempMaxCelsius().toString();
+					WeatherData.forecast[i].tempLow = wfc.getTempMinCelsius().toString();
 				} else {
 					WeatherData.forecast[i].tempHigh = 
 							  Integer.toString(WeatherUtils
