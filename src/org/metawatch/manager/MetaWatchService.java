@@ -654,7 +654,17 @@ public class MetaWatchService extends Service {
 		try {
 			byte[] bytes = new byte[256];
 			if (Preferences.logging) Log.d(MetaWatch.TAG, "before blocking read");
-			inputStream.read(bytes);
+			// Do a proper read loop 
+			int haveread = 0;
+			int lengthtoread = 4;
+			while((lengthtoread-haveread) != 0)
+			{
+			    haveread += inputStream.read(bytes, haveread, lengthtoread-haveread);
+			    if(haveread > 1)
+			    {
+			        lengthtoread = bytes[1];
+			    }
+			}
 			wakeLock.acquire(5000);
 
 			// print received
@@ -682,12 +692,15 @@ public class MetaWatchService extends Service {
 			 * success if (bytes[4] == 0x00) // set to 12 hour format
 			 * Protocol.setNvalTime(true); }
 			 */
-
-			if (bytes[2] == eMessageType.StatusChangeEvent.msg) { // status
+			if (bytes[2] == eMessageType.NvalOperationResponseMsg.msg) {
+			    if (Preferences.logging) Log.d(MetaWatch.TAG,
+                        "MetaWatchService.readFromDevice(): NvalOperationResponseMsg");
+			    // Do something here?
+			} else if (bytes[2] == eMessageType.StatusChangeEvent.msg) { // status
 																	// change
 																	// event
-				if (Preferences.logging) Log.d(MetaWatch.TAG,
-						"MetaWatchService.readFromDevice(): status change");
+			    if (Preferences.logging) Log.d(MetaWatch.TAG,
+                        "MetaWatchService.readFromDevice(): status change");
 				if (bytes[4] == 0x11) {
 					if (Preferences.logging) Log.d(MetaWatch.TAG,
 							"MetaWatchService.readFromDevice(): scroll request notification");
