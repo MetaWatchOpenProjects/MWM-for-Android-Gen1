@@ -86,8 +86,7 @@ public class AppBlacklist extends Activity {
 			ListView listView = (ListView) findViewById(android.R.id.list);
 			// listView.setAdapter(new ArrayAdapter<String>(this,
 			// android.R.layout.simple_list_item_1, menuList));
-			listView.setAdapter(new BlacklistAdapter(AppBlacklist.this,
-					appInfos));
+			listView.setAdapter(new BlacklistAdapter(appInfos));
 			AppBlacklist.this.appInfos = appInfos;
 			pdWait.dismiss();
 
@@ -107,20 +106,20 @@ public class AppBlacklist extends Activity {
 	}
 
 	class BlacklistAdapter extends ArrayAdapter<AppInfo> {
-		private final Activity context;
 		private final List<AppInfo> apps;
 
-		public BlacklistAdapter(Activity context, List<AppInfo> apps) {
-			super(context, R.layout.app_blacklist_list_item, apps);
-			this.context = context;
+		public BlacklistAdapter( List<AppInfo> apps) {
+			super(AppBlacklist.this, R.layout.app_blacklist_list_item, apps);
 			this.apps = apps;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = null;
-			LayoutInflater inflater = context.getLayoutInflater();
-			view = inflater.inflate(R.layout.app_blacklist_list_item, null);
+			View view = convertView;
+			LayoutInflater inflater = AppBlacklist.this.getLayoutInflater();
+			if(view == null) {
+			    view = inflater.inflate(R.layout.app_blacklist_list_item, null);
+			}
 			ImageView icon = (ImageView) view
 					.findViewById(R.id.app_blacklist_list_item_icon);
 			TextView appName = (TextView) view
