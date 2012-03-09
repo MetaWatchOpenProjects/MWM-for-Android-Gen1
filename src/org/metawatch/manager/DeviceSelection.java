@@ -109,6 +109,13 @@ public class DeviceSelection extends Activity {
 		super.onCreate(savedInstanceState);
 		context = this;
 		
+		// No point in discovering if it's switched off
+		BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+		if((defaultAdapter == null) || (!BluetoothAdapter.getDefaultAdapter().isEnabled())) {
+			finish();
+			return;
+		}
+		
 		pdWait = ProgressDialog.show(this, "Please wait", "Searching Bluetooth devices...");
 		pdWait.setCancelable(true);
 		pdWait.setOnCancelListener(new OnCancelListener() {			
