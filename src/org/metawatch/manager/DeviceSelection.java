@@ -103,7 +103,7 @@ public class DeviceSelection extends Activity {
 	ListView listView;
 	//static ArrayList<String> menuList = new ArrayList<String>();
 	List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-	
+	private Receiver receiver;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -162,7 +162,7 @@ public class DeviceSelection extends Activity {
 		    }
 		}
 		
-		Receiver receiver = new Receiver();
+		receiver = new Receiver();
 		IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		
@@ -210,13 +210,7 @@ public class DeviceSelection extends Activity {
 
 	@Override
 	protected void onDestroy() {		
-
 		super.onDestroy();
+		unregisterReceiver(receiver);
 	}
-
-		
-	
-	
-	
-
 }
