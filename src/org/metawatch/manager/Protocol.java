@@ -151,7 +151,7 @@ public class Protocol {
 		}
 	}
 
-	public static Boolean sendLcdBitmap(Bitmap bitmap, int bufferType) {
+	public static boolean sendLcdBitmap(Bitmap bitmap, int bufferType) {
 		if (bitmap==null) 
 			return false;
 		
@@ -162,7 +162,7 @@ public class Protocol {
 		return sendLcdArray(pixelArray, bufferType);
 	}
 
-	static Boolean sendLcdArray(int[] pixelArray, int bufferType) {
+	static boolean sendLcdArray(int[] pixelArray, int bufferType) {
 		byte send[] = new byte[1152];
 
 		for (int i = 0; i < 1152; i++) {
@@ -186,7 +186,7 @@ public class Protocol {
 		return sendLcdBuffer(send, bufferType);
 	}
 
-	static Boolean sendLcdBuffer(byte[] buffer, int bufferType) {
+	static boolean sendLcdBuffer(byte[] buffer, int bufferType) {
 		if (MetaWatchService.connectionState != MetaWatchService.ConnectionState.CONNECTED)
 			return false;
 
@@ -703,7 +703,7 @@ public class Protocol {
 		enqueue(bytes);
 	}
 
-	public static void ledChange(Boolean ledOn) {
+	public static void ledChange(boolean ledOn) {
 		if (Preferences.logging) Log.d(MetaWatch.TAG, "Protocol.ledChange()");
 		byte[] bytes = new byte[4];
 
