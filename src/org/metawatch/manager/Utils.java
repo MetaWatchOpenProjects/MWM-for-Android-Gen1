@@ -115,12 +115,8 @@ public class Utils {
 			
 			if (c.moveToFirst()) {
 				String name = c.getString(c.getColumnIndex(PhoneLookup.DISPLAY_NAME));
-				c.close();
-				
 				if (name.length() > 0)
 					return name;
-				else
-					return number;
 			}
 			
 			c.close();
