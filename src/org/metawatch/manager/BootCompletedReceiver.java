@@ -14,8 +14,9 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 	{
 		 if(Preferences.autoConnect) {
 			 context.startService(new Intent(context, MetaWatchService.class));
+			 if (Preferences.logging) Log.v(MetaWatch.TAG, "Service loaded at start");
 		 }
-	     if (Preferences.logging) Log.v(MetaWatch.TAG, "Service loaded at start");
+	     
 	}
 
 }
