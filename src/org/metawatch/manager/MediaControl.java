@@ -136,11 +136,10 @@ public class MediaControl {
 		if (artist.equals(MediaControl.lastArtist) && track.equals(MediaControl.lastTrack) && album.equals(MediaControl.lastAlbum)) {
 			if (Preferences.logging) Log.d(MetaWatch.TAG, "updateNowPlaying(): Track info hasn't changed, ignoring");
 			return;
-		} else {
-			MediaControl.lastArtist = artist;
-			MediaControl.lastTrack = track;
-			MediaControl.lastAlbum = album;
 		}
+		MediaControl.lastArtist = artist;
+		MediaControl.lastTrack = track;
+		MediaControl.lastAlbum = album;
 		
 		if(MediaControl.mediaPlayerActive)
 			Idle.updateLcdIdle(context);
