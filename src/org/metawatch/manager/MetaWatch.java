@@ -149,18 +149,6 @@ public class MetaWatch extends TabActivity {
 	        textView = MetaWatchStatus.textView;
 	        toggleButton = MetaWatchStatus.toggleButton;
         }
-    }
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu, menu);
-	    return true;
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
 
 		MetaWatchService.loadPreferences(this);
 		
@@ -186,6 +174,19 @@ public class MetaWatch extends TabActivity {
 		if (isServiceRunning() || Preferences.autoConnect) {
 			startService();
 		}
+    }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    return true;
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+
 	}
 
 	@Override
