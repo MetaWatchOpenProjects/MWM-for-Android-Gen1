@@ -757,43 +757,48 @@ public class Monitors {
 		}
 
 		//convert response to string
-		try{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
+		if (is != null) {
+			try {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is, "iso-8859-1"), 8);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				is.close();
+				result = sb.toString();
+			} catch (Exception e) {
+				if (Preferences.logging)
+					Log.e(MetaWatch.TAG,
+							"Error converting result " + e.toString());
 			}
-			is.close();
-			result=sb.toString();
-		}catch(Exception e){
-			if (Preferences.logging) Log.e(MetaWatch.TAG, "Error converting result "+e.toString());
-		}
 
-		//dump to sdcard for debugging
-		File sdCard = Environment.getExternalStorageDirectory();
-		File file = new File(sdCard, "weather.json");
+			// dump to sdcard for debugging
+			File sdCard = Environment.getExternalStorageDirectory();
+			File file = new File(sdCard, "weather.json");
 
-		try {
-			FileWriter writer = new FileWriter(file);
-	        writer.append(result);
-	        writer.flush();
-	        writer.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
-		//try parse the string to a JSON object
-		try{
-	        	jArray = new JSONObject(result);
-		}catch(JSONException e){
-			if (Preferences.logging) Log.e(MetaWatch.TAG, "Error parsing data "+e.toString());
-		}
+			try {
+				FileWriter writer = new FileWriter(file);
+				writer.append(result);
+				writer.flush();
+				writer.close();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+			// try parse the string to a JSON object
+			try {
+				jArray = new JSONObject(result);
+			} catch (JSONException e) {
+				if (Preferences.logging)
+					Log.e(MetaWatch.TAG, "Error parsing data " + e.toString());
+			}
+		}
 		return jArray;
 	}
 	
