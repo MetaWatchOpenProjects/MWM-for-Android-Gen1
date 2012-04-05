@@ -178,7 +178,7 @@ public class Monitors {
 			{
 				WeatherData.tempHigh = "High " + Integer.toString(WeatherUtils.celsiusToFahrenheit(wfc.getTempMaxCelsius()));
 				WeatherData.tempLow = "Low " + Integer.toString(WeatherUtils.celsiusToFahrenheit(wfc.getTempMinCelsius()));
-				temp = Integer.toString(wcc.getTempCelcius()) + (char) 0x00B0 + "F";
+				temp = Integer.toString(wcc.getTempFahrenheit()) + (char) 0x00B0 + "F";
 			}
 			//String place = gwh.city;
 			
