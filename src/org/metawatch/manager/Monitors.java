@@ -144,7 +144,7 @@ public class Monitors {
 		try {
 						
 			URL url;
-			String queryString = "http://www.google.com/ig/api?weather=" + Preferences.weatherCity;
+			String queryString = "http://www.google.com/ig/api?weather=" + Preferences.weatherCity + "&referrer=googlecalendar";
 			url = new URL(queryString.replace(" ", "%20"));
 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
